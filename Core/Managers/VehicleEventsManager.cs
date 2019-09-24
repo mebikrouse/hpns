@@ -1,17 +1,19 @@
 ﻿using System;
 using CitizenFX.Core;
 
-namespace HPNS.Core.Tools
+namespace HPNS.Core.Managers
 {
     public class VehicleEventsManager : IUpdateObject
     {
         private bool _isInVehicle;
         private bool _isEnteringVehicle;
 
+        private Vehicle _prevVehicle;
+
         public event EventHandler<Vehicle> PlayerEntering;
-        public event EventHandler PlayerAbortedEntering;
+        public event EventHandler<Vehicle> PlayerAbortedEntering;
         public event EventHandler<Vehicle> PlayerEntered;
-        public event EventHandler PlayerLeft;
+        public event EventHandler<Vehicle> PlayerLeft;
         
         public void Update(float deltaTime)
         {
@@ -21,24 +23,29 @@ namespace HPNS.Core.Tools
                 var vehicleTryingToEnter = Game.PlayerPed.VehicleTryingToEnter;
                 if (vehicleTryingToEnter != null && !_isEnteringVehicle)
                 {
+                    _prevVehicle = vehicleTryingToEnter;
                     _isEnteringVehicle = true;
                     PlayerEntering?.Invoke(this, vehicleTryingToEnter);
-                } else if (vehicleTryingToEnter == null && currentVehicle == null && _isEnteringVehicle)
+                } 
+                else if (vehicleTryingToEnter == null && currentVehicle == null && _isEnteringVehicle)
                 {
                     _isEnteringVehicle = false;
-                    PlayerAbortedEntering?.Invoke(this, EventArgs.Empty);
-                } else if (currentVehicle != null)
+                    PlayerAbortedEntering?.Invoke(this, _prevVehicle);
+                } 
+                else if (currentVehicle != null)
                 {
+                    _prevVehicle = currentVehicle;
                     _isEnteringVehicle = false;
                     _isInVehicle = true;
                     PlayerEntered?.Invoke(this, currentVehicle);
                 }
-            } else if (_isInVehicle)
+            } 
+            else if (_isInVehicle)
             {
                 if (currentVehicle == null || Game.Player.IsDead)
                 {
                     _isInVehicle = false;
-                    PlayerLeft?.Invoke(this, EventArgs.Empty);
+                    PlayerLeft?.Invoke(this, _prevVehicle);
                 }
             }
         }

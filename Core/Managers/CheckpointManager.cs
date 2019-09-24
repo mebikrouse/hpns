@@ -1,44 +1,32 @@
-﻿using CitizenFX.Core;
+﻿using System.Collections.Generic;
+using CitizenFX.Core;
 
-namespace HPNS.Core.Tools
+using Checkpoint = HPNS.Core.Environment.Checkpoint;
+
+namespace HPNS.Core.Managers
 {
-    public class CheckpointManager
+    public class CheckpointManager : IUpdateObject
     {
-        private const int DEFAULT_REFRESH_RATE = 1000;
-
-        private static CheckpointManager _instance;
+        private List<Checkpoint> _checkpoints = new List<Checkpoint>();
         
-        public static CheckpointManager Default
-        {
-            get
-            {
-                if (_instance == null) 
-                    _instance = new CheckpointManager(DEFAULT_REFRESH_RATE);
-                
-                return _instance;
-            }
-        }
-
-        private UpdateObjectPool _updateObjectPool;
-        
-        public CheckpointManager(int refreshRate)
-        {
-            _updateObjectPool = new UpdateObjectPool(refreshRate);
-            _updateObjectPool.Start();
-        }
-
         public Checkpoint AddCheckpoint(Vector3 center, float radius)
         {
             var checkpoint = new Checkpoint(center, radius);
-            _updateObjectPool.AddUpdateObject(checkpoint);
+            _checkpoints.Add(checkpoint);
             
             return checkpoint;
         }
 
         public void RemoveCheckpoint(Checkpoint checkpoint)
         {
-            _updateObjectPool.RemoveUpdateObject(checkpoint);
+            _checkpoints.Remove(checkpoint);
             checkpoint.Destroy();
+        }
+
+        public void Update(float deltaTime)
+        {
+            foreach (var checkpoint in _checkpoints)
+                checkpoint.Update(deltaTime);
         }
     }
 }

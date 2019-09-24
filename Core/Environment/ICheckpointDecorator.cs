@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 
-namespace HPNS.Core.Tools
+namespace HPNS.Core.Environment
 {
     public interface ICheckpointDecorator
     {

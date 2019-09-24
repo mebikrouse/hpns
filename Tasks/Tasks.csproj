@@ -45,8 +45,10 @@
     <Compile Include="Core\IStateDelegate.cs" />
     <Compile Include="Core\ITask.cs" />
     <Compile Include="Core\ITaskDelegate.cs" />
+    <Compile Include="Core\TaskState.cs" />
     <Compile Include="GoToRadiusAreaTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StayInVehicleState.cs" />
     <Compile Include="Support\StateConjunction.cs" />
     <Compile Include="Support\TaskSequence.cs" />
   </ItemGroup>

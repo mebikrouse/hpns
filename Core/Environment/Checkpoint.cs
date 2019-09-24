@@ -1,7 +1,7 @@
 ﻿using System;
 using CitizenFX.Core;
 
-namespace HPNS.Core.Tools
+namespace HPNS.Core.Environment
 {
     public class Checkpoint : IUpdateObject
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using HPNS.Core;
-using HPNS.Core.Tools;
+using HPNS.Core.Managers;
 using static CitizenFX.Core.Native.API;
 
 namespace PedTest
@@ -97,7 +97,7 @@ namespace PedTest
             return ped;
         }
 
-        private void VehicleEventsManagerOnPlayerLeft(object sender, EventArgs e)
+        private void VehicleEventsManagerOnPlayerLeft(object sender, Vehicle vehicle)
         {
             foreach (var ped in _peds)
             {

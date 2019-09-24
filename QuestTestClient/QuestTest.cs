@@ -1,19 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using CitizenFX.Core;
-using HPNS.Core.Tools;
 using HPNS.Tasks;
 using HPNS.Tasks.Core;
+using HPNS.Tasks.Support;
 using static CitizenFX.Core.Native.API;
-using Checkpoint = HPNS.Core.Tools.Checkpoint;
 
 namespace QuestTestClient
 {
     public class QuestTest : BaseScript, ITaskDelegate
     {
-        private Checkpoint _checkpoint;
-        private int _blipHandle;
-        
         public QuestTest()
         {
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
@@ -23,36 +19,17 @@ namespace QuestTestClient
         {
             if (GetCurrentResourceName() != resourceName) return;
             
-            RegisterCommand("quest1", new Action<int, List<object>, string>((source, args, raw) =>
+            RegisterCommand("quest1", new Action<int, List<object>, string>(async (source, args, raw) =>
             {
-                var goToTask = new GoToRadiusAreaTask(new Vector3(1494.855f, 3758.768f, 33.90023f), 50f);
-                goToTask.Delegate = this;
-                goToTask.Start();
-            }), false);
-            
-            RegisterCommand("checkpoint", new Action<int, List<object>, string>((source, args, raw) =>
-            {
-                if (_checkpoint != null)
-                {
-                    CheckpointManager.Default.RemoveCheckpoint(_checkpoint);
-                    RemoveBlip(ref _blipHandle);
+                var model = "toros";
+                var vehicle = await World.CreateVehicle(model, Game.PlayerPed.Position + Game.PlayerPed.RightVector * 5.0f, Game.PlayerPed.Heading);
 
-                    _checkpoint = null;
-
-                    return;
-                }
+                var goToRadiusAreaTask = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
+                var stayInVehicleState = new StayInVehicleState(vehicle.Handle);
                 
-                var position = Game.PlayerPed.Position;
-                var radius = 50f;
-
-                _checkpoint = CheckpointManager.Default.AddCheckpoint(position, radius);
-
-                _checkpoint.PlayerEntered += (sender, e) => Debug.WriteLine("Player Entered");
-                _checkpoint.PlayerLeft += (sender, e) => Debug.WriteLine("Player left");
-
-                _blipHandle = AddBlipForRadius(position.X, position.Y, position.Z, radius);
-                SetBlipAlpha(_blipHandle, 128);
-
+                var stateConjunction = new StateConjunction(goToRadiusAreaTask, stayInVehicleState);
+                stateConjunction.Delegate = this;
+                stateConjunction.Start();
             }), false);
         }
 
