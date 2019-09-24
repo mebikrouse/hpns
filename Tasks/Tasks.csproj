@@ -42,9 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\IState.cs" />
-    <Compile Include="Core\IStateDelegate.cs" />
     <Compile Include="Core\ITask.cs" />
-    <Compile Include="Core\ITaskDelegate.cs" />
     <Compile Include="Core\TaskState.cs" />
     <Compile Include="GoToRadiusAreaTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,95 +1,94 @@
-﻿using HPNS.Tasks.Core;
+﻿using System;
+using HPNS.Tasks.Core;
 
 namespace HPNS.Tasks.Support
 {
-    public class StateConjunction : ITask, ITaskDelegate, IStateDelegate
+    public class StateConjunction : ITask
     {
-        private ITask _task;
+        private Func<ITask> _taskProvider;
         private IState _state;
         
-        public ITaskDelegate Delegate { get; set; }
-        
-        public TaskState CurrentState { get; private set; }
+        private ITask _currentTask;
 
-        public StateConjunction(ITask task, IState state)
+        public TaskState CurrentState { get; private set; } = TaskState.Waiting;
+        
+        public event EventHandler TaskDidEnd;
+
+        public StateConjunction(Func<ITask> taskProvider, IState state)
         {
-            _task = task;
-            _task.Delegate = this;
-            
+            _taskProvider = taskProvider;
             _state = state;
-            _state.Delegate = this;
         }
         
         public void Start()
         {
-            if (CurrentState != TaskState.Waiting) return;
+            if (CurrentState != TaskState.Waiting)
+                throw new Exception("Cannot start task that is not in Waiting state!");
             
+            _state.StateDidBreak += OnStateDidBreak;
+            _state.StateDidRecover += OnStateDidRecover;
             _state.Start();
-            if (_state.IsValid) _task.Start();
+
+            if (_state.IsValid)
+            {
+                _currentTask = _taskProvider();
+                _currentTask.TaskDidEnd += OnTaskDidEnd;
+                _currentTask.Start();
+            }
 
             CurrentState = TaskState.Running;
-            Delegate?.TaskDidStart(this);
         }
 
         public void Abort()
         {
-            if (CurrentState != TaskState.Running &&
-                CurrentState != TaskState.Suspended) return;
+            if (CurrentState != TaskState.Running)
+                throw new Exception("Cannot abort task that is not in Running state!");
             
+            _state.StateDidBreak -= OnStateDidBreak;
+            _state.StateDidRecover -= OnStateDidRecover;
             _state.Stop();
-            _task.Abort();
+
+            if (_currentTask != null)
+            {
+                _currentTask.TaskDidEnd -= OnTaskDidEnd;
+                _currentTask.Abort();
+                _currentTask = null;
+            }
 
             CurrentState = TaskState.Aborted;
-            Delegate?.TaskDidAbort(this);
         }
 
-        public void Suspend()
+        private void OnStateDidRecover(object sender, EventArgs e)
         {
-            if (CurrentState != TaskState.Running) return;
+            if (_currentTask != null)
+                throw new Exception("Cannot resume task because it is already running!");
             
+            _currentTask = _taskProvider();
+            _currentTask.TaskDidEnd += OnTaskDidEnd;
+            _currentTask.Start();
+        }
+
+        private void OnStateDidBreak(object sender, EventArgs e)
+        {
+            if (_currentTask == null)
+                throw new Exception("Cannot abort task because it is already aborted!");
+            
+            _currentTask.TaskDidEnd -= OnTaskDidEnd;
+            _currentTask.Abort();
+            _currentTask = null;
+        }
+
+        private void OnTaskDidEnd(object sender, EventArgs e)
+        {
+            _state.StateDidBreak -= OnStateDidBreak;
+            _state.StateDidRecover -= OnStateDidRecover;
             _state.Stop();
-            _task.Suspend();
 
-            CurrentState = TaskState.Suspended;
-            Delegate?.TaskDidSuspend(this);
-        }
+            _currentTask.TaskDidEnd -= OnTaskDidEnd;
+            _currentTask = null;
 
-        public void Resume()
-        {
-            if (CurrentState != TaskState.Suspended) return;
-            
-            _state.Start();
-            if (_state.IsValid) _task.Resume();
-
-            CurrentState = TaskState.Running;
-            Delegate?.TaskDidResume(this);
-        }
-
-        public void TaskDidStart(ITask task) { }
-
-        public void TaskDidEnd(ITask task)
-        {
-            _state.Stop();
-            
             CurrentState = TaskState.Ended;
-            Delegate?.TaskDidEnd(this);
-        }
-
-        public void TaskDidAbort(ITask task) { }
-
-        public void TaskDidSuspend(ITask task) { }
-
-        public void TaskDidResume(ITask task) { }
-
-        public void StateDidBreak(IState state)
-        {
-            _task.Suspend();
-        }
-
-        public void StateDidRecover(IState state)
-        {
-            if (_task.CurrentState == TaskState.Waiting) _task.Start();
-            else _task.Resume();
+            TaskDidEnd?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HPNS.Tasks.Core;
 
 namespace HPNS.Tasks.Support
 {
-    public class TaskSequence : ITask, ITaskDelegate
+    public class TaskSequence : ITask
     {
         private Queue<ITask> _tasks;
         private ITask _currentTask;
         
-        public ITaskDelegate Delegate { get; set; }
-
         public TaskState CurrentState { get; private set; } = TaskState.Waiting;
+        
+        public event EventHandler TaskDidEnd;
 
         public TaskSequence(IEnumerable<ITask> tasks)
         {
@@ -19,12 +20,13 @@ namespace HPNS.Tasks.Support
         
         public void Start()
         {
-            if (CurrentState != TaskState.Waiting) return;
+            if (CurrentState != TaskState.Waiting)
+                throw new Exception("Cannot start task that is not in Waiting state!");
 
             if (_tasks.Count == 0)
             {
                 CurrentState = TaskState.Ended;
-                Delegate?.TaskDidEnd(this);
+                TaskDidEnd?.Invoke(this, EventArgs.Empty);
                 
                 return;
             }
@@ -32,7 +34,17 @@ namespace HPNS.Tasks.Support
             StartNextTask();
             
             CurrentState = TaskState.Running;
-            Delegate?.TaskDidStart(this);
+        }
+
+        public void Abort()
+        {
+            if (CurrentState != TaskState.Running)
+                throw new Exception("Cannot abort task that is not in Running state!");
+            
+            _currentTask.Abort();
+            _currentTask = null;
+
+            CurrentState = TaskState.Aborted;
         }
 
         private void StartNextTask()
@@ -40,60 +52,22 @@ namespace HPNS.Tasks.Support
             if (_tasks.Count == 0)
             {
                 CurrentState = TaskState.Ended;
-                Delegate?.TaskDidEnd(this);
+                TaskDidEnd?.Invoke(this, EventArgs.Empty);
 
                 return;
             }
 
-            var nextTask = _tasks.Dequeue();
-            _currentTask = nextTask;
-
-            nextTask.Delegate = this;
-            nextTask.Start();
+            _currentTask = _tasks.Dequeue();
+            _currentTask.TaskDidEnd += CurrentTaskOnTaskDidEnd;
+            _currentTask.Start();
         }
 
-        public void Abort()
+        private void CurrentTaskOnTaskDidEnd(object sender, EventArgs e)
         {
-            if (CurrentState != TaskState.Running &&
-                CurrentState != TaskState.Suspended) return;
+            _currentTask.TaskDidEnd -= CurrentTaskOnTaskDidEnd;
+            _currentTask = null;
             
-            _currentTask.Abort();
-
-            CurrentState = TaskState.Aborted;
-            Delegate?.TaskDidAbort(this);
-        }
-
-        public void Suspend()
-        {
-            if (CurrentState != TaskState.Running) return;
-            
-            _currentTask.Suspend();
-
-            CurrentState = TaskState.Suspended;
-            Delegate?.TaskDidSuspend(this);
-        }
-
-        public void Resume()
-        {
-            if (CurrentState != TaskState.Suspended) return;
-            
-            _currentTask.Resume();
-
-            CurrentState = TaskState.Running;
-            Delegate?.TaskDidResume(this);
-        }
-
-        public void TaskDidStart(ITask task) { }
-
-        public void TaskDidEnd(ITask task)
-        {
             StartNextTask();
         }
-
-        public void TaskDidAbort(ITask task) { }
-
-        public void TaskDidSuspend(ITask task) { }
-
-        public void TaskDidResume(ITask task) { }
     }
 }

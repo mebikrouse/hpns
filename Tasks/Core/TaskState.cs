@@ -5,7 +5,6 @@ namespace HPNS.Tasks.Core
         Waiting,
         Running,
         Aborted,
-        Suspended,
         Ended
     }
 }

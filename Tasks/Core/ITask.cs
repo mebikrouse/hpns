@@ -1,12 +1,12 @@
-﻿namespace HPNS.Tasks.Core
+﻿using System;
+
+namespace HPNS.Tasks.Core
 {
     public interface ITask
     {
-        ITaskDelegate Delegate { get; set; }
         TaskState CurrentState { get; }
+        event EventHandler TaskDidEnd;
         void Start();
         void Abort();
-        void Suspend();
-        void Resume();
     }
 }

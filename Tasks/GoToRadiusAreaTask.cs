@@ -16,10 +16,10 @@ namespace HPNS.Tasks
 
         private Checkpoint _checkpoint;
         private int _blipHandle;
+
+        public TaskState CurrentState { get; private set; } = TaskState.Waiting;
         
-        public ITaskDelegate Delegate { get; set; }
-        
-        public TaskState CurrentState { get; private set; }
+        public event EventHandler TaskDidEnd;
 
         public GoToRadiusAreaTask(Vector3 center, float radius)
         {
@@ -34,7 +34,6 @@ namespace HPNS.Tasks
             AddCheckpointAndBlip();
 
             CurrentState = TaskState.Running;
-            Delegate?.TaskDidStart(this);
         }
 
         public void Abort()
@@ -44,27 +43,6 @@ namespace HPNS.Tasks
             RemoveCheckpointAndBlip();
 
             CurrentState = TaskState.Aborted;
-            Delegate?.TaskDidAbort(this);
-        }
-
-        public void Suspend()
-        {
-            if (CurrentState != TaskState.Running) return;
-            
-            RemoveCheckpointAndBlip();
-
-            CurrentState = TaskState.Suspended;
-            Delegate?.TaskDidSuspend(this);
-        }
-
-        public void Resume()
-        {
-            if (CurrentState != TaskState.Suspended) return;
-            
-            AddCheckpointAndBlip();
-
-            CurrentState = TaskState.Running;
-            Delegate?.TaskDidResume(this);
         }
 
         private void AddCheckpointAndBlip()
@@ -91,7 +69,7 @@ namespace HPNS.Tasks
             RemoveCheckpointAndBlip();
 
             CurrentState = TaskState.Ended;
-            Delegate?.TaskDidEnd(this);
+            TaskDidEnd?.Invoke(this, EventArgs.Empty);
         }
     }
 }

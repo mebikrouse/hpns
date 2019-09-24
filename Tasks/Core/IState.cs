@@ -1,9 +1,12 @@
-﻿namespace HPNS.Tasks.Core
+﻿using System;
+
+namespace HPNS.Tasks.Core
 {
     public interface IState
     {
-        IStateDelegate Delegate { get; set; }
         bool IsValid { get; }
+        event EventHandler StateDidBreak;
+        event EventHandler StateDidRecover;
         void Start();
         void Stop();
     }

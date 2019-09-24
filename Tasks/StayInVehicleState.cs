@@ -1,3 +1,4 @@
+using System;
 using CitizenFX.Core;
 using HPNS.Tasks.Core;
 
@@ -10,13 +11,14 @@ namespace HPNS.Tasks
     public class StayInVehicleState : IState
     {
         private int _vehicleHandle;
-
-        private int _blipHandle;
         
-        public IStateDelegate Delegate { get; set; }
+        private int _blipHandle;
 
         public bool IsValid => Game.PlayerPed.CurrentVehicle != null &&
                                Game.PlayerPed.CurrentVehicle.Handle == _vehicleHandle;
+
+        public event EventHandler StateDidBreak;
+        public event EventHandler StateDidRecover;
 
         public StayInVehicleState(int vehicleHandle)
         {
@@ -44,7 +46,7 @@ namespace HPNS.Tasks
             if (e.Handle != _vehicleHandle) return;
             
             RemoveMarkerAndBlip();
-            Delegate?.StateDidRecover(this);
+            StateDidRecover?.Invoke(this, EventArgs.Empty);
         }
 
         private void VehicleEventsManagerOnPlayerLeft(object sender, Vehicle e)
@@ -52,7 +54,7 @@ namespace HPNS.Tasks
             if (e.Handle != _vehicleHandle) return;
             
             AddMarkerAndBlip();
-            Delegate?.StateDidBreak(this);
+            StateDidBreak?.Invoke(this, EventArgs.Empty);
         }
 
         private void AddMarkerAndBlip()
