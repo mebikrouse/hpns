@@ -46,6 +46,12 @@ namespace HPNS.Core.Managers
                 {
                     _isInVehicle = false;
                     PlayerLeft?.Invoke(this, _prevVehicle);
+                } 
+                else if (_prevVehicle != currentVehicle)
+                {
+                    PlayerLeft?.Invoke(this, _prevVehicle);
+                    PlayerEntered?.Invoke(this, currentVehicle);
+                    _prevVehicle = currentVehicle;
                 }
             }
         }
