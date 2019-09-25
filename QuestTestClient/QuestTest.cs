@@ -31,6 +31,13 @@ namespace QuestTestClient
                 stateConjunction.TaskDidEnd += (sender, e) => Debug.WriteLine("Task did end");
                 stateConjunction.Start();
             }), false);
+            
+            RegisterCommand("quest2", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                var task = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
+                task.TaskDidEnd += (sender, e) => Debug.WriteLine("Task did end");
+                task.Start();
+            }), false);
         }
     }
 }
