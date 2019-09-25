@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 
@@ -26,20 +27,20 @@ namespace HPNS.Core
 
         public void AddUpdateObject(IUpdateObject updateObject)
         {
-            lock (_updateObjects) _updateObjects.Add(updateObject);
+            _updateObjects.Add(updateObject);
         }
 
         public void RemoveUpdateObject(IUpdateObject updateObject)
         {
-            lock(_updateObjects) _updateObjects.Remove(updateObject);
+            _updateObjects.Remove(updateObject);
         }
 
-        public void Start()
+        public async void Start()
         {
             if (CurrentState != State.Idle) return;
             CurrentState = State.Running;
             
-            _ = UpdateLoop();
+            await UpdateLoop();
         }
 
         public void Stop()
@@ -52,11 +53,9 @@ namespace HPNS.Core
         {
             while (CurrentState == State.Running)
             {
-                lock (_updateObjects)
-                {
-                    foreach (var updateObject in _updateObjects)
-                        updateObject.Update(_refreshRate);
-                }
+                var updateObjects = new List<IUpdateObject>(_updateObjects);
+                foreach (var updateObject in updateObjects)
+                    updateObject.Update(_refreshRate);
 
                 await BaseScript.Delay(_refreshRate);
             }

@@ -25,7 +25,8 @@ namespace HPNS.Core.Managers
 
         public void Update(float deltaTime)
         {
-            foreach (var checkpoint in _checkpoints)
+            var checkpoints = new List<Checkpoint>(_checkpoints);
+            foreach (var checkpoint in checkpoints)
                 checkpoint.Update(deltaTime);
         }
     }
