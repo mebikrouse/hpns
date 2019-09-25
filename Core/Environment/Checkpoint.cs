@@ -9,7 +9,7 @@ namespace HPNS.Core.Environment
         private float _radius;
         private ICheckpointDecorator _decorator;
         
-        private bool _isPlayerInside;
+        private bool _playerWasInside;
 
         public event EventHandler PlayerEntered;
         public event EventHandler PlayerLeft;
@@ -25,19 +25,19 @@ namespace HPNS.Core.Environment
         
         public void Update(float deltaTime)
         {
-            var distance = Vector3.Distance(Game.PlayerPed.Position, _center);
-            if (distance <= _radius)
+            if (IsPlayerInside())
             {
-                if (_isPlayerInside) return;
-
-                _isPlayerInside = true;
+                if (_playerWasInside) return;
+                
+                _playerWasInside = true;
                 PlayerEntered?.Invoke(this, EventArgs.Empty);
+                
             }
             else
             {
-                if (!_isPlayerInside) return;
+                if (!_playerWasInside) return;
 
-                _isPlayerInside = false;
+                _playerWasInside = false;
                 PlayerLeft?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -46,6 +46,11 @@ namespace HPNS.Core.Environment
         {
             PlayerLeft?.Invoke(this, EventArgs.Empty);
             _decorator?.RemoveDecoration();
+        }
+
+        private bool IsPlayerInside()
+        {
+            return Vector3.Distance(Game.PlayerPed.Position, _center) <= _radius;
         }
     }
 }
