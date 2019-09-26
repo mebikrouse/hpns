@@ -6,9 +6,6 @@ using CitizenFX.Core;
 using HPNS.Tasks;
 using HPNS.Tasks.Core;
 using HPNS.Tasks.Support;
-
-using TaskSequence = HPNS.Tasks.Support.TaskSequence;
-
 using static CitizenFX.Core.Native.API;
 
 namespace QuestTestClient
@@ -32,7 +29,7 @@ namespace QuestTestClient
                 Func<ITask> goToRadiusAreaTaskProvider = () => new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
                 var stayInVehicleState = new StayInVehicleState(vehicle.Handle);
                 
-                var stateConjunction = new TaskStateSuspend(goToRadiusAreaTaskProvider, stayInVehicleState);
+                var stateConjunction = new StateSuspendTask(goToRadiusAreaTaskProvider, stayInVehicleState);
                 stateConjunction.TaskDidEnd += (sender, e) => Debug.WriteLine("Task did end");
                 stateConjunction.Start();
             }), false);
@@ -55,9 +52,9 @@ namespace QuestTestClient
                 var randomPedHash = await CreateRandomPed(pedPosition);
                 
                 var keepAimingState = new KeepAimingAtEntityState(randomPedHash);
-                var stateWait = new StateWait(keepAimingState);
+                var stateWait = new StateWaitTask(keepAimingState);
                 var goToRadiusAreaTask = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
-                var taskSequence = new TaskSequence(new List<ITask>() {stateWait, goToRadiusAreaTask});
+                var taskSequence = new SequenceTask(new List<ITask>() {stateWait, goToRadiusAreaTask});
                 taskSequence.TaskDidEnd += (sender, e) => PrintToChat("Task did end");
                 taskSequence.Start();
             }), false);

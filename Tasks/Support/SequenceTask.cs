@@ -4,7 +4,7 @@ using HPNS.Tasks.Core;
 
 namespace HPNS.Tasks.Support
 {
-    public class TaskSequence : ITask
+    public class SequenceTask : ITask
     {
         private Queue<ITask> _tasks;
         private ITask _currentTask;
@@ -13,7 +13,7 @@ namespace HPNS.Tasks.Support
         
         public event EventHandler TaskDidEnd;
 
-        public TaskSequence(IEnumerable<ITask> tasks)
+        public SequenceTask(IEnumerable<ITask> tasks)
         {
             _tasks = new Queue<ITask>(tasks);
         }

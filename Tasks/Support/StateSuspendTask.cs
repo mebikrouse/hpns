@@ -3,7 +3,7 @@ using HPNS.Tasks.Core;
 
 namespace HPNS.Tasks.Support
 {
-    public class TaskStateSuspend : ITask
+    public class StateSuspendTask : ITask
     {
         private Func<ITask> _taskProvider;
         private IState _state;
@@ -14,7 +14,7 @@ namespace HPNS.Tasks.Support
         
         public event EventHandler TaskDidEnd;
 
-        public TaskStateSuspend(Func<ITask> taskProvider, IState state)
+        public StateSuspendTask(Func<ITask> taskProvider, IState state)
         {
             _taskProvider = taskProvider;
             _state = state;

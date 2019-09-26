@@ -48,9 +48,9 @@
     <Compile Include="KeepAimingAtEntityState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StayInVehicleState.cs" />
-    <Compile Include="Support\StateWait.cs" />
-    <Compile Include="Support\TaskStateSuspend.cs" />
-    <Compile Include="Support\TaskSequence.cs" />
+    <Compile Include="Support\StateWaitTask.cs" />
+    <Compile Include="Support\StateSuspendTask.cs" />
+    <Compile Include="Support\SequenceTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

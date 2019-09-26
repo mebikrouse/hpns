@@ -3,7 +3,7 @@ using HPNS.Tasks.Core;
 
 namespace HPNS.Tasks.Support
 {
-    public class StateWait : ITask
+    public class StateWaitTask : ITask
     {
         private IState _state;
         
@@ -11,7 +11,7 @@ namespace HPNS.Tasks.Support
         
         public event EventHandler TaskDidEnd;
 
-        public StateWait(IState state)
+        public StateWaitTask(IState state)
         {
             _state = state;
         }
