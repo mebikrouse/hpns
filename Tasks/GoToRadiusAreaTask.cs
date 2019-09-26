@@ -50,9 +50,10 @@ namespace HPNS.Tasks
             _checkpoint = World.Current.CheckpointManager.AddCheckpoint(_center, _radius);
             _checkpoint.PlayerEntered += CheckpointOnPlayerEntered;
 
-            _blipHandle = AddBlipForRadius(_center.X, _center.Y, _center.Z, _radius);
-            SetBlipColour(_blipHandle, (int) BlipColor.Yellow);
-            SetBlipAlpha(_blipHandle, 128);
+            _blipHandle = AddBlipForCoord(_center.X, _center.Y, _center.Z);
+            SetBlipSprite(_blipHandle, 146);
+            SetBlipColour(_blipHandle, 5);
+            SetBlipScale(_blipHandle, 0.75f);
             SetBlipRoute(_blipHandle, true);
         }
 
