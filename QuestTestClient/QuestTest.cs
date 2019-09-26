@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using HPNS.Core.Managers;
 using HPNS.Tasks;
 using HPNS.Tasks.Core;
 using HPNS.Tasks.Support;
+
+using TaskSequence = HPNS.Tasks.Support.TaskSequence;
+
 using static CitizenFX.Core.Native.API;
 
 namespace QuestTestClient
@@ -53,9 +55,11 @@ namespace QuestTestClient
                 var randomPedHash = await CreateRandomPed(pedPosition);
                 
                 var keepAimingState = new KeepAimingAtEntityState(randomPedHash);
-                keepAimingState.StateDidRecover += (sender, e) => PrintToChat($"Started aiming at {randomPedHash}");
-                keepAimingState.StateDidBreak += (sender, e) => PrintToChat($"Stopped aiming at {randomPedHash}");
-                keepAimingState.Start();
+                var stateWait = new StateWait(keepAimingState);
+                var goToRadiusAreaTask = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
+                var taskSequence = new TaskSequence(new List<ITask>() {stateWait, goToRadiusAreaTask});
+                taskSequence.TaskDidEnd += (sender, e) => PrintToChat("Task did end");
+                taskSequence.Start();
             }), false);
         }
 
