@@ -1,7 +1,7 @@
 ﻿using System;
 using CitizenFX.Core;
 using HPNS.Tasks.Core;
-
+using HPNS.Tasks.Core.Exceptions;
 using Checkpoint = HPNS.Core.Environment.Checkpoint;
 using World = HPNS.Core.World;
 
@@ -29,7 +29,8 @@ namespace HPNS.Tasks
         
         public void Start()
         {
-            if (CurrentState != TaskState.Waiting) return;
+            if (CurrentState != TaskState.Waiting)
+                throw new StartException();
             
             AddCheckpointAndBlip();
 
@@ -38,7 +39,8 @@ namespace HPNS.Tasks
 
         public void Abort()
         {
-            if (CurrentState != TaskState.Running) return;
+            if (CurrentState != TaskState.Running)
+                throw new AbortException();
             
             RemoveCheckpointAndBlip();
 

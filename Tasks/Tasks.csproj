@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Exceptions\AbortException.cs" />
+    <Compile Include="Core\Exceptions\StartException.cs" />
     <Compile Include="Core\IState.cs" />
     <Compile Include="Core\ITask.cs" />
     <Compile Include="Core\TaskState.cs" />

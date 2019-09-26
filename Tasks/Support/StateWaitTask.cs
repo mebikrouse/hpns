@@ -1,5 +1,6 @@
 using System;
 using HPNS.Tasks.Core;
+using HPNS.Tasks.Core.Exceptions;
 
 namespace HPNS.Tasks.Support
 {
@@ -19,7 +20,7 @@ namespace HPNS.Tasks.Support
         public void Start()
         {
             if (CurrentState != TaskState.Waiting)
-                throw new Exception("Cannot start task that is not in Waiting state!");
+                throw new StartException();
             
             _state.StateDidRecover += StateOnStateDidRecover;
             _state.Start();
@@ -30,7 +31,7 @@ namespace HPNS.Tasks.Support
         public void Abort()
         {
             if (CurrentState != TaskState.Running)
-                throw new Exception("Cannot abort task that is not in Running state!");
+                throw new AbortException();
 
             _state.StateDidRecover -= StateOnStateDidRecover;
             _state.Stop();
