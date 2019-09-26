@@ -11,36 +11,12 @@ namespace PedTest
 {
     public class PedTest : BaseScript
     {
-        private const int DEFAULT_REFRESH_RATE = 500;
-        
-        private List<int> _peds = new List<int>();
-        private UpdateObjectPool _updateObjectPool;
-        private VehicleEventsManager _vehicleEventsManager;
-
-        private uint _friendlyFollowerGroupHash;
-        private uint _playerGroupHash;
+        private bool _isPedCreated;
+        private int _currentPed;
         
         public PedTest()
         {
-            _vehicleEventsManager = new VehicleEventsManager();
-            
-            _updateObjectPool = new UpdateObjectPool(DEFAULT_REFRESH_RATE);
-            _updateObjectPool.AddUpdateObject(_vehicleEventsManager);
-            _updateObjectPool.Start();
-            
-            _vehicleEventsManager.PlayerEntered += VehicleEventsManagerOnPlayerEntered;
-            _vehicleEventsManager.PlayerLeft += VehicleEventsManagerOnPlayerLeft;
-            
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
-            EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
-
-            AddRelationshipGroup("FRIENDLY_FOLLOWER", ref _friendlyFollowerGroupHash);
-            AddRelationshipGroup("PLAYER", ref _playerGroupHash);
-            
-            SetRelationshipBetweenGroups(0, _friendlyFollowerGroupHash, _playerGroupHash);
-            SetRelationshipBetweenGroups(0, _playerGroupHash, _friendlyFollowerGroupHash);
-            
-            SetPedRelationshipGroupHash(Game.PlayerPed.Handle, _playerGroupHash);
         }
 
         private void OnClientResourceStart(string resourceName)
@@ -49,44 +25,49 @@ namespace PedTest
             
             RegisterCommand("ped", new Action<int, List<object>, string>(async (source, args, raw) =>
             {
+                if (_isPedCreated)
+                    DeletePed(ref _currentPed);
+                
                 var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5f;
-                var ped = await CreateRandomPed(pedPosition);
-                _peds.Add(ped);
-                
-                SetPedRelationshipGroupHash(ped, _friendlyFollowerGroupHash);
-                
-                FollowEntity(ped, Game.PlayerPed.Handle);
+                var ped = await CreatePedAtPosition(pedPosition, (uint) GetHashKey("a_m_m_ktown_01"));
 
+                TaskSetBlockingOfNonTemporaryEvents(ped, true);
+
+                _isPedCreated = true;
+                _currentPed = ped;
             }), false);
             
             RegisterCommand("remove", new Action<int, List<object>, string>((source, args, raw) =>
             {
-                foreach (var ped in _peds)
+                if (!_isPedCreated) return;
+                
+                DeletePed(ref _currentPed);
+            }), false);
+            
+            RegisterCommand("anim", new Action<int, List<object>, string>(async (source, args, raw) =>
+            {
+                if (args.Count != 2)
                 {
-                    var pedHandle = ped;
-                    DeletePed(ref pedHandle);
+                    PrintToChat("Usage: /anim [dict] [name]");
+                    return;
+                }
+
+                if (!_isPedCreated)
+                {
+                    PrintToChat("You need to spawn ped at first!");
+                    return;
                 }
                 
-                _peds.Clear();
+                var dict = args[0].ToString();
+                var anim = args[1].ToString();
+
+                await PlayAnim(_currentPed, dict, anim);
+                
             }), false);
         }
 
-        private void OnClientResourceStop(string resourceName)
+        private static async Task<int> CreatePedAtPosition(Vector3 position, uint pedHash)
         {
-            if (GetCurrentResourceName() != resourceName) return;
-            _updateObjectPool.Stop();
-        }
-
-        private static uint GetRandomPedHash()
-        {
-            var pedHashes = Enum.GetValues(typeof(PedHash)).Cast<PedHash>().ToList();
-            return (uint) pedHashes[new Random().Next(0, pedHashes.Count)];
-        }
-
-        private static async Task<int> CreateRandomPed(Vector3 position)
-        {
-            var pedHash = GetRandomPedHash();
-
             while (!HasModelLoaded(pedHash))
             {
                 RequestModel(pedHash);
@@ -97,54 +78,24 @@ namespace PedTest
             return ped;
         }
 
-        private void VehicleEventsManagerOnPlayerLeft(object sender, Vehicle vehicle)
+        private static async Task PlayAnim(int pedHandle, string dict, string name)
         {
-            foreach (var ped in _peds)
+            RequestAnimDict(dict);
+
+            while (!HasAnimDictLoaded(dict))
+                await Delay(500);
+
+            PrintToChat("Stating to play animation...");
+            TaskPlayAnim(pedHandle, dict, name, 8.0f, 8.0f, -1, 0, 0.0f, false, false, false);
+        }
+        
+        private static void PrintToChat(string message)
+        {
+            TriggerEvent("chat:addMessage", new 
             {
-                if (IsPedInAnyVehicle(ped, true))
-                {
-                    TaskLeaveAnyVehicle(ped, 0, 0);
-                }
-
-                FollowEntity(ped, Game.PlayerPed.Handle);
-            }
-        }
-
-        private void VehicleEventsManagerOnPlayerEntered(object sender, Vehicle e)
-        {
-            var freeSeats = GetFreeSeats(e);
-            var random = new Random();
-            foreach (var ped in _peds)
-            {
-                if (freeSeats.Count > 0)
-                {
-                    var seatIndex = random.Next(0, freeSeats.Count);
-                    var seat = freeSeats[seatIndex];
-                    freeSeats.RemoveAt(seatIndex);
-                    TaskEnterVehicle(ped, e.Handle, -1, (int) seat, 10f, 1, 0);
-                }
-                else
-                {
-                    FollowEntity(ped, e.Handle);
-                }
-            }
-        }
-
-        private List<VehicleSeat> GetFreeSeats(Vehicle vehicle)
-        {
-            var seats = Enum.GetValues(typeof(VehicleSeat)).Cast<VehicleSeat>().Distinct().ToList();
-            var freeSeats = new List<VehicleSeat>();
-            foreach (var seat in seats)
-                if (vehicle.IsSeatFree(seat) &&
-                    seat != VehicleSeat.Any)
-                    freeSeats.Add(seat);
-
-            return freeSeats;
-        }
-
-        private void FollowEntity(int ped, int entity)
-        {
-            TaskFollowToOffsetOfEntity(ped, entity, 2.0f, 0.0f, 0.0f, 2.0f, -1, 10f, true);
+                color = new[] {255, 0, 0},
+                args = new[] {"[PedTest]", message}
+            });
         }
     }
 }
