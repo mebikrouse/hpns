@@ -60,8 +60,9 @@ namespace HPNS.Tasks
         private void AddMarkerAndBlip()
         {
             _blipHandle = AddBlipForEntity(_vehicleHandle);
-            SetBlipSprite(_blipHandle, 146);
-            SetBlipColour(_blipHandle, 5);
+            SetBlipSprite(_blipHandle, 143);
+            SetBlipColour(_blipHandle, 3);
+            SetBlipScale(_blipHandle, 0.75f);
         }
 
         private void RemoveMarkerAndBlip()
