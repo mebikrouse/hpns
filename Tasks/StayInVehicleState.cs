@@ -14,6 +14,8 @@ namespace HPNS.Tasks
         
         private int _blipHandle;
 
+        public StateState CurrentState { get; private set; } = StateState.Waiting;
+
         public bool IsValid => Game.PlayerPed.CurrentVehicle != null &&
                                Game.PlayerPed.CurrentVehicle.Handle == _vehicleHandle;
 
@@ -27,18 +29,28 @@ namespace HPNS.Tasks
 
         public void Start()
         {
+            if (CurrentState != StateState.Waiting)
+                throw new Exception("Cannot start state that is not in Waiting state.");
+            
             World.Current.VehicleEventsManager.PlayerEntered += VehicleEventsManagerOnPlayerEntered;
             World.Current.VehicleEventsManager.PlayerLeft += VehicleEventsManagerOnPlayerLeft;
             
             if (!IsValid) AddMarkerAndBlip();
+
+            CurrentState = StateState.Running;
         }
 
         public void Stop()
         {
+            if (CurrentState != StateState.Running)
+                throw new Exception("Cannot stop state that is not in Running state.");
+            
             World.Current.VehicleEventsManager.PlayerEntered -= VehicleEventsManagerOnPlayerEntered;
             World.Current.VehicleEventsManager.PlayerLeft -= VehicleEventsManagerOnPlayerLeft;
             
             if (!IsValid) RemoveMarkerAndBlip();
+
+            CurrentState = StateState.Waiting;
         }
 
         private void VehicleEventsManagerOnPlayerEntered(object sender, Vehicle e)

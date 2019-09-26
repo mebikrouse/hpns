@@ -45,6 +45,7 @@
     <Compile Include="Core\Exceptions\StartException.cs" />
     <Compile Include="Core\IState.cs" />
     <Compile Include="Core\ITask.cs" />
+    <Compile Include="Core\StateState.cs" />
     <Compile Include="Core\TaskState.cs" />
     <Compile Include="GoToRadiusAreaTask.cs" />
     <Compile Include="KeepAimingAtEntityState.cs" />
