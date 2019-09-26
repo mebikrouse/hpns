@@ -30,7 +30,7 @@ namespace QuestTestClient
                 Func<ITask> goToRadiusAreaTaskProvider = () => new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
                 var stayInVehicleState = new StayInVehicleState(vehicle.Handle);
                 
-                var stateConjunction = new StateConjunction(goToRadiusAreaTaskProvider, stayInVehicleState);
+                var stateConjunction = new TaskStateSuspend(goToRadiusAreaTaskProvider, stayInVehicleState);
                 stateConjunction.TaskDidEnd += (sender, e) => Debug.WriteLine("Task did end");
                 stateConjunction.Start();
             }), false);
