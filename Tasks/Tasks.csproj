@@ -45,6 +45,7 @@
     <Compile Include="Core\ITask.cs" />
     <Compile Include="Core\TaskState.cs" />
     <Compile Include="GoToRadiusAreaTask.cs" />
+    <Compile Include="KeepAimingAtEntityState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StayInVehicleState.cs" />
     <Compile Include="Support\StateConjunction.cs" />

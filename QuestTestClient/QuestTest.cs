@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using CitizenFX.Core;
 using HPNS.Core.Managers;
 using HPNS.Tasks;
@@ -40,10 +42,21 @@ namespace QuestTestClient
                 task.Start();
             }), false);
 
-            HPNS.Core.World.Current.AimingManager.PlayerDidStartAimingAtEntity += (sender, e) =>
-                PrintToChat($"Started aiming at entity with handle {e}");
-            HPNS.Core.World.Current.AimingManager.PlayerDidStopAimingAtEntity += (sender, e) =>
-                PrintToChat($"Stopped aiming at entity with handle {e}");
+            //HPNS.Core.World.Current.AimingManager.PlayerDidStartAimingAtEntity += (sender, e) =>
+            //    PrintToChat($"Started aiming at entity with handle {e}");
+            //HPNS.Core.World.Current.AimingManager.PlayerDidStopAimingAtEntity += (sender, e) =>
+            //    PrintToChat($"Stopped aiming at entity with handle {e}");
+            
+            RegisterCommand("quest3", new Action<int, List<object>, string>(async (source, args, raw) =>
+            {
+                var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5;
+                var randomPedHash = await CreateRandomPed(pedPosition);
+                
+                var keepAimingState = new KeepAimingAtEntityState(randomPedHash);
+                keepAimingState.StateDidRecover += (sender, e) => PrintToChat($"Started aiming at {randomPedHash}");
+                keepAimingState.StateDidBreak += (sender, e) => PrintToChat($"Stopped aiming at {randomPedHash}");
+                keepAimingState.Start();
+            }), false);
         }
 
         private void PrintToChat(string message)
@@ -51,8 +64,28 @@ namespace QuestTestClient
             TriggerEvent("chat:addMessage", new 
             {
                 color = new[] {255, 0, 0},
-                args = new[] {"[CarSpawner]", message}
+                args = new[] {"[QuestTest]", message}
             });
+        }
+        
+        private static async Task<int> CreateRandomPed(Vector3 position)
+        {
+            var pedHash = GetRandomPedHash();
+
+            while (!HasModelLoaded(pedHash))
+            {
+                RequestModel(pedHash);
+                await Delay(500);
+            }
+            
+            var ped = CreatePed(0, pedHash, position.X, position.Y, position.Z, 0f, true, false);
+            return ped;
+        }
+        
+        private static uint GetRandomPedHash()
+        {
+            var pedHashes = Enum.GetValues(typeof(PedHash)).Cast<PedHash>().ToList();
+            return (uint) pedHashes[new Random().Next(0, pedHashes.Count)];
         }
     }
 }
