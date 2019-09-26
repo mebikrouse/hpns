@@ -6,6 +6,7 @@ namespace HPNS.Core
     {
         private const int CHECKPOINT_MANAGER_REFRESH_RATE = 500;
         private const int VEHICLE_EVENTS_MANAGER_REFRESH_RATE = 500;
+        private const int AIMING_MANAGER_REFRESH_RATE = 100;
         
         private static World _current;
         
@@ -25,17 +26,16 @@ namespace HPNS.Core
 
         private UpdateObjectPool _vehicleEventsManagerUpdate;
         private VehicleEventsManager _vehicleEventsManager;
-        
-        public CheckpointManager CheckpointManager
-        {
-            get { return _checkpointManager; }
-        }
 
-        public VehicleEventsManager VehicleEventsManager
-        {
-            get { return _vehicleEventsManager; }
-        }
+        private UpdateObjectPool _aimingManagerUpdate;
+        private AimingManager _aimingManager;
         
+        public CheckpointManager CheckpointManager => _checkpointManager;
+
+        public VehicleEventsManager VehicleEventsManager => _vehicleEventsManager;
+
+        public AimingManager AimingManager => _aimingManager;
+
         public World()
         {
             _checkpointManagerUpdate = new UpdateObjectPool(CHECKPOINT_MANAGER_REFRESH_RATE);
@@ -47,6 +47,11 @@ namespace HPNS.Core
             _vehicleEventsManager = new VehicleEventsManager();
             _vehicleEventsManagerUpdate.AddUpdateObject(_vehicleEventsManager);
             _vehicleEventsManagerUpdate.Start();
+            
+            _aimingManagerUpdate = new UpdateObjectPool(AIMING_MANAGER_REFRESH_RATE);
+            _aimingManager = new AimingManager();
+            _aimingManagerUpdate.AddUpdateObject(_aimingManager);
+            _aimingManagerUpdate.Start();
         }
     }
 }

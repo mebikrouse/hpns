@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CitizenFX.Core;
+using HPNS.Core.Managers;
 using HPNS.Tasks;
 using HPNS.Tasks.Core;
 using HPNS.Tasks.Support;
@@ -38,6 +39,20 @@ namespace QuestTestClient
                 task.TaskDidEnd += (sender, e) => Debug.WriteLine("Task did end");
                 task.Start();
             }), false);
+
+            HPNS.Core.World.Current.AimingManager.PlayerDidStartAimingAtEntity += (sender, e) =>
+                PrintToChat($"Started aiming at entity with handle {e}");
+            HPNS.Core.World.Current.AimingManager.PlayerDidStopAimingAtEntity += (sender, e) =>
+                PrintToChat($"Stopped aiming at entity with handle {e}");
+        }
+
+        private void PrintToChat(string message)
+        {
+            TriggerEvent("chat:addMessage", new 
+            {
+                color = new[] {255, 0, 0},
+                args = new[] {"[CarSpawner]", message}
+            });
         }
     }
 }
