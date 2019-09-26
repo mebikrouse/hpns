@@ -4,7 +4,7 @@ using HPNS.Tasks.Core;
 
 namespace HPNS.Tasks
 {
-    public class KeepAimingAtEntityState : IState
+    public class AimingAtEntityState : IState
     {
         private int _entityHandle;
 
@@ -17,7 +17,7 @@ namespace HPNS.Tasks
         public event EventHandler StateDidBreak;
         public event EventHandler StateDidRecover;
 
-        public KeepAimingAtEntityState(int entityHandle)
+        public AimingAtEntityState(int entityHandle)
         {
             _entityHandle = entityHandle;
         }

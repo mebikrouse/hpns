@@ -27,7 +27,7 @@ namespace QuestTestClient
                 var vehicle = await World.CreateVehicle(model, Game.PlayerPed.Position + Game.PlayerPed.RightVector * 5.0f, Game.PlayerPed.Heading);
 
                 Func<ITask> goToRadiusAreaTaskProvider = () => new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
-                var stayInVehicleState = new StayInVehicleState(vehicle.Handle);
+                var stayInVehicleState = new BeingInVehicleState(vehicle.Handle);
                 
                 var stateConjunction = new StateSuspendTask(goToRadiusAreaTaskProvider, stayInVehicleState);
                 stateConjunction.TaskDidEnd += (sender, e) => Debug.WriteLine("Task did end");
@@ -51,7 +51,7 @@ namespace QuestTestClient
                 var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5;
                 var randomPedHash = await CreateRandomPed(pedPosition);
                 
-                var keepAimingState = new KeepAimingAtEntityState(randomPedHash);
+                var keepAimingState = new AimingAtEntityState(randomPedHash);
                 var stateWait = new StateWaitTask(keepAimingState);
                 var goToRadiusAreaTask = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
                 var taskSequence = new SequenceTask(new List<ITask>() {stateWait, goToRadiusAreaTask});

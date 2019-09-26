@@ -8,7 +8,7 @@ using static CitizenFX.Core.Native.API;
 
 namespace HPNS.Tasks
 {
-    public class StayInVehicleState : IState
+    public class BeingInVehicleState : IState
     {
         private int _vehicleHandle;
         
@@ -22,7 +22,7 @@ namespace HPNS.Tasks
         public event EventHandler StateDidBreak;
         public event EventHandler StateDidRecover;
 
-        public StayInVehicleState(int vehicleHandle)
+        public BeingInVehicleState(int vehicleHandle)
         {
             _vehicleHandle = vehicleHandle;
         }

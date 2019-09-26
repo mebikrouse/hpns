@@ -48,9 +48,9 @@
     <Compile Include="Core\StateState.cs" />
     <Compile Include="Core\TaskState.cs" />
     <Compile Include="GoToRadiusAreaTask.cs" />
-    <Compile Include="KeepAimingAtEntityState.cs" />
+    <Compile Include="AimingAtEntityState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StayInVehicleState.cs" />
+    <Compile Include="BeingInVehicleState.cs" />
     <Compile Include="Support\StateWaitTask.cs" />
     <Compile Include="Support\StateSuspendTask.cs" />
     <Compile Include="Support\SequenceTask.cs" />
