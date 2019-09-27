@@ -58,6 +58,92 @@ namespace QuestTestClient
                 taskSequence.TaskDidEnd += (sender, e) => PrintToChat("Task did end");
                 taskSequence.Start();
             }), false);
+            
+            RegisterCommand("quest4", new Action<int, List<object>, string>(async (source, args, raw) =>
+            {
+                var pedPosition = new Vector3(1166.155f, 2710.851f, 38.15769f);
+                var heading = 180.775f;
+                
+                var pedHandle = await CreatePedAtPosition(pedPosition, heading, (uint) GetHashKey("a_m_m_ktown_01"));
+                SetBlockingOfNonTemporaryEvents(pedHandle, true);
+                PlaceObjectOnGroundProperly(pedHandle);
+                
+                var dict = "random@shop_robbery";
+                var anim = "robbery_action_f";
+                
+                await LoadAnimDict(dict);
+
+                var aimingState = new AimingAtEntityState(pedHandle);
+                var aimingWaitTask = new StateWaitTask(aimingState);
+                aimingWaitTask.TaskDidEnd += async (sender, e) =>
+                {
+                    PlayAnim(pedHandle, dict, anim);
+
+                    var propModelHash = (uint) GetHashKey("prop_paper_bag_01");
+                    await LoadObject(propModelHash);
+                    
+                    await Delay(8000);
+                    
+                    var propHandle = CreateObject((int) propModelHash, 0f, 0f, 0f, true, true, true);
+                    var boneIndex = GetPedBoneIndex(pedHandle, 58866);
+                    AttachEntityToEntity(propHandle, pedHandle, boneIndex, 
+                        0.31f, -0.12f, -0.02f, -86f, -31f, 68f, true, 
+                        false, false, false, 0, true);
+                    
+                    await Delay(1500);
+
+                    DetachEntity(propHandle, true, true);
+
+                    SetBlockingOfNonTemporaryEvents(pedHandle, false);
+                    TaskSmartFleePed(pedHandle, Game.PlayerPed.Handle, 50f, -1, true, true);
+                };
+                aimingWaitTask.Start();
+            }), false);
+        }
+        
+        private static async Task<int> CreateRandomPed(Vector3 position)
+        {
+            var pedHash = GetRandomPedHash();
+            return await CreatePedAtPosition(position, 0f, pedHash);
+        }
+        
+        private static uint GetRandomPedHash()
+        {
+            var pedHashes = Enum.GetValues(typeof(PedHash)).Cast<PedHash>().ToList();
+            return (uint) pedHashes[new Random().Next(0, pedHashes.Count)];
+        }
+        
+        private static async Task<int> CreatePedAtPosition(Vector3 position, float heading, uint pedHash)
+        {
+            while (!HasModelLoaded(pedHash))
+            {
+                RequestModel(pedHash);
+                await Delay(500);
+            }
+            
+            var ped = CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, true, false);
+            return ped;
+        }
+
+        private static void PlayAnim(int pedHandle, string dict, string name)
+        {
+            TaskPlayAnim(pedHandle, dict, name, 8.0f, 8.0f, -1, 0, 0.0f, false, false, false);
+        }
+
+        private static async Task LoadAnimDict(string dict)
+        {
+            RequestAnimDict(dict);
+
+            while (!HasAnimDictLoaded(dict))
+                await Delay(500);
+        }
+
+        private static async Task LoadObject(uint modelHash)
+        {
+            RequestModel(modelHash);
+
+            while (!HasModelLoaded(modelHash))
+                await Delay(500);
         }
 
         private void PrintToChat(string message)
@@ -67,26 +153,6 @@ namespace QuestTestClient
                 color = new[] {255, 0, 0},
                 args = new[] {"[QuestTest]", message}
             });
-        }
-        
-        private static async Task<int> CreateRandomPed(Vector3 position)
-        {
-            var pedHash = GetRandomPedHash();
-
-            while (!HasModelLoaded(pedHash))
-            {
-                RequestModel(pedHash);
-                await Delay(500);
-            }
-            
-            var ped = CreatePed(0, pedHash, position.X, position.Y, position.Z, 0f, true, false);
-            return ped;
-        }
-        
-        private static uint GetRandomPedHash()
-        {
-            var pedHashes = Enum.GetValues(typeof(PedHash)).Cast<PedHash>().ToList();
-            return (uint) pedHashes[new Random().Next(0, pedHashes.Count)];
         }
     }
 }
