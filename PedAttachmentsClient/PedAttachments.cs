@@ -31,9 +31,11 @@ namespace PedAttachmentsClient
                 
                 var boneId = 0;
                 var vertexIndex = 0;
-                if (args.Count != 3) return;
+                var fixedRot = false;
+                if (args.Count != 4) return;
                 if (!int.TryParse(args[1].ToString(), out boneId)) return;
                 if (!int.TryParse(args[2].ToString(), out vertexIndex)) return;
+                if (!bool.TryParse(args[3].ToString(), out fixedRot)) return;
                 
                 var propModelHash = (uint) GetHashKey(args[0].ToString());
                 if (!IsModelInCdimage(propModelHash)) return;
@@ -53,9 +55,10 @@ namespace PedAttachmentsClient
                 var boneIndex = GetPedBoneIndex(pedHandle, boneId);
                 AttachEntityToEntity(propHandle, pedHandle, boneIndex, 
                     0f, 0f, 0f, 0, 0, 0, true, 
-                    false, false, false, vertexIndex, true);
+                    false, false, false, vertexIndex, fixedRot);
+                
                 _running = true;
-                await WaitForPlayerInput(pedHandle, propHandle, boneIndex, vertexIndex, boneId);
+                await WaitForPlayerInput(pedHandle, propHandle, boneIndex, vertexIndex, boneId, fixedRot);
 
             }), false);
 
@@ -63,7 +66,7 @@ namespace PedAttachmentsClient
                 new Action<int, List<object>, string>((source, args, raw) => { _running = false; }), false);
         }
         
-        private async Task WaitForPlayerInput(int pedHandle, int propHandle, int boneIndex, int vertexIndex, int boneId)
+        private async Task WaitForPlayerInput(int pedHandle, int propHandle, int boneIndex, int vertexIndex, int boneId, bool fixedRot)
         {
             var p = new Vector3(0, 0, 0);
             var r = new Vector3(0, 0, 0);
@@ -121,13 +124,14 @@ namespace PedAttachmentsClient
                 DetachEntity(propHandle, false, false);
                 AttachEntityToEntity(propHandle, pedHandle, boneIndex, 
                     p.X, p.Y, p.Z, r.X, r.Y, r.Z, true, 
-                    false, false, false, vertexIndex, true);
+                    false, false, false, vertexIndex, fixedRot);
             }
 
             Debug.WriteLine($"Attachment position: {p.X}f, {p.Y}f, {p.Z}f");
             Debug.WriteLine($"Attachment rotation: {r.X}f, {r.Y}f, {r.Z}f");
             Debug.WriteLine($"Bone id: {boneId}");
             Debug.WriteLine($"Vertex index: {vertexIndex}");
+            Debug.WriteLine($"Fixed rot: {fixedRot}");
 
             DetachEntity(propHandle, false, false);
             DeletePed(ref pedHandle);
