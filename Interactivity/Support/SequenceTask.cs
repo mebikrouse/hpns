@@ -41,7 +41,8 @@ namespace HPNS.Interactivity.Support
         {
             if (CurrentState != TaskState.Running)
                 throw new AbortException();
-            
+
+            _currentTask.TaskDidEnd -= CurrentTaskOnTaskDidEnd;
             _currentTask.Abort();
             _currentTask = null;
 
