@@ -53,7 +53,7 @@ namespace PedAttachmentsClient
                 var boneIndex = GetPedBoneIndex(pedHandle, boneId);
                 AttachEntityToEntity(propHandle, pedHandle, boneIndex, 
                     0f, 0f, 0f, 0, 0, 0, true, 
-                    false, false, false, vertexIndex, false);
+                    false, false, false, vertexIndex, true);
                 _running = true;
                 await WaitForPlayerInput(pedHandle, propHandle, boneIndex, vertexIndex, boneId);
 
