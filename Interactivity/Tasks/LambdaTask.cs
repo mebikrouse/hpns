@@ -1,8 +1,8 @@
 using System;
-using HPNS.Tasks.Core;
-using HPNS.Tasks.Core.Exceptions;
+using HPNS.Interactivity.Core;
+using HPNS.Interactivity.Exceptions;
 
-namespace HPNS.Tasks.Support
+namespace HPNS.Interactivity.Tasks
 {
     public class LambdaTask : ITask
     {

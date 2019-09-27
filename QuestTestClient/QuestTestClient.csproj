@@ -49,9 +49,9 @@
       <Project>{d32bac0c-2fb2-441e-b7aa-8002a058720a}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tasks\Tasks.csproj">
+    <ProjectReference Include="..\Interactivity\Interactivity.csproj">
       <Project>{d2f30c12-5999-4fec-b0dd-ea5223c1e57b}</Project>
-      <Name>Tasks</Name>
+      <Name>Interactivity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

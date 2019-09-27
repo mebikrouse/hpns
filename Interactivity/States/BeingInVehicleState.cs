@@ -1,12 +1,11 @@
 using System;
 using CitizenFX.Core;
-using HPNS.Tasks.Core;
-
+using HPNS.Interactivity.Core;
 using World = HPNS.Core.World;
 
 using static CitizenFX.Core.Native.API;
 
-namespace HPNS.Tasks
+namespace HPNS.Interactivity.States
 {
     public class BeingInVehicleState : IState
     {

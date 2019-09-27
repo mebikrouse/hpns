@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarSpawnerClient", "CarSpaw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrentLocationClient", "CurrentLocationClient\CurrentLocationClient.csproj", "{AE2D8352-8C3C-48FD-87D4-26BC2F883E0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasks", "Tasks\Tasks.csproj", "{D2F30C12-5999-4FEC-B0DD-EA5223C1E57B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interactivity", "Interactivity\Interactivity.csproj", "{D2F30C12-5999-4FEC-B0DD-EA5223C1E57B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestTestClient", "QuestTestClient\QuestTestClient.csproj", "{90F2A4C9-5745-4277-A78E-F60BA07C549E}"
 EndProject

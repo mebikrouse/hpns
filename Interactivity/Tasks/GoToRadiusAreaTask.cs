@@ -1,13 +1,13 @@
 ﻿using System;
 using CitizenFX.Core;
-using HPNS.Tasks.Core;
-using HPNS.Tasks.Core.Exceptions;
+using HPNS.Interactivity.Core;
+using HPNS.Interactivity.Exceptions;
 using Checkpoint = HPNS.Core.Environment.Checkpoint;
 using World = HPNS.Core.World;
 
 using static CitizenFX.Core.Native.API;
 
-namespace HPNS.Tasks
+namespace HPNS.Interactivity.Tasks
 {
     public class GoToRadiusAreaTask : ITask
     {

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using HPNS.Tasks;
-using HPNS.Tasks.Core;
-using HPNS.Tasks.Support;
+using HPNS.Interactivity;
+using HPNS.Interactivity.Core;
+using HPNS.Interactivity.States;
+using HPNS.Interactivity.Support;
+using HPNS.Interactivity.Tasks;
 using static CitizenFX.Core.Native.API;
 
 namespace QuestTestClient

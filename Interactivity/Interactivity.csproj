@@ -7,8 +7,8 @@
     <ProjectGuid>{D2F30C12-5999-4FEC-B0DD-EA5223C1E57B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HPNS.Tasks</RootNamespace>
-    <AssemblyName>Tasks</AssemblyName>
+    <RootNamespace>HPNS.Interactivity</RootNamespace>
+    <AssemblyName>Interactivity</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,21 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Exceptions\AbortException.cs" />
-    <Compile Include="Core\Exceptions\StartException.cs" />
     <Compile Include="Core\IState.cs" />
     <Compile Include="Core\ITask.cs" />
     <Compile Include="Core\StateState.cs" />
     <Compile Include="Core\TaskState.cs" />
-    <Compile Include="GoToRadiusAreaTask.cs" />
-    <Compile Include="AimingAtEntityState.cs" />
+    <Compile Include="Exceptions\AbortException.cs" />
+    <Compile Include="Exceptions\StartException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BeingInVehicleState.cs" />
-    <Compile Include="Support\LambdaTask.cs" />
+    <Compile Include="States\AimingAtEntityState.cs" />
+    <Compile Include="States\BeingInVehicleState.cs" />
     <Compile Include="Support\StateWaitTask.cs" />
     <Compile Include="Support\StateSuspendTask.cs" />
     <Compile Include="Support\SequenceTask.cs" />
-    <Compile Include="Support\WaitTask.cs" />
+    <Compile Include="Tasks\GoToRadiusAreaTask.cs" />
+    <Compile Include="Tasks\LambdaTask.cs" />
+    <Compile Include="Tasks\WaitTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

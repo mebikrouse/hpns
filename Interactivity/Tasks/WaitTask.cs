@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using HPNS.Tasks.Core;
-using HPNS.Tasks.Core.Exceptions;
+using HPNS.Interactivity.Core;
+using HPNS.Interactivity.Exceptions;
 
-namespace HPNS.Tasks.Support
+namespace HPNS.Interactivity.Tasks
 {
     public class WaitTask : ITask
     {

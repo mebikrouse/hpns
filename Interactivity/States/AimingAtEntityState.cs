@@ -1,8 +1,8 @@
 using System;
 using HPNS.Core;
-using HPNS.Tasks.Core;
+using HPNS.Interactivity.Core;
 
-namespace HPNS.Tasks
+namespace HPNS.Interactivity.States
 {
     public class AimingAtEntityState : IState
     {

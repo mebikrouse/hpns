@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HPNS.Tasks.Core
+namespace HPNS.Interactivity.Core
 {
     public interface ITask
     {

@@ -1,4 +1,4 @@
-namespace HPNS.Tasks.Core
+namespace HPNS.Interactivity.Core
 {
     public enum TaskState
     {

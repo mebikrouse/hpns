@@ -1,6 +1,6 @@
 using System;
 
-namespace HPNS.Tasks.Core.Exceptions
+namespace HPNS.Interactivity.Exceptions
 {
     public class StartException : Exception
     {
