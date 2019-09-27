@@ -22,6 +22,8 @@ namespace CurrentLocationClient
                 Debug.WriteLine($"Current position: {playerPedPosition.X}f, {playerPedPosition.Y}f, {playerPedPosition.Z}f");
                 var playerPedRotation = Game.PlayerPed.Rotation;
                 Debug.WriteLine($"Current rotation: {playerPedRotation.X}f, {playerPedRotation.Y}f, {playerPedRotation.Z}f");
+                var playerHeading = Game.PlayerPed.Heading;
+                Debug.WriteLine($"Current heading: {playerHeading}f");
             }), false);
         }
     }
