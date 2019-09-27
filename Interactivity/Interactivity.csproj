@@ -48,6 +48,7 @@
     <Compile Include="Exceptions\AbortException.cs" />
     <Compile Include="Exceptions\StartException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenarios\ShopRobberyScenario.cs" />
     <Compile Include="States\AimingAtEntityState.cs" />
     <Compile Include="States\BeingInVehicleState.cs" />
     <Compile Include="Support\StateWaitTask.cs" />
