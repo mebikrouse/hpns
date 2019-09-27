@@ -61,43 +61,53 @@ namespace QuestTestClient
             
             RegisterCommand("quest4", new Action<int, List<object>, string>(async (source, args, raw) =>
             {
-                var pedPosition = new Vector3(1166.155f, 2710.851f, 38.15769f);
-                var heading = 180.775f;
+                //var pedPosition = new Vector3(1166.155f, 2710.851f, 38.15769f);
+                //var heading = 180.775f;
+
+                var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 3;
+                var heading = Game.PlayerPed.Heading - 180f;
                 
                 var pedHandle = await CreatePedAtPosition(pedPosition, heading, (uint) GetHashKey("a_m_m_ktown_01"));
                 SetBlockingOfNonTemporaryEvents(pedHandle, true);
                 PlaceObjectOnGroundProperly(pedHandle);
                 
-                var dict = "random@shop_robbery";
-                var anim = "robbery_action_f";
-                
+                var dict = "mp_am_hold_up";
+                var anim = "holdup_victim_20s";
                 await LoadAnimDict(dict);
 
-                var aimingState = new AimingAtEntityState(pedHandle);
-                var aimingWaitTask = new StateWaitTask(aimingState);
-                aimingWaitTask.TaskDidEnd += async (sender, e) =>
+                var propModelHash = (uint) GetHashKey("prop_poly_bag_01");
+                await LoadObject(propModelHash);
+
+                var propHandle = 0;
+                
+                var tasks = new List<ITask>();
+                tasks.Add(new StateWaitTask(new AimingAtEntityState(pedHandle)));
+                tasks.Add(new LambdaTask(() => PlayAnim(pedHandle, dict, anim)));
+                tasks.Add(new WaitTask(11250));
+                tasks.Add(new LambdaTask(() =>
                 {
-                    PlayAnim(pedHandle, dict, anim);
-
-                    var propModelHash = (uint) GetHashKey("prop_paper_bag_01");
-                    await LoadObject(propModelHash);
+                    propHandle = CreateObject((int) propModelHash, 0f, 0f, 0f, true, true, true);
                     
-                    await Delay(8000);
-                    
-                    var propHandle = CreateObject((int) propModelHash, 0f, 0f, 0f, true, true, true);
-                    var boneIndex = GetPedBoneIndex(pedHandle, 58866);
+                    var boneIndex = GetPedBoneIndex(pedHandle, 4138);
                     AttachEntityToEntity(propHandle, pedHandle, boneIndex, 
-                        0.31f, -0.12f, -0.02f, -86f, -31f, 68f, true, 
+                        -0.09999999f, -0.04f, -0.13f, 0, 0, 0, true, 
                         false, false, false, 0, true);
-                    
-                    await Delay(1500);
-
+                }));
+                tasks.Add(new WaitTask(9750));
+                tasks.Add(new LambdaTask(() =>
+                {
                     DetachEntity(propHandle, true, true);
-
+                }));
+                tasks.Add(new WaitTask(2000));
+                tasks.Add(new LambdaTask(() =>
+                {
                     SetBlockingOfNonTemporaryEvents(pedHandle, false);
                     TaskSmartFleePed(pedHandle, Game.PlayerPed.Handle, 50f, -1, true, true);
-                };
-                aimingWaitTask.Start();
+                }));
+
+                var taskSequence = new SequenceTask(tasks);
+                taskSequence.TaskDidEnd += (sender, e) => PrintToChat("Task did end");
+                taskSequence.Start();
             }), false);
         }
         
