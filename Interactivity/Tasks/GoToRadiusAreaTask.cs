@@ -1,15 +1,15 @@
 ﻿using System;
 using CitizenFX.Core;
 using HPNS.Interactivity.Core;
-using HPNS.Interactivity.Exceptions;
-using Checkpoint = HPNS.Core.Environment.Checkpoint;
-using World = HPNS.Core.World;
 
 using static CitizenFX.Core.Native.API;
 
+using Checkpoint = HPNS.Core.Environment.Checkpoint;
+using World = HPNS.Core.World;
+
 namespace HPNS.Interactivity.Tasks
 {
-    public class GoToRadiusAreaTask : ITask
+    public class GoToRadiusAreaTask : TaskBase
     {
         private Vector3 _center;
         private float _radius;
@@ -17,34 +17,20 @@ namespace HPNS.Interactivity.Tasks
         private Checkpoint _checkpoint;
         private int _blipHandle;
 
-        public TaskState CurrentState { get; private set; } = TaskState.Waiting;
-        
-        public event EventHandler TaskDidEnd;
-
         public GoToRadiusAreaTask(Vector3 center, float radius)
         {
             _center = center;
             _radius = radius;
         }
-        
-        public void Start()
-        {
-            if (CurrentState != TaskState.Waiting)
-                throw new StartException();
-            
-            AddCheckpointAndBlip();
 
-            CurrentState = TaskState.Running;
+        protected override void ExecuteStarting()
+        {
+            AddCheckpointAndBlip();
         }
 
-        public void Abort()
+        protected override void ExecuteAborting()
         {
-            if (CurrentState != TaskState.Running)
-                throw new AbortException();
-            
             RemoveCheckpointAndBlip();
-
-            CurrentState = TaskState.Aborted;
         }
 
         private void AddCheckpointAndBlip()
@@ -70,9 +56,7 @@ namespace HPNS.Interactivity.Tasks
         private void CheckpointOnPlayerEntered(object sender, EventArgs e)
         {
             RemoveCheckpointAndBlip();
-
-            CurrentState = TaskState.Ended;
-            TaskDidEnd?.Invoke(this, EventArgs.Empty);
+            NotifyTaskDidEnd();
         }
     }
 }

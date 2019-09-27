@@ -1,95 +1,86 @@
 ﻿using System;
 using HPNS.Interactivity.Core;
-using HPNS.Interactivity.Exceptions;
 
 namespace HPNS.Interactivity.Support
 {
-    public class StateSuspendTask : ITask
+    public class StateSuspendTask : TaskBase
     {
         private Func<ITask> _taskProvider;
         private IState _state;
         
         private ITask _currentTask;
 
-        public TaskState CurrentState { get; private set; } = TaskState.Waiting;
-        
-        public event EventHandler TaskDidEnd;
-
         public StateSuspendTask(Func<ITask> taskProvider, IState state)
         {
             _taskProvider = taskProvider;
             _state = state;
         }
-        
-        public void Start()
+
+        protected override void ExecuteStarting()
         {
-            if (CurrentState != TaskState.Waiting)
-                throw new StartException();
-            
-            _state.StateDidBreak += OnStateDidBreak;
-            _state.StateDidRecover += OnStateDidRecover;
-            _state.Start();
-
-            if (_state.IsValid)
-            {
-                _currentTask = _taskProvider();
-                _currentTask.TaskDidEnd += OnTaskDidEnd;
-                _currentTask.Start();
-            }
-
-            CurrentState = TaskState.Running;
+            SubscribeToStateNotifications();
         }
 
-        public void Abort()
+        protected override void ExecuteAborting()
         {
-            if (CurrentState != TaskState.Running)
-                throw new AbortException();
-            
-            _state.StateDidBreak -= OnStateDidBreak;
-            _state.StateDidRecover -= OnStateDidRecover;
-            _state.Stop();
-
-            if (_currentTask != null)
-            {
-                _currentTask.TaskDidEnd -= OnTaskDidEnd;
-                _currentTask.Abort();
-                _currentTask = null;
-            }
-
-            CurrentState = TaskState.Aborted;
+            UnsubscribeFromStateNotifications();
+            if (_currentTask != null) AbortCurrentTask();
         }
 
         private void OnStateDidRecover(object sender, EventArgs e)
         {
             if (_currentTask != null)
                 throw new Exception("Cannot resume task because it is already running!");
-            
-            _currentTask = _taskProvider();
-            _currentTask.TaskDidEnd += OnTaskDidEnd;
-            _currentTask.Start();
+
+            StartNewTask();
         }
 
         private void OnStateDidBreak(object sender, EventArgs e)
         {
             if (_currentTask == null)
                 throw new Exception("Cannot abort task because it is already aborted!");
-            
-            _currentTask.TaskDidEnd -= OnTaskDidEnd;
-            _currentTask.Abort();
-            _currentTask = null;
+
+            AbortCurrentTask();
         }
 
         private void OnTaskDidEnd(object sender, EventArgs e)
         {
-            _state.StateDidBreak -= OnStateDidBreak;
-            _state.StateDidRecover -= OnStateDidRecover;
-            _state.Stop();
+            UnsubscribeFromStateNotifications();
 
             _currentTask.TaskDidEnd -= OnTaskDidEnd;
             _currentTask = null;
 
-            CurrentState = TaskState.Ended;
-            TaskDidEnd?.Invoke(this, EventArgs.Empty);
+            NotifyTaskDidEnd();
+        }
+
+        private void SubscribeToStateNotifications()
+        {
+            _state.StateDidBreak += OnStateDidBreak;
+            _state.StateDidRecover += OnStateDidRecover;
+            _state.Start();
+        }
+
+        private void UnsubscribeFromStateNotifications()
+        {
+            _state.StateDidBreak -= OnStateDidBreak;
+            _state.StateDidRecover -= OnStateDidRecover;
+            _state.Stop();
+        }
+
+        private void StartNewTask()
+        {
+            _currentTask = _taskProvider();
+            
+            _currentTask.TaskDidEnd += OnTaskDidEnd;
+            _currentTask.Start();
+        }
+
+        private void AbortCurrentTask()
+        {
+            _currentTask.Abort();
+            
+            _currentTask.TaskDidEnd -= OnTaskDidEnd;
+            _currentTask = null;
         }
     }
 }

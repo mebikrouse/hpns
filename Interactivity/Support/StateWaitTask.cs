@@ -1,51 +1,43 @@
 using System;
 using HPNS.Interactivity.Core;
-using HPNS.Interactivity.Exceptions;
 
 namespace HPNS.Interactivity.Support
 {
-    public class StateWaitTask : ITask
+    public class StateWaitTask : TaskBase
     {
         private IState _state;
-        
-        public TaskState CurrentState { get; private set; } = TaskState.Waiting;
-        
-        public event EventHandler TaskDidEnd;
 
         public StateWaitTask(IState state)
         {
             _state = state;
         }
-        
-        public void Start()
+
+        protected override void ExecuteStarting()
         {
-            if (CurrentState != TaskState.Waiting)
-                throw new StartException();
-            
-            _state.StateDidRecover += StateOnStateDidRecover;
-            _state.Start();
-            
-            CurrentState = TaskState.Running;
+            SubscribeToStateNotifications();
         }
 
-        public void Abort()
+        protected override void ExecuteAborting()
         {
-            if (CurrentState != TaskState.Running)
-                throw new AbortException();
-
-            _state.StateDidRecover -= StateOnStateDidRecover;
-            _state.Stop();
-
-            CurrentState = TaskState.Aborted;
+            UnsubscribeFromStateNotifications();
         }
 
         private void StateOnStateDidRecover(object sender, EventArgs e)
         {
+            UnsubscribeFromStateNotifications();
+            NotifyTaskDidEnd();
+        }
+
+        private void SubscribeToStateNotifications()
+        {
+            _state.StateDidRecover += StateOnStateDidRecover;
+            _state.Start();
+        }
+
+        private void UnsubscribeFromStateNotifications()
+        {
             _state.StateDidRecover -= StateOnStateDidRecover;
             _state.Stop();
-            
-            CurrentState = TaskState.Ended;
-            TaskDidEnd?.Invoke(this, EventArgs.Empty);
         }
     }
 }
