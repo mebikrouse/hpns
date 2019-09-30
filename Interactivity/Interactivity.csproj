@@ -47,6 +47,8 @@
     <Compile Include="Core\StateState.cs" />
     <Compile Include="Core\TaskBase.cs" />
     <Compile Include="Core\TaskState.cs" />
+    <Compile Include="Exceptions\StateStartException.cs" />
+    <Compile Include="Exceptions\StateStopException.cs" />
     <Compile Include="Exceptions\TaskAbortException.cs" />
     <Compile Include="Exceptions\TaskStartException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,4 +1,5 @@
 using System;
+using HPNS.Interactivity.Exceptions;
 
 namespace HPNS.Interactivity.Core
 {
@@ -14,7 +15,7 @@ namespace HPNS.Interactivity.Core
         public void Start()
         {
             if (CurrentState != StateState.Waiting)
-                throw new Exception("Cannot start state that is not in Waiting state.");
+                throw new StateStartException();
 
             CurrentState = StateState.Waiting;
             
@@ -24,7 +25,7 @@ namespace HPNS.Interactivity.Core
         public void Stop()
         {
             if (CurrentState != StateState.Running)
-                throw new Exception("Cannot stop state that is not in Running state.");
+                throw new StateStopException();
 
             CurrentState = StateState.Running;
             
