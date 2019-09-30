@@ -22,9 +22,8 @@ namespace HPNS.Interactivity.Scenarios
 
         protected override async void ExecuteStarting()
         {
-            var dict = "mp_am_hold_up";
-            var anim = "holdup_victim_20s";
-            await LoadAnimDict(dict);
+            var animDict = "mp_am_hold_up";
+            var animName = "holdup_victim_20s";
 
             var propModelHash = (uint) GetHashKey("prop_poly_bag_01");
             await LoadObject(propModelHash);
@@ -32,14 +31,9 @@ namespace HPNS.Interactivity.Scenarios
             var propHandle = 0;
             var pedHandle = _pedHandle;
 
-            var tasks = new List<ITask>();
-
-            tasks.Add(new LambdaTask(() =>
-            {
-                TaskPlayAnim(pedHandle, dict, anim, 8.0f, 8.0f, -1, 0, 0.0f, false, false, false);
-            }));
-            tasks.Add(new WaitTask(11250));
-            tasks.Add(new LambdaTask(() =>
+            var bagAttachmentTasks = new List<ITask>();
+            bagAttachmentTasks.Add(new WaitTask(11250));
+            bagAttachmentTasks.Add(new LambdaTask(() =>
             {
                 propHandle = CreateObject((int) propModelHash, 0f, 0f, 0f, true, true, true);
                 var boneIndex = GetPedBoneIndex(pedHandle, 4138);
@@ -47,19 +41,21 @@ namespace HPNS.Interactivity.Scenarios
                     -0.09999999f, -0.04f, -0.13f, 0, 0, 0, true,
                     false, false, false, 0, true);
             }));
-            tasks.Add(new WaitTask(9750));
-            tasks.Add(new LambdaTask(() =>
+            bagAttachmentTasks.Add(new WaitTask(9750));
+            bagAttachmentTasks.Add(new LambdaTask(() =>
             {
                 DetachEntity(propHandle, true, true);
             }));
-            tasks.Add(new WaitTask(2000));
+            
+            var parallelTasks = new List<ITask>();
+            parallelTasks.Add(new PlayAnimTask(pedHandle, animDict, animName, 23000));
+            parallelTasks.Add(new SequentialSetTask(bagAttachmentTasks));
 
-            var sequenceTask = new SequentialSetTask(tasks);
+            var parallelSetTask = new ParallelSetTask(parallelTasks);
+            parallelSetTask.TaskDidEnd += SequenceTaskOnTaskDidEnd;
+            parallelSetTask.Start();
 
-            sequenceTask.TaskDidEnd += SequenceTaskOnTaskDidEnd;
-            sequenceTask.Start();
-
-            _sequenceTask = sequenceTask;
+            _sequenceTask = parallelSetTask;
         }
 
         protected override void ExecuteAborting()
@@ -68,14 +64,6 @@ namespace HPNS.Interactivity.Scenarios
             
             _sequenceTask.TaskDidEnd -= SequenceTaskOnTaskDidEnd;
             _sequenceTask = null;
-        }
-
-        private static async Task LoadAnimDict(string dict)
-        {
-            RequestAnimDict(dict);
-
-            while (!HasAnimDictLoaded(dict))
-                await BaseScript.Delay(100);
         }
 
         private static async Task LoadObject(uint modelHash)
