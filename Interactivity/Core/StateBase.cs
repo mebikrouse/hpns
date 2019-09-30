@@ -17,7 +17,7 @@ namespace HPNS.Interactivity.Core
             if (CurrentState != StateState.Waiting)
                 throw new StateStartException();
 
-            CurrentState = StateState.Waiting;
+            CurrentState = StateState.Running;
             
             ExecuteStarting();
         }
@@ -27,7 +27,7 @@ namespace HPNS.Interactivity.Core
             if (CurrentState != StateState.Running)
                 throw new StateStopException();
 
-            CurrentState = StateState.Running;
+            CurrentState = StateState.Waiting;
             
             ExecuteStopping();
         }
