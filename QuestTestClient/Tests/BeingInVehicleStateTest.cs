@@ -9,9 +9,9 @@ namespace QuestTestClient.Tests
 {
     public class BeingInVehicleStateTest : TaskBase
     {
-        private const string VEHICLE_MODEL = "toros";
         private const float VEHICLE_DISTANCE = 5.0f;
         private const float AREA_RADIUS = 25f;
+        private const string VEHICLE_MODEL = "toros";
         
         private static readonly Vector3 AREA_CENTER = new Vector3(55.84977f, -1572.498f, 28.95687f);
         
