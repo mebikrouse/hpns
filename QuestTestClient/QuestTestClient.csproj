@@ -47,6 +47,7 @@
     <Compile Include="Tests\BeingInVehicleStateTest.cs" />
     <Compile Include="Tests\GoToRadiusAreaTaskTest.cs" />
     <Compile Include="Tests\ParallelSetTaskTest.cs" />
+    <Compile Include="Tests\PlayAnimTaskTest.cs" />
     <Compile Include="Tests\ShopRobberyScenarioTest.cs" />
   </ItemGroup>
   <ItemGroup>
