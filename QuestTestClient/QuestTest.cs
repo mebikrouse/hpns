@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CitizenFX.Core;
 using HPNS.Interactivity.Core;
+using HPNS.Interactivity.Support;
 using QuestTestClient.Tests;
 
 using static CitizenFX.Core.Native.API;
@@ -15,7 +16,8 @@ namespace QuestTestClient
             () => new BeingInVehicleStateTest(),
             () => new GoToRadiusAreaTaskTest(),
             () => new AimingAtEntityStateTest(),
-            () => new ShopRobberyScenarioTest()
+            () => new ShopRobberyScenarioTest(),
+            () => new ParallelSetTaskTest()
         };
         
         private ITask _currentTest;
