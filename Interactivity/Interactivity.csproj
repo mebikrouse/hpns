@@ -47,8 +47,8 @@
     <Compile Include="Core\StateState.cs" />
     <Compile Include="Core\TaskBase.cs" />
     <Compile Include="Core\TaskState.cs" />
-    <Compile Include="Exceptions\AbortException.cs" />
-    <Compile Include="Exceptions\StartException.cs" />
+    <Compile Include="Exceptions\TaskAbortException.cs" />
+    <Compile Include="Exceptions\TaskStartException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenarios\ShopRobberyScenario.cs" />
     <Compile Include="States\AimingAtEntityState.cs" />

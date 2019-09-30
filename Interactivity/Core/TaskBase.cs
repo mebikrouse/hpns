@@ -12,7 +12,7 @@ namespace HPNS.Interactivity.Core
         public void Start()
         {
             if (CurrentState != TaskState.Waiting)
-                throw new StartException();
+                throw new TaskStartException();
 
             CurrentState = TaskState.Running;
             
@@ -22,7 +22,7 @@ namespace HPNS.Interactivity.Core
         public void Abort()
         {
             if (CurrentState != TaskState.Running)
-                throw new AbortException();
+                throw new TaskAbortException();
 
             CurrentState = TaskState.Aborted;
             
