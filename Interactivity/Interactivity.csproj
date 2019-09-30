@@ -60,6 +60,7 @@
     <Compile Include="Support\SequenceTask.cs" />
     <Compile Include="Tasks\GoToRadiusAreaTask.cs" />
     <Compile Include="Tasks\LambdaTask.cs" />
+    <Compile Include="Tasks\PlayAnimTask.cs" />
     <Compile Include="Tasks\WaitTask.cs" />
   </ItemGroup>
   <ItemGroup>
