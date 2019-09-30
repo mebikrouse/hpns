@@ -11,6 +11,11 @@ namespace HPNS.Core.Managers
         public event EventHandler<int> PlayerDidStartAimingAtEntity;
         public event EventHandler<int> PlayerDidStopAimingAtEntity;
 
+        public bool IsPlayerAimingAtEntity(int entityHandle)
+        {
+            return _prevEntityHandle != null && _prevEntityHandle.Value == entityHandle;
+        }
+        
         public void Update(float deltaTime)
         {
             var entityHandle = 0;
