@@ -6,9 +6,8 @@ namespace HPNS.Interactivity.States
     public class AimingAtEntityState : StateBase
     {
         private int _entityHandle;
-        private bool _isAimingAtEntity;
-        
-        public override bool IsValid => _isAimingAtEntity;
+
+        public override bool IsValid => World.Current.AimingManager.IsPlayerAimingAtEntity(_entityHandle);
 
         public AimingAtEntityState(int entityHandle)
         {
@@ -30,16 +29,12 @@ namespace HPNS.Interactivity.States
         private void AimingManagerOnPlayerDidStartAimingAtEntity(object sender, int e)
         {
             if (e != _entityHandle) return;
-
-            _isAimingAtEntity = true;
             NotifyStateDidRecover();
         }
 
         private void AimingManagerOnPlayerDidStopAimingAtEntity(object sender, int e)
         {
             if (e != _entityHandle) return;
-
-            _isAimingAtEntity = false;
             NotifyStateDidBreak();
         }
     }
