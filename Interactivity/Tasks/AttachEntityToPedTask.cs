@@ -44,6 +44,8 @@ namespace HPNS.Interactivity.Tasks
 
         protected override void ExecuteAborting()
         {
+            DetachEntityFromPed();
+            
             _currentTask.TaskDidEnd -= CurrentTaskTaskDidEnd;
             _currentTask.Abort();
         }
