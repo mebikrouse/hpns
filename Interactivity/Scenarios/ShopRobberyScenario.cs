@@ -13,7 +13,8 @@ namespace HPNS.Interactivity.Scenarios
     public class ShopRobberyScenario : TaskBase
     {
         private int _pedHandle;
-        private ITask _sequenceTask;
+
+        private ITask _currentTask;
 
         public ShopRobberyScenario(int pedHandle)
         {
@@ -24,46 +25,45 @@ namespace HPNS.Interactivity.Scenarios
         {
             var animDict = "mp_am_hold_up";
             var animName = "holdup_victim_20s";
-
+            
             var propModelHash = (uint) GetHashKey("prop_poly_bag_01");
             await LoadObject(propModelHash);
 
-            var propHandle = 0;
-            var pedHandle = _pedHandle;
+            var bagEntityHandle = 0;
+
+            var offset = new Vector3(-0.09999999f, -0.04f, -0.13f);
+            var rotation = Vector3.Zero;
 
             var bagAttachmentTasks = new List<ITask>();
             bagAttachmentTasks.Add(new WaitTask(11250));
             bagAttachmentTasks.Add(new LambdaTask(() =>
             {
-                propHandle = CreateObject((int) propModelHash, 0f, 0f, 0f, true, true, true);
-                var boneIndex = GetPedBoneIndex(pedHandle, 4138);
-                AttachEntityToEntity(propHandle, pedHandle, boneIndex,
-                    -0.09999999f, -0.04f, -0.13f, 0, 0, 0, true,
-                    false, false, false, 0, true);
+                bagEntityHandle = CreateObject((int) propModelHash, 0f, 0f, 0f, true, true, true);
             }));
-            bagAttachmentTasks.Add(new WaitTask(9750));
-            bagAttachmentTasks.Add(new LambdaTask(() =>
-            {
-                DetachEntity(propHandle, true, true);
-            }));
+            bagAttachmentTasks.Add(new DeferredCreationTask(() =>
+                new AttachEntityToPedTask(bagEntityHandle, _pedHandle, 4138, offset, rotation, 9750)));
+
+            var wholeScenarioTasks = new List<ITask>();
+            wholeScenarioTasks.Add(new SequentialSetTask(bagAttachmentTasks));
+            wholeScenarioTasks.Add(new PlayAnimTask(_pedHandle, animDict, animName, 23000));
             
-            var parallelTasks = new List<ITask>();
-            parallelTasks.Add(new PlayAnimTask(pedHandle, animDict, animName, 23000));
-            parallelTasks.Add(new SequentialSetTask(bagAttachmentTasks));
+            var scenarioTask = new ParallelSetTask(wholeScenarioTasks);
+            scenarioTask.TaskDidEnd += CurrentTaskTaskDidEnd;
+            scenarioTask.Start();
 
-            var parallelSetTask = new ParallelSetTask(parallelTasks);
-            parallelSetTask.TaskDidEnd += SequenceTaskOnTaskDidEnd;
-            parallelSetTask.Start();
-
-            _sequenceTask = parallelSetTask;
+            _currentTask = scenarioTask;
         }
 
         protected override void ExecuteAborting()
         {
-            _sequenceTask.Abort();
-            
-            _sequenceTask.TaskDidEnd -= SequenceTaskOnTaskDidEnd;
-            _sequenceTask = null;
+            _currentTask.TaskDidEnd -= CurrentTaskTaskDidEnd;
+            _currentTask.Abort();
+        }
+
+        private void CurrentTaskTaskDidEnd(object sender, EventArgs e)
+        {
+            _currentTask.TaskDidEnd -= CurrentTaskTaskDidEnd;
+            NotifyTaskDidEnd();
         }
 
         private static async Task LoadObject(uint modelHash)
@@ -72,14 +72,6 @@ namespace HPNS.Interactivity.Scenarios
 
             while (!HasModelLoaded(modelHash))
                 await BaseScript.Delay(100);
-        }
-
-        private void SequenceTaskOnTaskDidEnd(object sender, EventArgs e)
-        {
-            _sequenceTask.TaskDidEnd -= SequenceTaskOnTaskDidEnd;
-            _sequenceTask = null;
-            
-            NotifyTaskDidEnd();
         }
     }
 }
