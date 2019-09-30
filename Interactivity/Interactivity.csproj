@@ -55,6 +55,7 @@
     <Compile Include="Scenarios\ShopRobberyScenario.cs" />
     <Compile Include="States\AimingAtEntityState.cs" />
     <Compile Include="States\BeingInVehicleState.cs" />
+    <Compile Include="Support\ParallelSetTask.cs" />
     <Compile Include="Support\StateWaitTask.cs" />
     <Compile Include="Support\StateSuspendTask.cs" />
     <Compile Include="Support\SequentialSetTask.cs" />
