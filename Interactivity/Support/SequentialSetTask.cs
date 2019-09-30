@@ -4,12 +4,12 @@ using HPNS.Interactivity.Core;
 
 namespace HPNS.Interactivity.Support
 {
-    public class SequenceTask : TaskBase
+    public class SequentialSetTask : TaskBase
     {
         private Queue<ITask> _tasks;
         private ITask _currentTask;
 
-        public SequenceTask(IEnumerable<ITask> tasks)
+        public SequentialSetTask(IEnumerable<ITask> tasks)
         {
             _tasks = new Queue<ITask>(tasks);
         }

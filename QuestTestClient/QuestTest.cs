@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using HPNS.Interactivity;
 using HPNS.Interactivity.Core;
 using HPNS.Interactivity.Scenarios;
 using HPNS.Interactivity.States;
@@ -15,6 +14,8 @@ namespace QuestTestClient
 {
     public class QuestTest : BaseScript
     {
+        private ITask _currentTask;
+        
         public QuestTest()
         {
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
@@ -26,6 +27,8 @@ namespace QuestTestClient
             
             RegisterCommand("quest1", new Action<int, List<object>, string>(async (source, args, raw) =>
             {
+                _currentTask?.Abort();
+                
                 var model = "toros";
                 var vehicle = await World.CreateVehicle(model, Game.PlayerPed.Position + Game.PlayerPed.RightVector * 5.0f, Game.PlayerPed.Heading);
 
@@ -33,37 +36,44 @@ namespace QuestTestClient
                 var stayInVehicleState = new BeingInVehicleState(vehicle.Handle);
                 
                 var stateConjunction = new StateSuspendTask(goToRadiusAreaTaskProvider, stayInVehicleState);
-                stateConjunction.TaskDidEnd += (sender, e) => Debug.WriteLine("Task did end");
+                stateConjunction.TaskDidEnd += CurrentTaskTaskDidEnd;
                 stateConjunction.Start();
+
+                _currentTask = stateConjunction;
             }), false);
             
             RegisterCommand("quest2", new Action<int, List<object>, string>((source, args, raw) =>
             {
+                _currentTask?.Abort();
+                
                 var task = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
-                task.TaskDidEnd += (sender, e) => Debug.WriteLine("Task did end");
+                task.TaskDidEnd += CurrentTaskTaskDidEnd;
                 task.Start();
-            }), false);
 
-            //HPNS.Core.World.Current.AimingManager.PlayerDidStartAimingAtEntity += (sender, e) =>
-            //    PrintToChat($"Started aiming at entity with handle {e}");
-            //HPNS.Core.World.Current.AimingManager.PlayerDidStopAimingAtEntity += (sender, e) =>
-            //    PrintToChat($"Stopped aiming at entity with handle {e}");
+                _currentTask = task;
+            }), false);
             
             RegisterCommand("quest3", new Action<int, List<object>, string>(async (source, args, raw) =>
             {
+                _currentTask?.Abort();
+                
                 var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5;
                 var randomPedHash = await CreateRandomPed(pedPosition);
                 
                 var keepAimingState = new AimingAtEntityState(randomPedHash);
                 var stateWait = new StateWaitTask(keepAimingState);
                 var goToRadiusAreaTask = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
-                var taskSequence = new SequenceTask(new List<ITask>() {stateWait, goToRadiusAreaTask});
-                taskSequence.TaskDidEnd += (sender, e) => PrintToChat("Task did end");
+                var taskSequence = new SequentialSetTask(new List<ITask>() {stateWait, goToRadiusAreaTask});
+                taskSequence.TaskDidEnd += CurrentTaskTaskDidEnd;
                 taskSequence.Start();
+
+                _currentTask = taskSequence;
             }), false);
             
             RegisterCommand("quest4", new Action<int, List<object>, string>(async (source, args, raw) =>
             {
+                _currentTask?.Abort();
+                
                 var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 3;
                 var heading = Game.PlayerPed.Heading - 180f;
                 
@@ -81,12 +91,32 @@ namespace QuestTestClient
                     TaskSmartFleePed(pedHandle, Game.PlayerPed.Handle, 50f, -1, true, true);
                 }));
 
-                var taskSequence = new SequenceTask(tasks);
-                taskSequence.TaskDidEnd += (sender, e) => PrintToChat("Task did end");
+                var taskSequence = new SequentialSetTask(tasks);
+                taskSequence.TaskDidEnd += CurrentTaskTaskDidEnd;
                 taskSequence.Start();
+
+                _currentTask = taskSequence;
+            }), false);
+            
+            RegisterCommand("abort", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                if (_currentTask == null) return;
+
+                _currentTask.Abort();
+
+                _currentTask.TaskDidEnd -= CurrentTaskTaskDidEnd;
+                _currentTask = null;
             }), false);
         }
-        
+
+        private void CurrentTaskTaskDidEnd(object sender, EventArgs e)
+        {
+            PrintToChat("Task did end");
+            
+            _currentTask.TaskDidEnd -= CurrentTaskTaskDidEnd;
+            _currentTask = null;
+        }
+
         private static async Task<int> CreateRandomPed(Vector3 position)
         {
             var pedHash = GetRandomPedHash();

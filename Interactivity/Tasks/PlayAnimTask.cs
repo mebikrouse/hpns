@@ -39,7 +39,7 @@ namespace HPNS.Interactivity.Tasks
             tasks.Add(new LambdaTask(StopAnimation));
             tasks.Add(new LambdaTask(NotifyTaskDidEnd));
             
-            _sequenceTask = new SequenceTask(tasks);
+            _sequenceTask = new SequentialSetTask(tasks);
 
             await loadingTask;
             _sequenceTask.Start();

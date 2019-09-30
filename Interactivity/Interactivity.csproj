@@ -57,7 +57,7 @@
     <Compile Include="States\BeingInVehicleState.cs" />
     <Compile Include="Support\StateWaitTask.cs" />
     <Compile Include="Support\StateSuspendTask.cs" />
-    <Compile Include="Support\SequenceTask.cs" />
+    <Compile Include="Support\SequentialSetTask.cs" />
     <Compile Include="Tasks\GoToRadiusAreaTask.cs" />
     <Compile Include="Tasks\LambdaTask.cs" />
     <Compile Include="Tasks\PlayAnimTask.cs" />
