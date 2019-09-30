@@ -13,17 +13,22 @@ namespace QuestTestClient.Tests
 {
     public class AimingAtEntityStateTest : TaskBase
     {
+        private const float PED_DISTANCE = 5f;
+        private const float AREA_RADIUS = 25f;
+
+        private static readonly Vector3 AREA_CENTER = new Vector3(55.84977f, -1572.498f, 28.95687f);
+
         private ITask _currentTask;
         
         protected override async void ExecuteStarting()
         {
-            var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5;
-            var pedHandle = await CreateRandomPed(pedPosition);
+            var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * PED_DISTANCE;
+            var pedHandle = await CreateRandomPed(pedPosition, Game.PlayerPed.Heading - 180f);
                 
             var aimingAtEntityState = new AimingAtEntityState(pedHandle);
             var stateWaitTask = new StateWaitTask(aimingAtEntityState);
             
-            var goToRadiusAreaTask = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
+            var goToRadiusAreaTask = new GoToRadiusAreaTask(AREA_CENTER, AREA_RADIUS);
             
             var sequentialSetTask = new SequentialSetTask(new List<ITask>() {stateWaitTask, goToRadiusAreaTask});
             sequentialSetTask.TaskDidEnd += CurrentTaskTaskDidEnd;
@@ -44,10 +49,10 @@ namespace QuestTestClient.Tests
             NotifyTaskDidEnd();
         }
         
-        private static async Task<int> CreateRandomPed(Vector3 position)
+        private static async Task<int> CreateRandomPed(Vector3 position, float heading)
         {
             var pedHash = GetRandomPedHash();
-            return await CreatePedAtPosition(position, 0f, pedHash);
+            return await CreatePedAtPosition(position, heading, pedHash);
         }
         
         private static uint GetRandomPedHash()
