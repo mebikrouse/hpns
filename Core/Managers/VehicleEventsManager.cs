@@ -14,6 +14,11 @@ namespace HPNS.Core.Managers
         public event EventHandler<Vehicle> PlayerAbortedEntering;
         public event EventHandler<Vehicle> PlayerEntered;
         public event EventHandler<Vehicle> PlayerLeft;
+
+        public bool IsPlayerInVehicle(int vehicleHandle)
+        {
+            return _isInVehicle && _prevVehicle.Handle == vehicleHandle;
+        }
         
         public void Update(float deltaTime)
         {
