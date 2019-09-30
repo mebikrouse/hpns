@@ -12,8 +12,7 @@ namespace HPNS.Interactivity.States
         private int _vehicleHandle;
         private int _blipHandle;
 
-        public override bool IsValid => Game.PlayerPed.CurrentVehicle != null && 
-                                        Game.PlayerPed.CurrentVehicle.Handle == _vehicleHandle;
+        public override bool IsValid => World.Current.VehicleEventsManager.IsPlayerInVehicle(_vehicleHandle);
 
         public BeingInVehicleState(int vehicleHandle)
         {
@@ -24,12 +23,16 @@ namespace HPNS.Interactivity.States
         {
             World.Current.VehicleEventsManager.PlayerEntered += VehicleEventsManagerOnPlayerEntered;
             World.Current.VehicleEventsManager.PlayerLeft += VehicleEventsManagerOnPlayerLeft;
+            
+            if (!IsValid) AddMarkerAndBlip();
         }
 
         protected override void ExecuteStopping()
         {
             World.Current.VehicleEventsManager.PlayerEntered -= VehicleEventsManagerOnPlayerEntered;
             World.Current.VehicleEventsManager.PlayerLeft -= VehicleEventsManagerOnPlayerLeft;
+            
+            if (!IsValid) RemoveMarkerAndBlip();
         }
 
         private void VehicleEventsManagerOnPlayerEntered(object sender, Vehicle e)
