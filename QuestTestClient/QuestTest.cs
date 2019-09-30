@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using CitizenFX.Core;
 using HPNS.Interactivity.Core;
-using HPNS.Interactivity.Support;
 using QuestTestClient.Tests;
 
 using static CitizenFX.Core.Native.API;
@@ -11,13 +10,14 @@ namespace QuestTestClient
 {
     public class QuestTest : BaseScript
     {
-        private List<Func<ITask>> _testProviders = new List<Func<ITask>>()
+        private List<Tuple<Func<ITask>, string>> _testProviders = new List<Tuple<Func<ITask>, string>>()
         {
-            () => new BeingInVehicleStateTest(),
-            () => new GoToRadiusAreaTaskTest(),
-            () => new AimingAtEntityStateTest(),
-            () => new ShopRobberyScenarioTest(),
-            () => new ParallelSetTaskTest()
+            new Tuple<Func<ITask>, string>(() => new BeingInVehicleStateTest(), nameof(BeingInVehicleStateTest)),
+            new Tuple<Func<ITask>, string>(() => new GoToRadiusAreaTaskTest(), nameof(GoToRadiusAreaTaskTest)),
+            new Tuple<Func<ITask>, string>(() => new AimingAtEntityStateTest(), nameof(AimingAtEntityStateTest)),
+            new Tuple<Func<ITask>, string>(() => new ShopRobberyScenarioTest(), nameof(ShopRobberyScenarioTest)),
+            new Tuple<Func<ITask>, string>(() => new ParallelSetTaskTest(), nameof(ParallelSetTaskTest)),
+            new Tuple<Func<ITask>, string>(() => new PlayAnimTaskTest(), nameof(PlayAnimTaskTest))
         };
         
         private ITask _currentTest;
@@ -42,11 +42,13 @@ namespace QuestTestClient
 
                 if (_currentTest != null) AbortCurrentTest();
 
-                var test = _testProviders[testNum]();
+                var testItem = _testProviders[testNum];
+                
+                var test = testItem.Item1();
                 test.TaskDidEnd += CurrentTestTaskDidEnd;
                 test.Start();
                 
-                PrintToChat("Started new test.");
+                PrintToChat($"Started new test {testItem.Item2}.");
 
                 _currentTest = test;
 
@@ -61,6 +63,13 @@ namespace QuestTestClient
                 }
                 
                 AbortCurrentTest();
+            }), false);
+            
+            RegisterCommand("help", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                var i = 0;
+                foreach (var testItem in _testProviders)
+                    PrintToChat($"{i++} - {testItem.Item2}");
             }), false);
         }
 
