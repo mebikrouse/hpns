@@ -59,7 +59,7 @@ namespace HPNS.Interactivity.Tasks
 
         private void StopAnimation()
         {
-            StopAnimTask(_pedHandle, _dict, _name, 0f);
+            StopAnimTask(_pedHandle, _dict, _name, 3f);
         }
         
         private static async Task LoadAnimDict(string dict)
