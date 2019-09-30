@@ -1,47 +1,30 @@
-using System;
 using HPNS.Core;
 using HPNS.Interactivity.Core;
 
 namespace HPNS.Interactivity.States
 {
-    public class AimingAtEntityState : IState
+    public class AimingAtEntityState : StateBase
     {
         private int _entityHandle;
-
         private bool _isAimingAtEntity;
-
-        public StateState CurrentState { get; private set; } = StateState.Waiting;
         
-        public bool IsValid => _isAimingAtEntity;
-        
-        public event EventHandler StateDidBreak;
-        public event EventHandler StateDidRecover;
+        public override bool IsValid => _isAimingAtEntity;
 
         public AimingAtEntityState(int entityHandle)
         {
             _entityHandle = entityHandle;
         }
-        
-        public void Start()
+
+        protected override void ExecuteStarting()
         {
-            if (CurrentState != StateState.Waiting)
-                throw new Exception("Cannot start state that is not in Waiting state.");
-            
             World.Current.AimingManager.PlayerDidStartAimingAtEntity += AimingManagerOnPlayerDidStartAimingAtEntity;
             World.Current.AimingManager.PlayerDidStopAimingAtEntity += AimingManagerOnPlayerDidStopAimingAtEntity;
-
-            CurrentState = StateState.Running;
         }
 
-        public void Stop()
+        protected override void ExecuteStopping()
         {
-            if (CurrentState != StateState.Running)
-                throw new Exception("Cannot stop state that is not in Running state.");
-            
             World.Current.AimingManager.PlayerDidStartAimingAtEntity -= AimingManagerOnPlayerDidStartAimingAtEntity;
             World.Current.AimingManager.PlayerDidStopAimingAtEntity -= AimingManagerOnPlayerDidStopAimingAtEntity;
-
-            CurrentState = StateState.Waiting;
         }
 
         private void AimingManagerOnPlayerDidStartAimingAtEntity(object sender, int e)
@@ -49,7 +32,7 @@ namespace HPNS.Interactivity.States
             if (e != _entityHandle) return;
 
             _isAimingAtEntity = true;
-            StateDidRecover?.Invoke(this, EventArgs.Empty);
+            NotifyStateDidRecover();
         }
 
         private void AimingManagerOnPlayerDidStopAimingAtEntity(object sender, int e)
@@ -57,7 +40,7 @@ namespace HPNS.Interactivity.States
             if (e != _entityHandle) return;
 
             _isAimingAtEntity = false;
-            StateDidBreak?.Invoke(this, EventArgs.Empty);
+            NotifyStateDidBreak();
         }
     }
 }

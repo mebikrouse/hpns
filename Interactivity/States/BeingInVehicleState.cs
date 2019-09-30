@@ -1,55 +1,35 @@
-using System;
 using CitizenFX.Core;
 using HPNS.Interactivity.Core;
-using World = HPNS.Core.World;
 
 using static CitizenFX.Core.Native.API;
 
+using World = HPNS.Core.World;
+
 namespace HPNS.Interactivity.States
 {
-    public class BeingInVehicleState : IState
+    public class BeingInVehicleState : StateBase
     {
         private int _vehicleHandle;
-        
         private int _blipHandle;
 
-        public StateState CurrentState { get; private set; } = StateState.Waiting;
-
-        public bool IsValid => Game.PlayerPed.CurrentVehicle != null &&
-                               Game.PlayerPed.CurrentVehicle.Handle == _vehicleHandle;
-
-        public event EventHandler StateDidBreak;
-        public event EventHandler StateDidRecover;
+        public override bool IsValid => Game.PlayerPed.CurrentVehicle != null && 
+                                        Game.PlayerPed.CurrentVehicle.Handle == _vehicleHandle;
 
         public BeingInVehicleState(int vehicleHandle)
         {
             _vehicleHandle = vehicleHandle;
         }
 
-        public void Start()
+        protected override void ExecuteStarting()
         {
-            if (CurrentState != StateState.Waiting)
-                throw new Exception("Cannot start state that is not in Waiting state.");
-            
             World.Current.VehicleEventsManager.PlayerEntered += VehicleEventsManagerOnPlayerEntered;
             World.Current.VehicleEventsManager.PlayerLeft += VehicleEventsManagerOnPlayerLeft;
-            
-            if (!IsValid) AddMarkerAndBlip();
-
-            CurrentState = StateState.Running;
         }
 
-        public void Stop()
+        protected override void ExecuteStopping()
         {
-            if (CurrentState != StateState.Running)
-                throw new Exception("Cannot stop state that is not in Running state.");
-            
             World.Current.VehicleEventsManager.PlayerEntered -= VehicleEventsManagerOnPlayerEntered;
             World.Current.VehicleEventsManager.PlayerLeft -= VehicleEventsManagerOnPlayerLeft;
-            
-            if (!IsValid) RemoveMarkerAndBlip();
-
-            CurrentState = StateState.Waiting;
         }
 
         private void VehicleEventsManagerOnPlayerEntered(object sender, Vehicle e)
@@ -57,7 +37,7 @@ namespace HPNS.Interactivity.States
             if (e.Handle != _vehicleHandle) return;
             
             RemoveMarkerAndBlip();
-            StateDidRecover?.Invoke(this, EventArgs.Empty);
+            NotifyStateDidRecover();
         }
 
         private void VehicleEventsManagerOnPlayerLeft(object sender, Vehicle e)
@@ -65,7 +45,7 @@ namespace HPNS.Interactivity.States
             if (e.Handle != _vehicleHandle) return;
             
             AddMarkerAndBlip();
-            StateDidBreak?.Invoke(this, EventArgs.Empty);
+            NotifyStateDidBreak();
         }
 
         private void AddMarkerAndBlip()

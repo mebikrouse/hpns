@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Core\IState.cs" />
     <Compile Include="Core\ITask.cs" />
+    <Compile Include="Core\StateBase.cs" />
     <Compile Include="Core\StateState.cs" />
     <Compile Include="Core\TaskBase.cs" />
     <Compile Include="Core\TaskState.cs" />
