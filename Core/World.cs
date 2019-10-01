@@ -4,9 +4,7 @@ namespace HPNS.Core
 {
     public class World
     {
-        private const int CHECKPOINT_MANAGER_REFRESH_RATE = 500;
-        private const int VEHICLE_EVENTS_MANAGER_REFRESH_RATE = 500;
-        private const int AIMING_MANAGER_REFRESH_RATE = 100;
+        private const int REFRESH_RATE = 100;
         
         private static World _current;
         
@@ -21,37 +19,24 @@ namespace HPNS.Core
             }
         }
 
-        private UpdateObjectPool _checkpointManagerUpdate;
-        private CheckpointManager _checkpointManager;
-
-        private UpdateObjectPool _vehicleEventsManagerUpdate;
-        private VehicleEventsManager _vehicleEventsManager;
-
-        private UpdateObjectPool _aimingManagerUpdate;
-        private AimingManager _aimingManager;
+        private UpdateObjectPool _updateObjectPool;
         
-        public CheckpointManager CheckpointManager => _checkpointManager;
-
-        public VehicleEventsManager VehicleEventsManager => _vehicleEventsManager;
-
-        public AimingManager AimingManager => _aimingManager;
+        public CheckpointManager CheckpointManager { get; }
+        public VehicleEventsManager VehicleEventsManager { get; }
+        public AimingManager AimingManager { get; }
 
         public World()
         {
-            _checkpointManagerUpdate = new UpdateObjectPool(CHECKPOINT_MANAGER_REFRESH_RATE);
-            _checkpointManager = new CheckpointManager();
-            _checkpointManagerUpdate.AddUpdateObject(_checkpointManager);
-            _checkpointManagerUpdate.Start();
-
-            _vehicleEventsManagerUpdate = new UpdateObjectPool(VEHICLE_EVENTS_MANAGER_REFRESH_RATE);
-            _vehicleEventsManager = new VehicleEventsManager();
-            _vehicleEventsManagerUpdate.AddUpdateObject(_vehicleEventsManager);
-            _vehicleEventsManagerUpdate.Start();
+            _updateObjectPool = new UpdateObjectPool(REFRESH_RATE);
             
-            _aimingManagerUpdate = new UpdateObjectPool(AIMING_MANAGER_REFRESH_RATE);
-            _aimingManager = new AimingManager();
-            _aimingManagerUpdate.AddUpdateObject(_aimingManager);
-            _aimingManagerUpdate.Start();
+            CheckpointManager = new CheckpointManager();
+            _updateObjectPool.AddUpdateObject(CheckpointManager);
+            
+            VehicleEventsManager = new VehicleEventsManager();
+            _updateObjectPool.AddUpdateObject(VehicleEventsManager);
+            
+            AimingManager = new AimingManager();
+            _updateObjectPool.AddUpdateObject(AimingManager);
         }
     }
 }
