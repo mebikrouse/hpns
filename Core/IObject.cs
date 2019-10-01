@@ -1,7 +1,8 @@
 namespace HPNS.Core
 {
-    public class IObject
+    public interface IObject : IUpdateObject
     {
-        
+        void OnCreate();
+        void OnDestroy();
     }
 }
