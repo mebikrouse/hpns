@@ -21,7 +21,10 @@ namespace HPNS.Core.Environment
 
         public void OnCreate() { }
 
-        public void OnDestroy() { }
+        public void OnDestroy() 
+        {
+            PlayerLeft?.Invoke(this, EventArgs.Empty);
+        }
         
         public void Update(float deltaTime)
         {
