@@ -21,22 +21,23 @@ namespace HPNS.Core
 
         private UpdateObjectPool _updateObjectPool;
         
-        public CheckpointManager CheckpointManager { get; }
         public VehicleEventsManager VehicleEventsManager { get; }
         public AimingManager AimingManager { get; }
+        public CheckpointManager CheckpointManager { get; }
+        public ObjectManager ObjectManager { get; }
 
         public World()
         {
             _updateObjectPool = new UpdateObjectPool(REFRESH_RATE);
-            
-            CheckpointManager = new CheckpointManager();
-            _updateObjectPool.AddUpdateObject(CheckpointManager);
-            
+
             VehicleEventsManager = new VehicleEventsManager();
             _updateObjectPool.AddUpdateObject(VehicleEventsManager);
             
             AimingManager = new AimingManager();
             _updateObjectPool.AddUpdateObject(AimingManager);
+            
+            CheckpointManager = new CheckpointManager();
+            ObjectManager = new ObjectManager(REFRESH_RATE);
         }
     }
 }

@@ -1,33 +1,19 @@
-﻿using System.Collections.Generic;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 
 using Checkpoint = HPNS.Core.Environment.Checkpoint;
 
 namespace HPNS.Core.Managers
 {
-    public class CheckpointManager : IUpdateObject
+    public class CheckpointManager
     {
-        private List<Checkpoint> _checkpoints = new List<Checkpoint>();
-        
         public Checkpoint AddCheckpoint(Vector3 center, float radius)
         {
-            var checkpoint = new Checkpoint(center, radius);
-            _checkpoints.Add(checkpoint);
-            
-            return checkpoint;
+            return World.Current.ObjectManager.AddObject(new Checkpoint(center, radius));
         }
 
         public void RemoveCheckpoint(Checkpoint checkpoint)
         {
-            _checkpoints.Remove(checkpoint);
-            checkpoint.Destroy();
-        }
-
-        public void Update(float deltaTime)
-        {
-            var checkpoints = new List<Checkpoint>(_checkpoints);
-            foreach (var checkpoint in checkpoints)
-                checkpoint.Update(deltaTime);
+            World.Current.ObjectManager.DestroyObject(checkpoint);
         }
     }
 }

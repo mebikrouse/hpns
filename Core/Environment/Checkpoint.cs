@@ -3,25 +3,25 @@ using CitizenFX.Core;
 
 namespace HPNS.Core.Environment
 {
-    public class Checkpoint : IUpdateObject
+    public class Checkpoint : IObject
     {
         private Vector3 _center;
         private float _radius;
-        private ICheckpointDecorator _decorator;
         
         private bool _playerWasInside;
 
         public event EventHandler PlayerEntered;
         public event EventHandler PlayerLeft;
         
-        public Checkpoint(Vector3 center, float radius, ICheckpointDecorator decorator = null)
+        public Checkpoint(Vector3 center, float radius)
         {
             _center = center;
             _radius = radius;
-            
-            _decorator = decorator;
-            _decorator?.AddDecoration(center, radius);
         }
+
+        public void OnCreate() { }
+
+        public void OnDestroy() { }
         
         public void Update(float deltaTime)
         {
@@ -40,12 +40,6 @@ namespace HPNS.Core.Environment
                 _playerWasInside = false;
                 PlayerLeft?.Invoke(this, EventArgs.Empty);
             }
-        }
-
-        public void Destroy()
-        {
-            PlayerLeft?.Invoke(this, EventArgs.Empty);
-            _decorator?.RemoveDecoration();
         }
 
         private bool IsPlayerInside()
