@@ -43,7 +43,7 @@ namespace HPNS.Interactivity.Tasks
 
         private void RemoveCheckpoint()
         {
-            _checkpoint.PlayerEntered -= CheckpointOnPlayerLeft;
+            _checkpoint.PlayerLeft -= CheckpointOnPlayerLeft;
             World.Current.ObjectManager.DestroyObject(_checkpoint);
         }
     }
