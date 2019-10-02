@@ -24,6 +24,8 @@ namespace HPNS.Core
         public VehicleEventsManager VehicleEventsManager { get; }
         public AimingManager AimingManager { get; }
         public ObjectManager ObjectManager { get; }
+        
+        public EntityDeathTracker EntityDeathTracker { get; }
 
         public World()
         {
@@ -35,6 +37,9 @@ namespace HPNS.Core
             
             AimingManager = new AimingManager();
             _updateObjectPool.AddUpdateObject(AimingManager);
+            
+            EntityDeathTracker = new EntityDeathTracker();
+            _updateObjectPool.AddUpdateObject(EntityDeathTracker);
             
             ObjectManager = new ObjectManager(REFRESH_RATE);
         }

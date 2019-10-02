@@ -45,6 +45,7 @@
     <Compile Include="IObject.cs" />
     <Compile Include="IUpdateObject.cs" />
     <Compile Include="Managers\AimingManager.cs" />
+    <Compile Include="Managers\EntityDeathTracker.cs" />
     <Compile Include="Managers\ObjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Managers\VehicleEventsManager.cs" />
