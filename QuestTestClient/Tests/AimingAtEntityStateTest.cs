@@ -26,7 +26,7 @@ namespace QuestTestClient.Tests
             var pedHandle = await CreateRandomPed(pedPosition, Game.PlayerPed.Heading - 180f);
                 
             var aimingAtEntityState = new AimingAtEntityState(pedHandle);
-            var stateWaitTask = new StateWaitTask(aimingAtEntityState);
+            var stateWaitTask = new StateRecoverWaitTask(aimingAtEntityState);
             
             var goToRadiusAreaTask = new GoToRadiusAreaTask(AREA_CENTER, AREA_RADIUS);
             

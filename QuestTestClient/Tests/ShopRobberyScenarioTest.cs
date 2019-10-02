@@ -34,7 +34,7 @@ namespace QuestTestClient.Tests
 
             var tasks = new List<ITask>();
             
-            tasks.Add(new StateWaitTask(new AimingAtEntityState(pedHandle)));
+            tasks.Add(new StateRecoverWaitTask(new AimingAtEntityState(pedHandle)));
             var shopRobberyScenario = new ShopRobberyScenario(pedHandle);
             tasks.Add(shopRobberyScenario);
             tasks.Add(new LambdaTask(() =>

@@ -34,7 +34,7 @@ namespace QuestTestClient.Tests
             var tasks = new List<ITask>();
             tasks.Add(new GoToRadiusAreaTask(new Vector3(-55.11107f, -1759.414f, 28.98155f), 10.0f));
             tasks.Add(new GoToRadiusAreaTask(new Vector3(-51.2039f, -1754.137f, 29.42102f), 5.0f));
-            tasks.Add(new StateWaitTask(new AimingAtEntityState(pedHandle)));
+            tasks.Add(new StateRecoverWaitTask(new AimingAtEntityState(pedHandle)));
             tasks.Add(shopRobberyScenario = new ShopRobberyScenario(pedHandle));
             tasks.Add(new LambdaTask(() =>
             {

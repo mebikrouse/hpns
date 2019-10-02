@@ -37,13 +37,13 @@ namespace QuestTestClient.Tests
             var pedCHandle = await pedCTask;
             
             var aimingAState = new AimingAtEntityState(pedAHandle);
-            var stateWaitATask = new StateWaitTask(aimingAState);
+            var stateWaitATask = new StateRecoverWaitTask(aimingAState);
             
             var aimingBState = new AimingAtEntityState(pedBHandle);
-            var stateWaitBTask = new StateWaitTask(aimingBState);
+            var stateWaitBTask = new StateRecoverWaitTask(aimingBState);
             
             var aimingCState = new AimingAtEntityState(pedCHandle);
-            var stateWaitCTask = new StateWaitTask(aimingCState);
+            var stateWaitCTask = new StateRecoverWaitTask(aimingCState);
             
             var parallelSetTask = new ParallelSetTask(new [] {stateWaitATask, stateWaitBTask, stateWaitCTask});
             parallelSetTask.TaskDidEnd += CurrentTaskOnTaskDidEnd;
