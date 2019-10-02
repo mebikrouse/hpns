@@ -10,6 +10,9 @@ using HPNS.Interactivity.Tasks;
 
 using static CitizenFX.Core.Native.API;
 
+using Pickup = HPNS.Core.Environment.Pickup;
+using World = HPNS.Core.World;
+
 namespace QuestTestClient.Tests
 {
     public class ShopRobberyScenarioTest : TaskBase
@@ -30,13 +33,18 @@ namespace QuestTestClient.Tests
             PlaceObjectOnGroundProperly(pedHandle);
 
             var tasks = new List<ITask>();
+            
             tasks.Add(new StateWaitTask(new AimingAtEntityState(pedHandle)));
-            tasks.Add(new ShopRobberyScenario(pedHandle));
+            var shopRobberyScenario = new ShopRobberyScenario(pedHandle);
+            tasks.Add(shopRobberyScenario);
             tasks.Add(new LambdaTask(() =>
             {
                 SetBlockingOfNonTemporaryEvents(pedHandle, false);
                 TaskSmartFleePed(pedHandle, Game.PlayerPed.Handle, PED_FLEE_DISTANCE, -1, true, true);
             }));
+            Pickup pickup = null;
+            tasks.Add(new LambdaTask(() => { pickup = World.Current.ObjectManager.AddObject(new Pickup(shopRobberyScenario.BagEntityHandle, 0.5f)); }));
+            tasks.Add(new DeferredCreationTask(() => new TakePickupTask(pickup)));
 
             var sequentialSetTask = new SequentialSetTask(tasks);
             sequentialSetTask.TaskDidEnd += CurrentTaskTaskDidEnd;
@@ -44,6 +52,7 @@ namespace QuestTestClient.Tests
 
             _currentTask = sequentialSetTask;
         }
+
         protected override void ExecuteAborting()
         {
             _currentTask.TaskDidEnd -= CurrentTaskTaskDidEnd;

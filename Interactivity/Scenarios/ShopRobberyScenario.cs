@@ -13,6 +13,8 @@ namespace HPNS.Interactivity.Scenarios
     public class ShopRobberyScenario : TaskBase
     {
         private int _pedHandle;
+        
+        public int BagEntityHandle { get; private set; }
 
         private ITask _currentTask;
 
@@ -39,6 +41,9 @@ namespace HPNS.Interactivity.Scenarios
             bagAttachmentTasks.Add(new LambdaTask(() =>
             {
                 bagEntityHandle = CreateObject((int) propModelHash, 0f, 0f, 0f, true, true, true);
+                SetEntityNoCollisionEntity(Game.PlayerPed.Handle, bagEntityHandle, false);
+
+                BagEntityHandle = bagEntityHandle;
             }));
             bagAttachmentTasks.Add(new DeferredCreationTask(() =>
                 new AttachEntityToPedTask(bagEntityHandle, _pedHandle, 4138, offset, rotation, 9750)));
