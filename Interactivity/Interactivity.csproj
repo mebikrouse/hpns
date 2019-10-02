@@ -63,6 +63,7 @@
     <Compile Include="Tasks\AttachEntityToPedTask.cs" />
     <Compile Include="Tasks\GoToRadiusAreaTask.cs" />
     <Compile Include="Tasks\LambdaTask.cs" />
+    <Compile Include="Tasks\LeaveRadiusAreaTask.cs" />
     <Compile Include="Tasks\PlayAnimTask.cs" />
     <Compile Include="Tasks\TakePickupTask.cs" />
     <Compile Include="Tasks\WaitTask.cs" />
