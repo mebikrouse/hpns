@@ -39,7 +39,11 @@ namespace HPNS.Interactivity.Support
 
         private void TaskOnTaskDidEnd(object sender, EventArgs e)
         {
-            _tasks.Remove((ITask) sender);
+            var task = (ITask) sender;
+
+            task.TaskDidEnd -= TaskOnTaskDidEnd;
+            _tasks.Remove(task);
+            
             if (_tasks.Count == 0) NotifyTaskDidEnd();
         }
     }
