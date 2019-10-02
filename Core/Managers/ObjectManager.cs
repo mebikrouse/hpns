@@ -7,6 +7,7 @@ namespace HPNS.Core.Managers
         public ObjectManager(int refreshRate)
         {
             _updateObjectPool = new UpdateObjectPool(refreshRate);
+            _updateObjectPool.Start();
         }
 
         public T AddObject<T>(T obj) where T : IObject
