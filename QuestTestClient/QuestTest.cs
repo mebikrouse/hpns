@@ -17,7 +17,8 @@ namespace QuestTestClient
             new Tuple<Func<ITask>, string>(() => new AimingAtEntityStateTest(), nameof(AimingAtEntityStateTest)),
             new Tuple<Func<ITask>, string>(() => new ShopRobberyScenarioTest(), nameof(ShopRobberyScenarioTest)),
             new Tuple<Func<ITask>, string>(() => new ParallelSetTaskTest(), nameof(ParallelSetTaskTest)),
-            new Tuple<Func<ITask>, string>(() => new PlayAnimTaskTest(), nameof(PlayAnimTaskTest))
+            new Tuple<Func<ITask>, string>(() => new PlayAnimTaskTest(), nameof(PlayAnimTaskTest)),
+            new Tuple<Func<ITask>, string>(() => new PickupTest(), nameof(PickupTest))
         };
         
         private ITask _currentTest;

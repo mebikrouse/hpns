@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Environment\Pickup.cs" />
     <Compile Include="IObject.cs" />
     <Compile Include="IUpdateObject.cs" />
     <Compile Include="Managers\AimingManager.cs" />
