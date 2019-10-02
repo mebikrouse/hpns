@@ -11,6 +11,8 @@ namespace HPNS.Core.Environment
         private int _entityHandle;
         private float _radius;
 
+        public bool IsPickedUp { get; private set; } = false;
+
         public event EventHandler PlayerPickedUp;
         
         public Pickup(int entityHandle, float radius)
@@ -25,8 +27,10 @@ namespace HPNS.Core.Environment
             if (GetDistance(Game.PlayerPed.Position, entityPosition) > _radius) return;
 
             PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
-            
+
+            IsPickedUp = true;
             PlayerPickedUp?.Invoke(this, EventArgs.Empty);
+            
             World.Current.ObjectManager.DestroyObject(this);
         }
 
