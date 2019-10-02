@@ -49,6 +49,7 @@
     <Compile Include="Tests\ParallelSetTaskTest.cs" />
     <Compile Include="Tests\PickupTest.cs" />
     <Compile Include="Tests\PlayAnimTaskTest.cs" />
+    <Compile Include="Tests\ShopRobberyQuestTest.cs" />
     <Compile Include="Tests\ShopRobberyScenarioTest.cs" />
   </ItemGroup>
   <ItemGroup>
