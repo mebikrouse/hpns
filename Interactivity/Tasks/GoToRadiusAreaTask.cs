@@ -35,7 +35,7 @@ namespace HPNS.Interactivity.Tasks
 
         private void AddCheckpointAndBlip()
         {
-            _checkpoint = World.Current.CheckpointManager.AddCheckpoint(_center, _radius);
+            _checkpoint = World.Current.ObjectManager.AddObject(new Checkpoint(_center, _radius));
             _checkpoint.PlayerEntered += CheckpointOnPlayerEntered;
 
             _blipHandle = AddBlipForCoord(_center.X, _center.Y, _center.Z);
@@ -48,7 +48,7 @@ namespace HPNS.Interactivity.Tasks
         private void RemoveCheckpointAndBlip()
         {
             _checkpoint.PlayerEntered -= CheckpointOnPlayerEntered;
-            World.Current.CheckpointManager.RemoveCheckpoint(_checkpoint);
+            World.Current.ObjectManager.DestroyObject(_checkpoint);
             
             RemoveBlip(ref _blipHandle);
         }

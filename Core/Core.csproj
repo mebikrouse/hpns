@@ -46,7 +46,6 @@
     <Compile Include="Managers\AimingManager.cs" />
     <Compile Include="Managers\ObjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Managers\CheckpointManager.cs" />
     <Compile Include="Managers\VehicleEventsManager.cs" />
     <Compile Include="UpdateObjectPool.cs" />
     <Compile Include="World.cs" />

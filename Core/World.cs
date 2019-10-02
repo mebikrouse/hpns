@@ -23,7 +23,6 @@ namespace HPNS.Core
         
         public VehicleEventsManager VehicleEventsManager { get; }
         public AimingManager AimingManager { get; }
-        public CheckpointManager CheckpointManager { get; }
         public ObjectManager ObjectManager { get; }
 
         public World()
@@ -36,7 +35,6 @@ namespace HPNS.Core
             AimingManager = new AimingManager();
             _updateObjectPool.AddUpdateObject(AimingManager);
             
-            CheckpointManager = new CheckpointManager();
             ObjectManager = new ObjectManager(REFRESH_RATE);
         }
     }
