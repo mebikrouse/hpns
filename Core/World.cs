@@ -28,6 +28,7 @@ namespace HPNS.Core
         public World()
         {
             _updateObjectPool = new UpdateObjectPool(REFRESH_RATE);
+            _updateObjectPool.Start();
 
             VehicleEventsManager = new VehicleEventsManager();
             _updateObjectPool.AddUpdateObject(VehicleEventsManager);
