@@ -22,11 +22,7 @@ namespace HPNS.Core.Environment
         public void Update(float deltaTime)
         {
             var entityPosition = GetEntityCoords(_entityHandle, !IsEntityDead(_entityHandle));
-
-            var distance = GetDistance(Game.PlayerPed.Position, entityPosition);
-            Debug.WriteLine(distance.ToString());
-            
-            if (distance > _radius) return;
+            if (GetDistance(Game.PlayerPed.Position, entityPosition) > _radius) return;
 
             PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
             
