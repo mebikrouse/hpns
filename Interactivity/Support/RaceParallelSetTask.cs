@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CitizenFX.Core;
 using HPNS.Interactivity.Core;
 
 namespace HPNS.Interactivity.Support
@@ -39,8 +40,9 @@ namespace HPNS.Interactivity.Support
 
             task.TaskDidEnd -= TaskOnTaskDidEnd;
             _tasks.Remove((ITask) sender);
-            
+
             AbortAllRunningTasks();
+            NotifyTaskDidEnd();
         }
 
         private void AbortAllRunningTasks()
