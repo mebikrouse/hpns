@@ -13,6 +13,9 @@ namespace PedTest
     {
         private bool _isPedCreated;
         private int _currentPed;
+
+        private string _faceAnimDict;
+        private string _faceAnimName;
         
         public PedTest()
         {
@@ -64,6 +67,29 @@ namespace PedTest
                 await PlayAnim(_currentPed, dict, anim);
                 
             }), false);
+            
+            RegisterCommand("face", new Action<int, List<object>, string>(async (source, args, raw) =>
+            {
+                if (args.Count != 2)
+                {
+                    StopAnimTask(_currentPed, _faceAnimDict, _faceAnimName, 3.0f);
+                    return;
+                }
+
+                if (!_isPedCreated)
+                {
+                    PrintToChat("You need to spawn ped at first!");
+                    return;
+                }
+                
+                var dict = args[0].ToString();
+                var anim = args[1].ToString();
+
+                _faceAnimDict = dict;
+                _faceAnimName = anim;
+
+                await PlayFacialAnim(_currentPed, dict, anim);
+            }), false);
         }
 
         private static async Task<int> CreatePedAtPosition(Vector3 position, uint pedHash)
@@ -80,13 +106,26 @@ namespace PedTest
 
         private static async Task PlayAnim(int pedHandle, string dict, string name)
         {
+            await LoadAnimDict(dict);
+
+            PrintToChat("Stating to play animation...");
+            TaskPlayAnim(pedHandle, dict, name, 8.0f, 8.0f, -1, 0, 0.0f, false, false, false);
+        }
+
+        private static async Task PlayFacialAnim(int pedHandle, string dict, string name)
+        {
+            await LoadAnimDict(dict);
+            
+            PrintToChat("Stating to play facial animation...");
+            TaskPlayAnim(pedHandle, dict, name, 8.0f, 8.0f, -1, 33, 0.0f, false, false, false);
+        }
+
+        private static async Task LoadAnimDict(string dict)
+        {
             RequestAnimDict(dict);
 
             while (!HasAnimDictLoaded(dict))
                 await Delay(500);
-
-            PrintToChat("Stating to play animation...");
-            TaskPlayAnim(pedHandle, dict, name, 8.0f, 8.0f, -1, 0, 0.0f, false, false, false);
         }
         
         private static void PrintToChat(string message)
