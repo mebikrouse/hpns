@@ -57,6 +57,7 @@
     <Compile Include="States\BeingInVehicleState.cs" />
     <Compile Include="States\EntityIsAliveState.cs" />
     <Compile Include="Support\ConditionalJumpTask.cs" />
+    <Compile Include="Support\ConditionalTask.cs" />
     <Compile Include="Support\DeferredCreationTask.cs" />
     <Compile Include="Support\ParallelSetTask.cs" />
     <Compile Include="Support\RaceParallelSetTask.cs" />
