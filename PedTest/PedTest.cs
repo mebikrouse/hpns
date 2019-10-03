@@ -32,7 +32,7 @@ namespace PedTest
                     DeletePed(ref _currentPed);
                 
                 var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5f;
-                var ped = await CreatePedAtPosition(pedPosition, (uint) GetHashKey("a_m_m_ktown_01"));
+                var ped = await Utility.CreatePedAtPosition(pedPosition, Game.PlayerPed.Heading - 180f, (uint) GetHashKey("a_m_m_ktown_01"));
 
                 TaskSetBlockingOfNonTemporaryEvents(ped, true);
 
@@ -92,21 +92,9 @@ namespace PedTest
             }), false);
         }
 
-        private static async Task<int> CreatePedAtPosition(Vector3 position, uint pedHash)
-        {
-            while (!HasModelLoaded(pedHash))
-            {
-                RequestModel(pedHash);
-                await Delay(500);
-            }
-            
-            var ped = CreatePed(0, pedHash, position.X, position.Y, position.Z, 0f, true, false);
-            return ped;
-        }
-
         private static async Task PlayAnim(int pedHandle, string dict, string name)
         {
-            await LoadAnimDict(dict);
+            await Utility.LoadAnimDict(dict);
 
             PrintToChat("Stating to play animation...");
             TaskPlayAnim(pedHandle, dict, name, 8.0f, 8.0f, -1, 0, 0.0f, false, false, false);
@@ -114,18 +102,10 @@ namespace PedTest
 
         private static async Task PlayFacialAnim(int pedHandle, string dict, string name)
         {
-            await LoadAnimDict(dict);
+            await Utility.LoadAnimDict(dict);
             
             PrintToChat("Stating to play facial animation...");
             TaskPlayAnim(pedHandle, dict, name, 8.0f, 8.0f, -1, 33, 0.0f, false, false, false);
-        }
-
-        private static async Task LoadAnimDict(string dict)
-        {
-            RequestAnimDict(dict);
-
-            while (!HasAnimDictLoaded(dict))
-                await Delay(500);
         }
         
         private static void PrintToChat(string message)
