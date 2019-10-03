@@ -7,14 +7,11 @@ namespace QuestTestClient.Tests
 {
     public class GoToRadiusAreaTaskTest : TaskBase
     {
-        private const float AREA_RADIUS = 25f;
-        private static readonly Vector3 AREA_CENTER = new Vector3(55.84977f, -1572.498f, 28.95687f);
-        
         private ITask _currentTask;
         
         protected override void ExecuteStarting()
         {
-            var goToRadiusAreaTask = new GoToRadiusAreaTask(AREA_CENTER, AREA_RADIUS);
+            var goToRadiusAreaTask = new GoToRadiusAreaTask(new Vector3(55.84977f, -1572.498f, 28.95687f), 25f);
             goToRadiusAreaTask.TaskDidEnd += CurrentTaskTaskDidEnd;
             goToRadiusAreaTask.Start();
 
