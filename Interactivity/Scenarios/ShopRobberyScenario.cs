@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using CitizenFX.Core;
+using HPNS.Core;
 using HPNS.Interactivity.Core;
 using HPNS.Interactivity.Support;
 using HPNS.Interactivity.Tasks;
@@ -25,11 +25,8 @@ namespace HPNS.Interactivity.Scenarios
 
         protected override async void ExecuteStarting()
         {
-            var animDict = "mp_am_hold_up";
-            var animName = "holdup_victim_20s";
-            
             var propModelHash = (uint) GetHashKey("prop_poly_bag_01");
-            await LoadObject(propModelHash);
+            await Utility.LoadObject(propModelHash);
 
             var bagEntityHandle = 0;
 
@@ -50,7 +47,8 @@ namespace HPNS.Interactivity.Scenarios
 
             var wholeScenarioTasks = new List<ITask>();
             wholeScenarioTasks.Add(new SequentialSetTask(bagAttachmentTasks));
-            wholeScenarioTasks.Add(new PlayAnimTask(_pedHandle, animDict, animName, 23000));
+            wholeScenarioTasks.Add(new PlayAnimTask(_pedHandle, "mp_am_hold_up", "holdup_victim_20s", 21750));
+            wholeScenarioTasks.Add(new PlayFacialAnimTask(_pedHandle, "facials@gen_male@base", "shocked_1", 21750));
             
             var scenarioTask = new ParallelSetTask(wholeScenarioTasks);
             scenarioTask.TaskDidEnd += CurrentTaskTaskDidEnd;
@@ -69,14 +67,6 @@ namespace HPNS.Interactivity.Scenarios
         {
             _currentTask.TaskDidEnd -= CurrentTaskTaskDidEnd;
             NotifyTaskDidEnd();
-        }
-
-        private static async Task LoadObject(uint modelHash)
-        {
-            RequestModel(modelHash);
-
-            while (!HasModelLoaded(modelHash))
-                await BaseScript.Delay(100);
         }
     }
 }
