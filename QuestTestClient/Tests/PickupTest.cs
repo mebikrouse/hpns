@@ -1,6 +1,6 @@
 using System;
-using System.Threading.Tasks;
 using CitizenFX.Core;
+using HPNS.Core;
 using HPNS.Interactivity.Core;
 
 using World = HPNS.Core.World;
@@ -17,7 +17,7 @@ namespace QuestTestClient.Tests
         protected override async void ExecuteStarting()
         {
             var modelHash = (uint) GetHashKey("prop_poly_bag_01");
-            await LoadObject(modelHash);
+            await Utility.LoadObject(modelHash);
 
             var pickupPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 3f;
             var entityHandle = CreateObject((int) modelHash, pickupPosition.X, pickupPosition.Y, pickupPosition.Z, true, true,
@@ -41,14 +41,6 @@ namespace QuestTestClient.Tests
         {
             _pickup.PlayerPickedUp -= PickupOnPlayerPickedUp;
             NotifyTaskDidEnd();
-        }
-
-        private static async Task LoadObject(uint modelHash)
-        {
-            RequestModel(modelHash);
-
-            while (!HasModelLoaded(modelHash))
-                await BaseScript.Delay(100);
         }
     }
 }

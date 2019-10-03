@@ -1,11 +1,9 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using CitizenFX.Core;
+using HPNS.Core;
 using HPNS.Interactivity.Core;
 using HPNS.Interactivity.States;
 using HPNS.Interactivity.Support;
-using static CitizenFX.Core.Native.API;
 
 namespace QuestTestClient.Tests
 {
@@ -24,13 +22,13 @@ namespace QuestTestClient.Tests
             var lineDirection = Game.PlayerPed.RightVector;
             
             var pedAPosition = playerPosition + (-lineDirection + forwardVector) * PED_DISTANCE;
-            var pedATask = CreateRandomPed(pedAPosition, pedsHeading);
+            var pedATask = Utility.CreateRandomPed(pedAPosition, pedsHeading);
 
             var pedBPosition = playerPosition + forwardVector * PED_DISTANCE;
-            var pedBTask = CreateRandomPed(pedBPosition, pedsHeading);
+            var pedBTask = Utility.CreateRandomPed(pedBPosition, pedsHeading);
 
             var pedCPosition = playerPosition + (lineDirection + forwardVector) * PED_DISTANCE;
-            var pedCTask = CreateRandomPed(pedCPosition, pedsHeading);
+            var pedCTask = Utility.CreateRandomPed(pedCPosition, pedsHeading);
 
             var pedAHandle = await pedATask;
             var pedBHandle = await pedBTask;
@@ -62,30 +60,6 @@ namespace QuestTestClient.Tests
         {
             _currentTask.TaskDidEnd -= CurrentTaskOnTaskDidEnd;
             NotifyTaskDidEnd();
-        }
-        
-        private static async Task<int> CreateRandomPed(Vector3 position, float heading)
-        {
-            var pedHash = GetRandomPedHash();
-            return await CreatePedAtPosition(position, heading, pedHash);
-        }
-        
-        private static uint GetRandomPedHash()
-        {
-            var pedHashes = Enum.GetValues(typeof(PedHash)).Cast<PedHash>().ToList();
-            return (uint) pedHashes[new Random().Next(0, pedHashes.Count)];
-        }
-        
-        private static async Task<int> CreatePedAtPosition(Vector3 position, float heading, uint pedHash)
-        {
-            while (!HasModelLoaded(pedHash))
-            {
-                RequestModel(pedHash);
-                await BaseScript.Delay(100);
-            }
-            
-            var ped = CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, true, false);
-            return ped;
         }
     }
 }

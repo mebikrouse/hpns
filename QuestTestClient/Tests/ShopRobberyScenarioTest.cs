@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
+using HPNS.Core;
 using HPNS.Interactivity.Core;
 using HPNS.Interactivity.Scenarios;
 using HPNS.Interactivity.States;
@@ -17,18 +18,14 @@ namespace QuestTestClient.Tests
 {
     public class ShopRobberyScenarioTest : TaskBase
     {
-        private const float PED_DISTANCE = 3f;
-        private const float PED_FLEE_DISTANCE = 50f;
-        private const string PED_MODEL = "a_m_m_ktown_01";
-        
         private ITask _currentTask;
         
         protected override async void ExecuteStarting()
         {
-            var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * PED_DISTANCE;
+            var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 3f;
             var pedHeading = Game.PlayerPed.Heading - 180f;
                 
-            var pedHandle = await CreatePedAtPosition(pedPosition, pedHeading, (uint) GetHashKey(PED_MODEL));
+            var pedHandle = await Utility.CreatePedAtPosition(pedPosition, pedHeading, (uint) GetHashKey("a_m_m_ktown_01"));
             SetBlockingOfNonTemporaryEvents(pedHandle, true);
             PlaceObjectOnGroundProperly(pedHandle);
 
@@ -40,7 +37,7 @@ namespace QuestTestClient.Tests
             tasks.Add(new LambdaTask(() =>
             {
                 SetBlockingOfNonTemporaryEvents(pedHandle, false);
-                TaskSmartFleePed(pedHandle, Game.PlayerPed.Handle, PED_FLEE_DISTANCE, -1, true, true);
+                TaskSmartFleePed(pedHandle, Game.PlayerPed.Handle, 50f, -1, true, true);
             }));
             Pickup pickup = null;
             tasks.Add(new LambdaTask(() => { pickup = World.Current.ObjectManager.AddObject(new Pickup(shopRobberyScenario.BagEntityHandle, 0.5f)); }));
@@ -63,18 +60,6 @@ namespace QuestTestClient.Tests
         {
             _currentTask.TaskDidEnd -= CurrentTaskTaskDidEnd;
             NotifyTaskDidEnd();
-        }
-
-        private static async Task<int> CreatePedAtPosition(Vector3 position, float heading, uint pedHash)
-        {
-            while (!HasModelLoaded(pedHash))
-            {
-                RequestModel(pedHash);
-                await BaseScript.Delay(100);
-            }
-            
-            var ped = CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, true, false);
-            return ped;
         }
     }
 }
