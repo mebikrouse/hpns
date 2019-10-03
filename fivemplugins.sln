@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerSkinSetterClient", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedAttachmentsClient", "PedAttachmentsClient\PedAttachmentsClient.csproj", "{1C7B62EF-8A6F-42B2-A026-B5AD6965168D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundTestClient", "SoundTestClient\SoundTestClient.csproj", "{BFE45577-396B-496A-80A6-1373A2983B2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +68,9 @@ Global
 		{1C7B62EF-8A6F-42B2-A026-B5AD6965168D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C7B62EF-8A6F-42B2-A026-B5AD6965168D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C7B62EF-8A6F-42B2-A026-B5AD6965168D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFE45577-396B-496A-80A6-1373A2983B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFE45577-396B-496A-80A6-1373A2983B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFE45577-396B-496A-80A6-1373A2983B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFE45577-396B-496A-80A6-1373A2983B2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
