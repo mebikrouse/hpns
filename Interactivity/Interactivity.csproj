@@ -58,6 +58,7 @@
     <Compile Include="States\EntityIsAliveState.cs" />
     <Compile Include="Support\DeferredCreationTask.cs" />
     <Compile Include="Support\ParallelSetTask.cs" />
+    <Compile Include="Support\RaceParallelSetTask.cs" />
     <Compile Include="Support\StateBreakWaitTask.cs" />
     <Compile Include="Support\StateRecoverWaitTask.cs" />
     <Compile Include="Support\StateSuspendTask.cs" />
