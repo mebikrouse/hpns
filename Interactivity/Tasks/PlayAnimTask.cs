@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+using HPNS.Core;
 using HPNS.Interactivity.Core;
 using HPNS.Interactivity.Support;
 
@@ -10,9 +9,6 @@ namespace HPNS.Interactivity.Tasks
 {
     public class PlayAnimTask : TaskBase
     {
-        private const float BLEND_IN_SPEED = 8.0f;
-        private const float BLEND_OUT_SPEED = 8.0f;
-        
         private int _pedHandle;
         private string _dict;
         private string _name;
@@ -30,7 +26,7 @@ namespace HPNS.Interactivity.Tasks
         
         protected override async void ExecuteStarting()
         {
-            var loadingTask = LoadAnimDict(_dict);
+            var loadingTask = Utility.LoadAnimDict(_dict);
             
             var tasks = new List<ITask>();
             
@@ -53,21 +49,13 @@ namespace HPNS.Interactivity.Tasks
 
         private void StartAnimation()
         {
-            TaskPlayAnim(_pedHandle, _dict, _name, BLEND_IN_SPEED, BLEND_OUT_SPEED, _duration, 0, 
+            TaskPlayAnim(_pedHandle, _dict, _name, 8f, 8f, _duration, 0, 
                 0.0f, false, false, false);
         }
 
         private void StopAnimation()
         {
             StopAnimTask(_pedHandle, _dict, _name, 3f);
-        }
-        
-        private static async Task LoadAnimDict(string dict)
-        {
-            RequestAnimDict(dict);
-
-            while (!HasAnimDictLoaded(dict))
-                await BaseScript.Delay(100);
         }
     }
 }
