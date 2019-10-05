@@ -11,17 +11,18 @@ namespace HPNS.InteractivityV2.Tasks
     public class CreatePedTask : TaskBase
     {
         private uint _pedHash;
-        private Vector3 _position;
-        private float _heading;
         
-        public CreatePedTask(uint pedHash, Vector3 position, float heading)
+        public Property<Vector3> Position = new Property<Vector3>(Vector3.Zero);
+        public Property<float> Heading = new Property<float>(0f);
+
+        public Property<int> PedHandle = new Property<int>();
+        
+        public CreatePedTask(uint pedHash)
         {
             _pedHash = pedHash;
-            _position = position;
-            _heading = heading;
         }
         
-        public CreatePedTask(string pedModel, Vector3 position, float heading) : this((uint) GetHashKey(pedModel), position, heading) { }
+        public CreatePedTask(string pedModel) : this((uint) GetHashKey(pedModel)) { }
         
         protected override async Task ExecutePrepare()
         {
@@ -33,7 +34,12 @@ namespace HPNS.InteractivityV2.Tasks
 
         protected override void ExecuteStart()
         {
-            Utility.CreatePedAtPosition(_position, _heading, _pedHash);
+            var position = Position.Value;
+            var heading = Heading.Value;
+            
+            var pedHandle = Utility.CreatePedAtPosition(position, heading, _pedHash);
+            PedHandle.Value = pedHandle;
+            
             NotifyTaskDidEnd();
         }
 

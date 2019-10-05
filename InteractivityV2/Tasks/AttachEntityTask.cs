@@ -9,30 +9,20 @@ namespace HPNS.InteractivityV2.Tasks
 {
     public class AttachEntityTask : TaskBase
     {
-        private int _pedHandle;
-        private int _entityHandle;
-        private int _boneIndex;
-        private Vector3 _offset;
-        private Vector3 _rotation;
-        private int _duration;
+        public Property<int> PedHandle;
+        public Property<int> EntityHandle;
+        public Property<int> BoneId;
+        public Property<Vector3> Offset = new Property<Vector3>(Vector3.Zero);
+        public Property<Vector3> Rotation = new Property<Vector3>(Vector3.Zero);
+        public Property<int> Duration;
 
         private ITask _attachSequence;
-        
-        public AttachEntityTask(int pedHandle, int entityHandle, int boneId, Vector3 offset, Vector3 rotation, int duration)
-        {
-            _pedHandle = pedHandle;
-            _entityHandle = entityHandle;
-            _boneIndex = GetPedBoneIndex(pedHandle, boneId);
-            _offset = offset;
-            _rotation = rotation;
-            _duration = duration;
-        }
 
         protected override async Task ExecutePrepare()
         {
             var tasks = new List<ITask>();
             tasks.Add(new LambdaTask(AttachEntity));
-            tasks.Add(new WaitTask(_duration));
+            tasks.Add(new WaitTask {Duration = Duration});
             tasks.Add(new LambdaTask(DetachEntity));
             tasks.Add(new LambdaTask(NotifyTaskDidEnd));
 
@@ -59,14 +49,21 @@ namespace HPNS.InteractivityV2.Tasks
 
         private void AttachEntity()
         {
-            AttachEntityToEntity(_entityHandle, _pedHandle, _boneIndex,
-                _offset.X, _offset.Y, _offset.Z, _rotation.X, _rotation.Y, _rotation.Z,
+            var entityHandle = EntityHandle.Value;
+            var pedHandle = PedHandle.Value;
+            var boneIndex = GetPedBoneIndex(pedHandle, BoneId.Value);
+            var offset = Offset.Value;
+            var rotation = Rotation.Value;
+            
+            AttachEntityToEntity(entityHandle, pedHandle, boneIndex,
+                offset.X, offset.Y, offset.Z, rotation.X, rotation.Y, rotation.Z,
                 true, false, false, false, 0, true);
         }
 
         private void DetachEntity()
         {
-            CitizenFX.Core.Native.API.DetachEntity(_entityHandle, true, true);
+            var entityHandle = EntityHandle.Value;
+            CitizenFX.Core.Native.API.DetachEntity(entityHandle, true, true);
         }
     }
 }

@@ -45,6 +45,7 @@
     <Compile Include="Core\ConditionState.cs" />
     <Compile Include="Core\ICondition.cs" />
     <Compile Include="Core\ITask.cs" />
+    <Compile Include="Core\Property.cs" />
     <Compile Include="Core\TaskBase.cs" />
     <Compile Include="Core\TaskState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

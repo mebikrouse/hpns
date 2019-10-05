@@ -11,20 +11,18 @@ namespace HPNS.InteractivityV2.Support
             public bool Cancelled { get; set; }
         }
         
-        private int _duration;
         private CancellationToken _currentCancellationToken;
-        
-        public WaitTask(int duration)
-        {
-            _duration = duration;
-        }
+
+        public Property<int> Duration;
 
         protected override async Task ExecutePrepare() { }
 
         protected override void ExecuteStart()
         {
+            var duration = Duration.Value;
+            
             var cancellationToken = new CancellationToken();
-            _ = WaitForDelay(_duration, cancellationToken);
+            _ = WaitForDelay(duration, cancellationToken);
 
             _currentCancellationToken = cancellationToken;
         }

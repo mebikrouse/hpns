@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CitizenFX.Core;
 using HPNS.InteractivityV2.Core;
 
 namespace HPNS.InteractivityV2.Support
@@ -52,12 +53,11 @@ namespace HPNS.InteractivityV2.Support
                 return;
             }
 
-            var task = _tasks[_nextTaskIndex];
-            task.TaskDidEnd += TaskOnTaskDidEnd;
-            task.Start();
-
-            _currentTask = task;
+            _currentTask = _tasks[_nextTaskIndex];
             _nextTaskIndex++;
+            
+            _currentTask.TaskDidEnd += TaskOnTaskDidEnd;
+            _currentTask.Start();
         }
 
         private void TaskOnTaskDidEnd(object sender, EventArgs e)

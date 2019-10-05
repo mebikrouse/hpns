@@ -10,14 +10,15 @@ namespace HPNS.InteractivityV2.Tasks
     public class CreateObjectTask : TaskBase
     {
         private uint _modelHash;
-        private Vector3 _position;
-        private Vector3 _rotation;
+        
+        public Property<Vector3> Position = new Property<Vector3>(Vector3.Zero);
+        public Property<Vector3> Rotation = new Property<Vector3>(Vector3.Zero);
 
-        public CreateObjectTask(string model, Vector3 position, Vector3 rotation)
+        public Property<int> ObjectHandle;
+
+        public CreateObjectTask(string model)
         {
             _modelHash = (uint) GetHashKey(model);
-            _position = position;
-            _rotation = rotation;
         }
         
         protected override async Task ExecutePrepare()
@@ -30,8 +31,13 @@ namespace HPNS.InteractivityV2.Tasks
 
         protected override void ExecuteStart()
         {
-            var objectHandle = CreateObject((int) _modelHash, _position.X, _position.Y, _position.Z, true, true, true);
-            SetEntityRotation(objectHandle, _rotation.X, _rotation.Y, _rotation.Z, 1, true);
+            var position = Position.Value;
+            var rotation = Rotation.Value;
+            
+            var objectHandle = CreateObject((int) _modelHash, position.X, position.Y, position.Z, true, true, true);
+            SetEntityRotation(objectHandle, rotation.X, rotation.Y, rotation.Z, 1, true);
+
+            ObjectHandle.Value = objectHandle;
             
             NotifyTaskDidEnd();
         }

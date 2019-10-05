@@ -9,21 +9,20 @@ namespace HPNS.InteractivityV2.Tasks
 {
     public class PlayAnimTask : TaskBase
     {
-        private int _pedHandle;
         private string _dict;
         private string _name;
-        private int _duration;
+        
+        public Property<int> PedHandle;
+        public Property<int> Duration;
 
         protected virtual int AnimFlag => 1;
 
         private ITask _animSequence;
 
-        public PlayAnimTask(int pedHandle, string dict, string name, int duration)
+        public PlayAnimTask(string dict, string name)
         {
-            _pedHandle = pedHandle;
             _dict = dict;
             _name = name;
-            _duration = duration;
         }
         
         protected override async Task ExecutePrepare()
@@ -32,7 +31,7 @@ namespace HPNS.InteractivityV2.Tasks
 
             var tasks = new List<ITask>();
             tasks.Add(new LambdaTask(PlayAnim));
-            tasks.Add(new WaitTask(_duration));
+            tasks.Add(new WaitTask {Duration = Duration});
             tasks.Add(new LambdaTask(StopAnim));
             tasks.Add(new LambdaTask(NotifyTaskDidEnd));
 
@@ -59,13 +58,15 @@ namespace HPNS.InteractivityV2.Tasks
 
         private void PlayAnim()
         {
-            TaskPlayAnim(_pedHandle, _dict, _name, 8f, 8f, -1, AnimFlag, 
+            var pedHandle = PedHandle.Value;
+            TaskPlayAnim(pedHandle, _dict, _name, 8f, 8f, -1, AnimFlag, 
                 0f, false, false, false);
         }
 
         private void StopAnim()
         {
-            StopAnimTask(_pedHandle, _dict, _name, 3f);
+            var pedHandle = PedHandle.Value;
+            StopAnimTask(pedHandle, _dict, _name, 3f);
         }
     }
 }

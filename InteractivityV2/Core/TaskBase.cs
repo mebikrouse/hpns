@@ -41,8 +41,10 @@ namespace HPNS.InteractivityV2.Core
 
         public void Reset()
         {
-            if (CurrentState == TaskState.NotReady ||
-                CurrentState == TaskState.Running)
+            if (CurrentState == TaskState.NotReady)
+                throw new Exception();
+            
+            if (CurrentState == TaskState.Running)
                 throw new Exception();
             
             if (CurrentState == TaskState.Ready) 
