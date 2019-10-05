@@ -22,6 +22,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedAttachmentsClient", "Ped
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundTestClient", "SoundTestClient\SoundTestClient.csproj", "{BFE45577-396B-496A-80A6-1373A2983B2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractivityV2", "InteractivityV2\InteractivityV2.csproj", "{89CC3348-7E35-41B1-BD78-7FDB926B35DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractivityTests", "InteractivityTests\InteractivityTests.csproj", "{2F77376F-F42A-434C-B00E-449A04E6865E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +76,13 @@ Global
 		{BFE45577-396B-496A-80A6-1373A2983B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFE45577-396B-496A-80A6-1373A2983B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFE45577-396B-496A-80A6-1373A2983B2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89CC3348-7E35-41B1-BD78-7FDB926B35DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89CC3348-7E35-41B1-BD78-7FDB926B35DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89CC3348-7E35-41B1-BD78-7FDB926B35DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89CC3348-7E35-41B1-BD78-7FDB926B35DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F77376F-F42A-434C-B00E-449A04E6865E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F77376F-F42A-434C-B00E-449A04E6865E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F77376F-F42A-434C-B00E-449A04E6865E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F77376F-F42A-434C-B00E-449A04E6865E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
