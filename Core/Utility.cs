@@ -25,18 +25,21 @@ namespace HPNS.Core
                 await BaseScript.Delay(100);
         }
         
-        public static async Task<int> CreatePedAtPosition(Vector3 position, float heading, uint pedHash)
+        public static async Task<int> CreatePedAtPositionAsync(Vector3 position, float heading, uint pedHash)
         {
             await LoadObject(pedHash);
-            
-            var ped = CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, true, false);
-            return ped;
+            return CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, true, false);
         }
         
-        public static async Task<int> CreateRandomPed(Vector3 position, float heading)
+        public static int CreatePedAtPosition(Vector3 position, float heading, uint pedHash)
+        {
+            return CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, true, false);
+        }
+        
+        public static async Task<int> CreateRandomPedAsync(Vector3 position, float heading)
         {
             var pedHash = GetRandomPedHash();
-            return await CreatePedAtPosition(position, heading, pedHash);
+            return await CreatePedAtPositionAsync(position, heading, pedHash);
         }
         
         public static uint GetRandomPedHash()

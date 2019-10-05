@@ -13,7 +13,7 @@ namespace QuestTestClient.Tests
         protected override async void ExecuteStarting()
         {
             var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5f;
-            var pedHandle = await Utility.CreateRandomPed(pedPosition, Game.PlayerPed.Heading - 180f);
+            var pedHandle = await Utility.CreateRandomPedAsync(pedPosition, Game.PlayerPed.Heading - 180f);
 
             var playAnimTask = new PlayAnimTask(pedHandle, "mp_am_hold_up", "holdup_victim_20s", 23000);
             playAnimTask.TaskDidEnd += CurrentTaskTaskOnTaskDidEnd;

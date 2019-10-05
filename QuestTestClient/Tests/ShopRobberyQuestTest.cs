@@ -25,7 +25,7 @@ namespace QuestTestClient.Tests
             var pedPosition = new Vector3(-46.10585f, -1757.487f, 29.421f);
             var pedHeading = 52.37571f;
             
-            var pedHandle = await Utility.CreatePedAtPosition(pedPosition, pedHeading, (uint) GetHashKey("a_m_m_ktown_01"));
+            var pedHandle = await Utility.CreatePedAtPositionAsync(pedPosition, pedHeading, (uint) GetHashKey("a_m_m_ktown_01"));
             SetBlockingOfNonTemporaryEvents(pedHandle, true);
             SetPedCanRagdollFromPlayerImpact(pedHandle, false);
             PlaceObjectOnGroundProperly(pedHandle);

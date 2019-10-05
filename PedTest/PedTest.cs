@@ -32,7 +32,7 @@ namespace PedTest
                     DeletePed(ref _currentPed);
                 
                 var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5f;
-                var ped = await Utility.CreatePedAtPosition(pedPosition, Game.PlayerPed.Heading - 180f, (uint) GetHashKey("a_m_m_ktown_01"));
+                var ped = await Utility.CreatePedAtPositionAsync(pedPosition, Game.PlayerPed.Heading - 180f, (uint) GetHashKey("a_m_m_ktown_01"));
 
                 TaskSetBlockingOfNonTemporaryEvents(ped, true);
 

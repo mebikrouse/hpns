@@ -22,13 +22,13 @@ namespace QuestTestClient.Tests
             var lineDirection = Game.PlayerPed.RightVector;
             
             var pedAPosition = playerPosition + (-lineDirection + forwardVector) * PED_DISTANCE;
-            var pedATask = Utility.CreateRandomPed(pedAPosition, pedsHeading);
+            var pedATask = Utility.CreateRandomPedAsync(pedAPosition, pedsHeading);
 
             var pedBPosition = playerPosition + forwardVector * PED_DISTANCE;
-            var pedBTask = Utility.CreateRandomPed(pedBPosition, pedsHeading);
+            var pedBTask = Utility.CreateRandomPedAsync(pedBPosition, pedsHeading);
 
             var pedCPosition = playerPosition + (lineDirection + forwardVector) * PED_DISTANCE;
-            var pedCTask = Utility.CreateRandomPed(pedCPosition, pedsHeading);
+            var pedCTask = Utility.CreateRandomPedAsync(pedCPosition, pedsHeading);
 
             var pedAHandle = await pedATask;
             var pedBHandle = await pedBTask;

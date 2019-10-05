@@ -16,7 +16,7 @@ namespace QuestTestClient.Tests
         protected override async void ExecuteStarting()
         {
             var pedPosition = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5f;
-            var pedHandle = await Utility.CreateRandomPed(pedPosition, Game.PlayerPed.Heading - 180f);
+            var pedHandle = await Utility.CreateRandomPedAsync(pedPosition, Game.PlayerPed.Heading - 180f);
                 
             var aimingAtEntityState = new AimingAtEntityState(pedHandle);
             var stateWaitTask = new StateRecoverWaitTask(aimingAtEntityState);
