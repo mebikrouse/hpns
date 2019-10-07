@@ -11,11 +11,10 @@ namespace HPNS.InteractivityV2.Tasks
     public class CreatePedTask : TaskBase
     {
         private uint _pedHash;
-        
-        public Property<Vector3> Position = new Property<Vector3>(Vector3.Zero);
-        public Property<float> Heading = new Property<float>(0f);
 
-        public Property<int> PedHandle = new Property<int>();
+        public IParameter<Vector3> Position = new Parameter<Vector3>(Vector3.Zero);
+        public IParameter<float> Heading = new Parameter<float>(0f);
+        public IResult<int> PedHandle;
         
         public CreatePedTask(uint pedHash)
         {
@@ -34,11 +33,11 @@ namespace HPNS.InteractivityV2.Tasks
 
         protected override void ExecuteStart()
         {
-            var position = Position.Value;
-            var heading = Heading.Value;
+            var position = Position.GetValue();
+            var heading = Heading.GetValue();
             
             var pedHandle = Utility.CreatePedAtPosition(position, heading, _pedHash);
-            PedHandle.Value = pedHandle;
+            PedHandle?.SetValue(pedHandle);
             
             NotifyTaskDidEnd();
         }

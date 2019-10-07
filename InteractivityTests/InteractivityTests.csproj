@@ -45,6 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestsRunner.cs" />
     <Compile Include="Tests\AttachEntityTaskTest.cs" />
+    <Compile Include="Tests\ShopRobberyScenarioTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

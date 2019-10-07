@@ -44,11 +44,15 @@
     <Compile Include="Core\ConditionBase.cs" />
     <Compile Include="Core\ConditionState.cs" />
     <Compile Include="Core\ICondition.cs" />
+    <Compile Include="Core\IParameter.cs" />
+    <Compile Include="Core\IResult.cs" />
     <Compile Include="Core\ITask.cs" />
-    <Compile Include="Core\Property.cs" />
+    <Compile Include="Core\Parameter.cs" />
+    <Compile Include="Core\ResultCapturer.cs" />
     <Compile Include="Core\TaskBase.cs" />
     <Compile Include="Core\TaskState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenarios\ShopRobberyScenario.cs" />
     <Compile Include="Support\ConditionalTask.cs" />
     <Compile Include="Support\ConditionSuspendTask.cs" />
     <Compile Include="Support\LambdaTask.cs" />
@@ -66,9 +70,6 @@
       <Project>{d32bac0c-2fb2-441e-b7aa-8002a058720a}</Project>
       <Name>Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scenarios" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

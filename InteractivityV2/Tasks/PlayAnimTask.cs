@@ -12,8 +12,8 @@ namespace HPNS.InteractivityV2.Tasks
         private string _dict;
         private string _name;
         
-        public Property<int> PedHandle;
-        public Property<int> Duration;
+        public IParameter<int> PedHandle;
+        public IParameter<int> Duration;
 
         protected virtual int AnimFlag => 1;
 
@@ -58,14 +58,14 @@ namespace HPNS.InteractivityV2.Tasks
 
         private void PlayAnim()
         {
-            var pedHandle = PedHandle.Value;
+            var pedHandle = PedHandle.GetValue();
             TaskPlayAnim(pedHandle, _dict, _name, 8f, 8f, -1, AnimFlag, 
                 0f, false, false, false);
         }
 
         private void StopAnim()
         {
-            var pedHandle = PedHandle.Value;
+            var pedHandle = PedHandle.GetValue();
             StopAnimTask(pedHandle, _dict, _name, 3f);
         }
     }

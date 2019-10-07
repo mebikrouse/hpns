@@ -13,13 +13,13 @@ namespace HPNS.InteractivityV2.Support
         
         private CancellationToken _currentCancellationToken;
 
-        public Property<int> Duration;
+        public IParameter<int> Duration;
 
         protected override async Task ExecutePrepare() { }
 
         protected override void ExecuteStart()
         {
-            var duration = Duration.Value;
+            var duration = Duration.GetValue();
             
             var cancellationToken = new CancellationToken();
             _ = WaitForDelay(duration, cancellationToken);

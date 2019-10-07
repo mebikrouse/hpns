@@ -9,12 +9,12 @@ namespace HPNS.InteractivityV2.Tasks
 {
     public class AttachEntityTask : TaskBase
     {
-        public Property<int> PedHandle;
-        public Property<int> EntityHandle;
-        public Property<int> BoneId;
-        public Property<Vector3> Offset = new Property<Vector3>(Vector3.Zero);
-        public Property<Vector3> Rotation = new Property<Vector3>(Vector3.Zero);
-        public Property<int> Duration;
+        public IParameter<int> PedHandle;
+        public IParameter<int> EntityHandle;
+        public IParameter<int> BoneId;
+        public IParameter<Vector3> Offset = new Parameter<Vector3>(Vector3.Zero);
+        public IParameter<Vector3> Rotation = new Parameter<Vector3>(Vector3.Zero);
+        public IParameter<int> Duration;
 
         private ITask _attachSequence;
 
@@ -49,11 +49,11 @@ namespace HPNS.InteractivityV2.Tasks
 
         private void AttachEntity()
         {
-            var entityHandle = EntityHandle.Value;
-            var pedHandle = PedHandle.Value;
-            var boneIndex = GetPedBoneIndex(pedHandle, BoneId.Value);
-            var offset = Offset.Value;
-            var rotation = Rotation.Value;
+            var entityHandle = EntityHandle.GetValue();
+            var pedHandle = PedHandle.GetValue();
+            var boneIndex = GetPedBoneIndex(pedHandle, BoneId.GetValue());
+            var offset = Offset.GetValue();
+            var rotation = Rotation.GetValue();
             
             AttachEntityToEntity(entityHandle, pedHandle, boneIndex,
                 offset.X, offset.Y, offset.Z, rotation.X, rotation.Y, rotation.Z,
@@ -62,7 +62,7 @@ namespace HPNS.InteractivityV2.Tasks
 
         private void DetachEntity()
         {
-            var entityHandle = EntityHandle.Value;
+            var entityHandle = EntityHandle.GetValue();
             CitizenFX.Core.Native.API.DetachEntity(entityHandle, true, true);
         }
     }

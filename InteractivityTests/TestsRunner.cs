@@ -12,7 +12,8 @@ namespace InteractivityTests
     {
         private List<ITest> _tests = new List<ITest>
         {
-            new AttachEntityTaskTest()
+            new AttachEntityTaskTest(),
+            new ShopRobberyScenarioTest()
         };
         
         private ITest _currentTest;
@@ -85,6 +86,7 @@ namespace InteractivityTests
 
                 _currentTest.TaskDidEnd -= CurrentTestOnTaskDidEnd;
                 _currentTest.Abort();
+                
                 _currentTest = null;
                 
                 PrintToChat($"Test {abortedTest.Name} has been aborted.");
