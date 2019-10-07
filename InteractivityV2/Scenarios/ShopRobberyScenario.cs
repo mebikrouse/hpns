@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using HPNS.InteractivityV2.Core;
+using HPNS.InteractivityV2.Core.Data;
+using HPNS.InteractivityV2.Core.Task;
 using HPNS.InteractivityV2.Support;
 using HPNS.InteractivityV2.Tasks;
 
@@ -38,48 +40,45 @@ namespace HPNS.InteractivityV2.Scenarios
                 Duration = new Parameter<int>(9750)
             });
 
-            var parallelTasks = new List<ITask>();
-            parallelTasks.Add(new SequenceTask(bagAttachmentTasks));
-            parallelTasks.Add(new PlayAnimTask("mp_am_hold_up", "holdup_victim_20s")
-            {
-                PedHandle = PedHandle,
-                Duration = new Parameter<int>(21750)
-            });
-            parallelTasks.Add(new PlayFacialAnimTask("facials@gen_male@base", "shocked_1")
-            {
-                PedHandle = PedHandle,
-                Duration = new Parameter<int>(21750)
-            });
-
             var scenarioTasks = new List<ITask>();
-            scenarioTasks.Add(new LambdaTask(() => { SetBlockingOfNonTemporaryEvents(PedHandle.GetValue(), true); }));
-            scenarioTasks.Add(new ParallelTask(parallelTasks));
-            scenarioTasks.Add(new LambdaTask(() =>
+            scenarioTasks.Add(new SequenceTask(bagAttachmentTasks));
+            scenarioTasks.Add(new PlayAnimTask("mp_am_hold_up", "holdup_victim_20s")
             {
-                SetBlockingOfNonTemporaryEvents(PedHandle.GetValue(), false);
-                BagHandle?.SetValue(bagHandle.GetValue());
-                NotifyTaskDidEnd();
-            }));
+                PedHandle = PedHandle,
+                Duration = new Parameter<int>(21750)
+            });
+            scenarioTasks.Add(new PlayFacialAnimTask("facials@gen_male@base", "shocked_1")
+            {
+                PedHandle = PedHandle,
+                Duration = new Parameter<int>(21750)
+            });
 
-            _scenarioTask = new SequenceTask(scenarioTasks);
+            _scenarioTask = new ParallelTask(scenarioTasks);
 
             await _scenarioTask.Prepare();
         }
 
         protected override void ExecuteStart()
         {
+            _scenarioTask.DidEnd += ScenarioTaskOnDidEnd;
             _scenarioTask.Start();
         }
 
         protected override void ExecuteAbort()
         {
-            SetBlockingOfNonTemporaryEvents(PedHandle.GetValue(), false);
+            _scenarioTask.DidEnd -= ScenarioTaskOnDidEnd;
             _scenarioTask.Abort();
         }
 
         protected override void ExecuteReset()
         {
             _scenarioTask.Reset();
+        }
+
+        private void ScenarioTaskOnDidEnd(object sender, EventArgs e)
+        {
+            _scenarioTask.DidEnd -= ScenarioTaskOnDidEnd;
+            NotifyTaskDidEnd();
         }
     }
 }

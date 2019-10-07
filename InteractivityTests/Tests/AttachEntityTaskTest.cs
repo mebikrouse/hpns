@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using HPNS.Core;
 using HPNS.InteractivityV2.Core;
+using HPNS.InteractivityV2.Core.Data;
+using HPNS.InteractivityV2.Core.Task;
 using HPNS.InteractivityV2.Support;
 using HPNS.InteractivityV2.Tasks;
 using InteractivityTests.Core;

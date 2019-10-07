@@ -1,20 +1,20 @@
 using System;
 using System.Threading.Tasks;
-using HPNS.InteractivityV2.Core;
+using HPNS.InteractivityV2.Core.Task;
 
 namespace HPNS.InteractivityV2.Support
 {
     public class ConditionalTask : TaskBase
     {
-        private Func<bool> _condition;
         private ITask _task;
-
-        public ConditionalTask(Func<bool> condition, ITask task)
+        private Func<bool> _condition;
+        
+        public ConditionalTask(ITask task, Func<bool> condition)
         {
-            _condition = condition;
             _task = task;
+            _condition = condition;
         }
-
+        
         protected override async Task ExecutePrepare()
         {
             await _task.Prepare();
@@ -22,13 +22,19 @@ namespace HPNS.InteractivityV2.Support
 
         protected override void ExecuteStart()
         {
-            if (_condition()) StartTask();
-            else NotifyTaskDidEnd();
+            if (!_condition())
+            {
+                NotifyTaskDidEnd();
+                return;
+            }
+            
+            _task.DidEnd += TaskOnDidEnd;
+            _task.Start();
         }
 
         protected override void ExecuteAbort()
         {
-            _task.TaskDidEnd -= TaskOnTaskDidEnd;
+            _task.DidEnd -= TaskOnDidEnd;
             _task.Abort();
         }
 
@@ -37,15 +43,9 @@ namespace HPNS.InteractivityV2.Support
             _task.Reset();
         }
 
-        private void StartTask()
+        private void TaskOnDidEnd(object sender, EventArgs e)
         {
-            _task.TaskDidEnd += TaskOnTaskDidEnd;
-            _task.Start();
-        }
-
-        private void TaskOnTaskDidEnd(object sender, EventArgs e)
-        {
-            _task.TaskDidEnd -= TaskOnTaskDidEnd;
+            _task.DidEnd -= TaskOnDidEnd;
             NotifyTaskDidEnd();
         }
     }

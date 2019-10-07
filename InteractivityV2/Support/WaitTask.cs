@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using HPNS.InteractivityV2.Core;
+using HPNS.InteractivityV2.Core.Data;
+using HPNS.InteractivityV2.Core.Task;
 
 namespace HPNS.InteractivityV2.Support
 {

@@ -1,4 +1,4 @@
-namespace HPNS.InteractivityV2.Core
+namespace HPNS.InteractivityV2.Core.Data
 {
     public interface IParameter<out T>
     {

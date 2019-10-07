@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using HPNS.InteractivityV2.Core;
+using HPNS.InteractivityV2.Core.Task;
 
 namespace HPNS.InteractivityV2.Support
 {
@@ -33,7 +32,7 @@ namespace HPNS.InteractivityV2.Support
 
         protected override void ExecuteAbort()
         {
-            _currentTask.TaskDidEnd -= TaskOnTaskDidEnd;
+            _currentTask.DidEnd -= TaskOnDidEnd;
             _currentTask.Abort();
         }
 
@@ -52,17 +51,16 @@ namespace HPNS.InteractivityV2.Support
                 NotifyTaskDidEnd();
                 return;
             }
-
             _currentTask = _tasks[_nextTaskIndex];
             _nextTaskIndex++;
             
-            _currentTask.TaskDidEnd += TaskOnTaskDidEnd;
+            _currentTask.DidEnd += TaskOnDidEnd;
             _currentTask.Start();
         }
 
-        private void TaskOnTaskDidEnd(object sender, EventArgs e)
+        private void TaskOnDidEnd(object sender, EventArgs e)
         {
-            _currentTask.TaskDidEnd -= TaskOnTaskDidEnd;
+            _currentTask.DidEnd -= TaskOnDidEnd;
             StartNextTask();
         }
     }

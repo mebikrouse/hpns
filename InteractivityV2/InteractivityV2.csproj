@@ -41,29 +41,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\ConditionBase.cs" />
-    <Compile Include="Core\ConditionState.cs" />
-    <Compile Include="Core\ICondition.cs" />
-    <Compile Include="Core\IParameter.cs" />
-    <Compile Include="Core\IResult.cs" />
-    <Compile Include="Core\ITask.cs" />
-    <Compile Include="Core\Parameter.cs" />
-    <Compile Include="Core\ResultCapturer.cs" />
-    <Compile Include="Core\TaskBase.cs" />
-    <Compile Include="Core\TaskState.cs" />
+    <Compile Include="Activities\CalmPedActivity.cs" />
+    <Compile Include="Conditions\AimingAtEntityCondition.cs" />
+    <Compile Include="Core\Activity\ActivityBase.cs" />
+    <Compile Include="Core\Activity\ActivityState.cs" />
+    <Compile Include="Core\Activity\IActivity.cs" />
+    <Compile Include="Core\Condition\ConditionBase.cs" />
+    <Compile Include="Core\Condition\ConditionState.cs" />
+    <Compile Include="Core\Condition\ICondition.cs" />
+    <Compile Include="Core\Data\IParameter.cs" />
+    <Compile Include="Core\Data\IResult.cs" />
+    <Compile Include="Core\Data\Parameter.cs" />
+    <Compile Include="Core\Data\ResultCapturer.cs" />
+    <Compile Include="Core\Task\ITask.cs" />
+    <Compile Include="Core\Task\TaskBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenarios\ShopRobberyScenario.cs" />
     <Compile Include="Support\ConditionalTask.cs" />
     <Compile Include="Support\ConditionSuspendTask.cs" />
+    <Compile Include="Support\ConditionWaitRecoverTask.cs" />
     <Compile Include="Support\LambdaTask.cs" />
+    <Compile Include="Support\ParallelActivityTask.cs" />
     <Compile Include="Support\ParallelTask.cs" />
     <Compile Include="Support\SequenceTask.cs" />
     <Compile Include="Support\WaitTask.cs" />
     <Compile Include="Tasks\AttachEntityTask.cs" />
     <Compile Include="Tasks\CreateObjectTask.cs" />
     <Compile Include="Tasks\CreatePedTask.cs" />
+    <Compile Include="Tasks\CreatePickupTask.cs" />
     <Compile Include="Tasks\PlayAnimTask.cs" />
     <Compile Include="Tasks\PlayFacialAnimTask.cs" />
+    <Compile Include="Tasks\TakePickupTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HPNS.InteractivityV2.Core;
+using HPNS.InteractivityV2.Core.Task;
 
 namespace HPNS.InteractivityV2.Support
 {
@@ -29,7 +29,7 @@ namespace HPNS.InteractivityV2.Support
             _runningTasks = new List<ITask>();
             foreach (var task in _tasks)
             {
-                task.TaskDidEnd += TaskOnTaskDidEnd;
+                task.DidEnd += TaskOnDidEnd;
                 task.Start();
 
                 _runningTasks.Add(task);
@@ -40,7 +40,7 @@ namespace HPNS.InteractivityV2.Support
         {
             foreach (var task in _runningTasks)
             {
-                task.TaskDidEnd -= TaskOnTaskDidEnd;
+                task.DidEnd -= TaskOnDidEnd;
                 task.Abort();
             }
         }
@@ -51,11 +51,11 @@ namespace HPNS.InteractivityV2.Support
                 task.Reset();
         }
 
-        private void TaskOnTaskDidEnd(object sender, EventArgs e)
+        private void TaskOnDidEnd(object sender, EventArgs e)
         {
             var task = (ITask) sender;
             
-            task.TaskDidEnd -= TaskOnTaskDidEnd;
+            task.DidEnd -= TaskOnDidEnd;
             _runningTasks.Remove(task);
             
             if (_runningTasks.Count == 0) NotifyTaskDidEnd();

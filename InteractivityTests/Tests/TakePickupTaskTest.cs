@@ -1,44 +1,45 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using HPNS.Core;
 using HPNS.InteractivityV2.Core.Data;
 using HPNS.InteractivityV2.Core.Task;
-using HPNS.InteractivityV2.Scenarios;
 using HPNS.InteractivityV2.Support;
 using HPNS.InteractivityV2.Tasks;
 using InteractivityTests.Core;
+using Pickup = HPNS.Core.Environment.Pickup;
 
 namespace InteractivityTests.Tests
 {
-    public class ShopRobberyScenarioTest : TaskBase, ITest
+    public class TakePickupTaskTest : TaskBase, ITest
     {
-        public string Name => nameof(ShopRobberyScenarioTest);
+        public string Name => nameof(TakePickupTaskTest);
 
         private ITask _testSequence;
         
         protected override async Task ExecutePrepare()
         {
-            var pedPosition = new Parameter<Vector3>();
-            var pedHeading = new Parameter<float>();
-            
-            var pedHandle = new ResultCapturer<int>();
+            var objectPosition = new Parameter<Vector3>();
+            var objectHandle = new ResultCapturer<int>();
+            var pickup = new ResultCapturer<Pickup>();
             
             var tasks = new List<ITask>();
             tasks.Add(new LambdaTask(() =>
             {
-                pedPosition.SetValue(Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 3f);
-                pedHeading.SetValue(Game.PlayerPed.Heading - 180f);
+                objectPosition.SetValue(Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 3f);
             }));
-            tasks.Add(new CreatePedTask(Utility.GetRandomPedHash())
+            tasks.Add(new CreateObjectTask("prop_poly_bag_01")
             {
-                Position = pedPosition,
-                Heading = pedHeading,
-                PedHandle = pedHandle
+                Position = objectPosition,
+                ObjectHandle = objectHandle
             });
-            tasks.Add(new ShopRobberyScenario
+            tasks.Add(new CreatePickupTask
             {
-                PedHandle = pedHandle
+                EntityHandle = objectHandle,
+                Pickup = pickup
+            });
+            tasks.Add(new TakePickupTask
+            {
+                Pickup = pickup
             });
             tasks.Add(new LambdaTask(NotifyTaskDidEnd));
 

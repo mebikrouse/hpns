@@ -1,4 +1,4 @@
-namespace HPNS.InteractivityV2.Core
+namespace HPNS.InteractivityV2.Core.Data
 {
     public class ResultCapturer<T> : IResult<T>, IParameter<T>
     {

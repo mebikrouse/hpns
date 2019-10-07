@@ -11,7 +11,7 @@ namespace HPNS.Core.Environment
         private int _entityHandle;
         private float _radius;
 
-        public bool IsPickedUp { get; private set; } = false;
+        public bool IsPickedUp { get; private set; }
 
         public event EventHandler PlayerPickedUp;
         

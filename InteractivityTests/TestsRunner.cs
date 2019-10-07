@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CitizenFX.Core;
-using HPNS.InteractivityV2.Core;
+using HPNS.InteractivityV2.Core.Activity;
 using InteractivityTests.Core;
 using InteractivityTests.Tests;
 using static CitizenFX.Core.Native.API;
@@ -13,7 +13,9 @@ namespace InteractivityTests
         private List<ITest> _tests = new List<ITest>
         {
             new AttachEntityTaskTest(),
-            new ShopRobberyScenarioTest()
+            new ShopRobberyScenarioTest(),
+            new ShopRobberyQuestTest(),
+            new TakePickupTaskTest()
         };
         
         private ITest _currentTest;
@@ -44,7 +46,7 @@ namespace InteractivityTests
 
                 if (_currentTest != null)
                 {
-                    _currentTest.TaskDidEnd -= CurrentTestOnTaskDidEnd;
+                    _currentTest.DidEnd -= CurrentTestOnDidEnd;
                     _currentTest.Abort();
                     
                     PrintToChat($"Currently running test {_currentTest.Name} has been aborted.");
@@ -52,19 +54,20 @@ namespace InteractivityTests
 
                 _currentTest = _tests[testIndex];
 
-                if (_currentTest.CurrentState == TaskState.NotReady)
+                if (_currentTest.ActivityState == ActivityState.NotReady)
                 {
                     PrintToChat("Loading test...");
                     await _currentTest.Prepare();
                     PrintToChat("Test has been loaded.");
                 }
 
-                _currentTest.Reset();
+                if (_currentTest.ActivityState == ActivityState.Consumed)
+                    _currentTest.Reset();
                 
-                _currentTest.TaskDidEnd += CurrentTestOnTaskDidEnd;
+                PrintToChat($"Starting test {_currentTest.Name}.");
+                
+                _currentTest.DidEnd += CurrentTestOnDidEnd;
                 _currentTest.Start();
-                
-                PrintToChat($"Test {_currentTest.Name} started.");
                 
             }), false);
             
@@ -84,7 +87,7 @@ namespace InteractivityTests
 
                 var abortedTest = _currentTest;
 
-                _currentTest.TaskDidEnd -= CurrentTestOnTaskDidEnd;
+                _currentTest.DidEnd -= CurrentTestOnDidEnd;
                 _currentTest.Abort();
                 
                 _currentTest = null;
@@ -128,16 +131,11 @@ namespace InteractivityTests
             }), false);
         }
 
-        private void CurrentTestOnTaskDidEnd(object sender, EventArgs e)
+        private void CurrentTestOnDidEnd(object sender, EventArgs e)
         {
-            if (_currentTest == null)
-            {
-                PrintToChat("Current test ended and is now somehow null.");
-            }
-            
             PrintToChat($"Current test {_currentTest.Name} ended.");
-            
-            _currentTest.TaskDidEnd -= CurrentTestOnTaskDidEnd;
+
+            _currentTest.DidEnd -= CurrentTestOnDidEnd;
             _currentTest = null;
         }
 
