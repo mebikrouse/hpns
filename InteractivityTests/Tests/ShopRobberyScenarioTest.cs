@@ -2,20 +2,23 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using HPNS.Core;
-using HPNS.InteractivityV2.Core.Data;
-using HPNS.InteractivityV2.Core.Task;
-using HPNS.InteractivityV2.Scenarios;
-using HPNS.InteractivityV2.Support;
-using HPNS.InteractivityV2.Tasks;
+using HPNS.CoreClient;
+using HPNS.Interactivity.Core.Data;
+using HPNS.Interactivity.Core.Task;
+using HPNS.Interactivity.Scenarios;
+using HPNS.Interactivity.Support;
+using HPNS.Interactivity.Tasks;
 using InteractivityTests.Core;
 
 namespace InteractivityTests.Tests
 {
     public class ShopRobberyScenarioTest : TaskBase, ITest
     {
-        public string Name => nameof(ShopRobberyScenarioTest);
-
         private ITask _testSequence;
+
+        public string TestName => nameof(ShopRobberyScenarioTest);
+        
+        public ShopRobberyScenarioTest() : base(nameof(ShopRobberyScenarioTest)) { }
         
         protected override async Task ExecutePrepare()
         {

@@ -1,37 +1,44 @@
 using System;
-using HPNS.Core.Environment;
-using HPNS.Interactivity.Core;
+using System.Threading.Tasks;
+using HPNS.Core;
+using HPNS.CoreClient.Environment;
+using HPNS.Interactivity.Core.Data;
+using HPNS.Interactivity.Core.Task;
 
 namespace HPNS.Interactivity.Tasks
 {
     public class TakePickupTask : TaskBase
     {
-        private Pickup _pickup;
+        public IParameter<Pickup> Pickup;
         
-        public TakePickupTask(Pickup pickup)
+        public TakePickupTask() : base(nameof(TakePickupTask)) { }
+
+        protected override Task ExecutePrepare()
         {
-            _pickup = pickup;
+            return TaskHelper.CompletedTask;
         }
-        
-        protected override void ExecuteStarting()
+
+        protected override void ExecuteStart()
         {
-            if (_pickup.IsPickedUp)
+            if (Pickup.GetValue().IsPickedUp)
             {
                 NotifyTaskDidEnd();
                 return;
             }
-            
-            _pickup.PlayerPickedUp += PickupOnPlayerPickedUp;
+
+            Pickup.GetValue().PlayerPickedUp += OnPlayerPickedUp;
         }
 
-        protected override void ExecuteAborting()
+        protected override void ExecuteAbort()
         {
-            _pickup.PlayerPickedUp -= PickupOnPlayerPickedUp;
+            Pickup.GetValue().PlayerPickedUp -= OnPlayerPickedUp;
         }
 
-        private void PickupOnPlayerPickedUp(object sender, EventArgs e)
+        protected override void ExecuteReset() { }
+
+        private void OnPlayerPickedUp(object sender, EventArgs e)
         {
-            _pickup.PlayerPickedUp -= PickupOnPlayerPickedUp;
+            Pickup.GetValue().PlayerPickedUp -= OnPlayerPickedUp;
             NotifyTaskDidEnd();
         }
     }

@@ -32,27 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\FiveMDependencies\client\CitizenFX.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Environment\Pickup.cs" />
     <Compile Include="IObject.cs" />
     <Compile Include="IUpdateObject.cs" />
-    <Compile Include="Managers\AimingManager.cs" />
-    <Compile Include="Managers\EntityDeathTracker.cs" />
-    <Compile Include="Managers\ObjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Managers\VehicleEventsManager.cs" />
+    <Compile Include="TaskHelper.cs" />
     <Compile Include="UpdateObjectPool.cs" />
-    <Compile Include="Utility.cs" />
-    <Compile Include="World.cs" />
-    <Compile Include="Environment\Checkpoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

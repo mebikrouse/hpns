@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CitizenFX.Core;
-using HPNS.InteractivityV2.Core.Activity;
+using HPNS.Interactivity.Core.Activity;
 using InteractivityTests.Core;
 using InteractivityTests.Tests;
 using static CitizenFX.Core.Native.API;
@@ -49,7 +49,7 @@ namespace InteractivityTests
                     _currentTest.DidEnd -= CurrentTestOnDidEnd;
                     _currentTest.Abort();
                     
-                    PrintToChat($"Currently running test {_currentTest.Name} has been aborted.");
+                    PrintToChat($"Currently running test {_currentTest.TestName} has been aborted.");
                 }
 
                 _currentTest = _tests[testIndex];
@@ -64,7 +64,7 @@ namespace InteractivityTests
                 if (_currentTest.ActivityState == ActivityState.Consumed)
                     _currentTest.Reset();
                 
-                PrintToChat($"Starting test {_currentTest.Name}.");
+                PrintToChat($"Starting test {_currentTest.TestName}.");
                 
                 _currentTest.DidEnd += CurrentTestOnDidEnd;
                 _currentTest.Start();
@@ -92,7 +92,7 @@ namespace InteractivityTests
                 
                 _currentTest = null;
                 
-                PrintToChat($"Test {abortedTest.Name} has been aborted.");
+                PrintToChat($"Test {abortedTest.TestName} has been aborted.");
                 
             }), false);
             
@@ -106,7 +106,7 @@ namespace InteractivityTests
 
                 PrintToChat(_currentTest == null
                     ? "No tests are running right now."
-                    : $"Current test is {_currentTest.Name}");
+                    : $"Current test is {_currentTest.TestName}");
                 
             }), false);
             
@@ -126,14 +126,28 @@ namespace InteractivityTests
 
                 var testIndex = 0;
                 foreach (var test in _tests)
-                    PrintToChat($"{testIndex++} - {test.Name}");
+                    PrintToChat($"{testIndex++} - {test.TestName}");
                 
+            }), false);
+            
+            RegisterCommand("lester", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                if (args.Count != 0)
+                {
+                    PrintToChat("Usage: /lester");
+                    return;
+                }
+
+                ClearPlayerWantedLevel(Game.Player.Handle);
+
+                PrintToChat("Your wanted level has been reseted.");
+
             }), false);
         }
 
         private void CurrentTestOnDidEnd(object sender, EventArgs e)
         {
-            PrintToChat($"Current test {_currentTest.Name} ended.");
+            PrintToChat($"Current test {_currentTest.TestName} ended.");
 
             _currentTest.DidEnd -= CurrentTestOnDidEnd;
             _currentTest = null;

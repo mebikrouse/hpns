@@ -1,21 +1,22 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using HPNS.Core;
-using HPNS.InteractivityV2.Core;
-using HPNS.InteractivityV2.Core.Data;
-using HPNS.InteractivityV2.Core.Task;
-using HPNS.InteractivityV2.Support;
-using HPNS.InteractivityV2.Tasks;
+using HPNS.CoreClient;
+using HPNS.Interactivity.Core.Data;
+using HPNS.Interactivity.Core.Task;
+using HPNS.Interactivity.Support;
+using HPNS.Interactivity.Tasks;
 using InteractivityTests.Core;
 
 namespace InteractivityTests.Tests
 {
     public class AttachEntityTaskTest : TaskBase, ITest
     {
-        public string Name => nameof(AttachEntityTaskTest);
-
         private ITask _testSequence;
+
+        public string TestName => nameof(AttachEntityTaskTest);
+
+        public AttachEntityTaskTest() : base(nameof(AttachEntityTaskTest)) { }
         
         protected override async Task ExecutePrepare()
         {

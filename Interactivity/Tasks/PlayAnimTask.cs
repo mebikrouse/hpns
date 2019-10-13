@@ -1,61 +1,73 @@
 using System.Collections.Generic;
-using HPNS.Core;
-using HPNS.Interactivity.Core;
+using System.Threading.Tasks;
+using HPNS.CoreClient;
+using HPNS.Interactivity.Core.Data;
+using HPNS.Interactivity.Core.Task;
 using HPNS.Interactivity.Support;
-
 using static CitizenFX.Core.Native.API;
 
 namespace HPNS.Interactivity.Tasks
 {
     public class PlayAnimTask : TaskBase
     {
-        private int _pedHandle;
         private string _dict;
         private string _name;
-        private int _duration;
-
-        private ITask _sequenceTask;
         
-        public PlayAnimTask(int pedHandle, string dict, string name, int duration)
+        public IParameter<int> PedHandle;
+        public IParameter<int> Duration;
+
+        protected virtual int AnimFlag => 1;
+
+        private ITask _animSequence;
+
+        public PlayAnimTask(string dict, string name, string typeName = nameof(PlayAnimTask)) : base(typeName)
         {
-            _pedHandle = pedHandle;
             _dict = dict;
             _name = name;
-            _duration = duration;
         }
         
-        protected override async void ExecuteStarting()
+        protected override async Task ExecutePrepare()
         {
-            var loadingTask = Utility.LoadAnimDict(_dict);
-            
+            await Utility.LoadAnimDict(_dict);
+
             var tasks = new List<ITask>();
-            
-            tasks.Add(new LambdaTask(StartAnimation));
-            tasks.Add(new WaitTask(_duration));
-            tasks.Add(new LambdaTask(StopAnimation));
+            tasks.Add(new LambdaTask(PlayAnim));
+            tasks.Add(new WaitTask {Duration = Duration});
+            tasks.Add(new LambdaTask(StopAnim));
             tasks.Add(new LambdaTask(NotifyTaskDidEnd));
+
+            _animSequence = new SequenceTask(tasks);
             
-            _sequenceTask = new SequentialSetTask(tasks);
-
-            await loadingTask;
-            _sequenceTask.Start();
+            await _animSequence.Prepare();
         }
 
-        protected override void ExecuteAborting()
+        protected override void ExecuteStart()
         {
-            _sequenceTask.Abort();
-            StopAnimation();
+            _animSequence.Start();
         }
 
-        private void StartAnimation()
+        protected override void ExecuteAbort()
         {
-            TaskPlayAnim(_pedHandle, _dict, _name, 8f, 8f, _duration, 0, 
-                0.0f, false, false, false);
+            _animSequence.Abort();
+            StopAnim();
         }
 
-        private void StopAnimation()
+        protected override void ExecuteReset()
         {
-            StopAnimTask(_pedHandle, _dict, _name, 3f);
+            _animSequence.Reset();
+        }
+
+        private void PlayAnim()
+        {
+            var pedHandle = PedHandle.GetValue();
+            TaskPlayAnim(pedHandle, _dict, _name, 8f, 8f, -1, AnimFlag, 
+                0f, false, false, false);
+        }
+
+        private void StopAnim()
+        {
+            var pedHandle = PedHandle.GetValue();
+            StopAnimTask(pedHandle, _dict, _name, 3f);
         }
     }
 }

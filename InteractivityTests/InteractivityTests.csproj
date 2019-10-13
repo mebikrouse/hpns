@@ -50,13 +50,21 @@
     <Compile Include="Tests\TakePickupTaskTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoreClient\CoreClient.csproj">
+      <Project>{f7345dc1-0391-407b-ad34-a141d63a2fee}</Project>
+      <Name>CoreClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{d32bac0c-2fb2-441e-b7aa-8002a058720a}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InteractivityV2\InteractivityV2.csproj">
+    <ProjectReference Include="..\Interactivity\Interactivity.csproj">
       <Project>{89cc3348-7e35-41b1-bd78-7fdb926b35df}</Project>
-      <Name>InteractivityV2</Name>
+      <Name>Interactivity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UI\UI.csproj">
+      <Project>{34134fd2-41ca-49ee-ac4b-e95479f05a47}</Project>
+      <Name>UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

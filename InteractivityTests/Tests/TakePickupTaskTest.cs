@@ -1,20 +1,22 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using HPNS.InteractivityV2.Core.Data;
-using HPNS.InteractivityV2.Core.Task;
-using HPNS.InteractivityV2.Support;
-using HPNS.InteractivityV2.Tasks;
+using HPNS.Interactivity.Core.Data;
+using HPNS.Interactivity.Core.Task;
+using HPNS.Interactivity.Support;
+using HPNS.Interactivity.Tasks;
 using InteractivityTests.Core;
-using Pickup = HPNS.Core.Environment.Pickup;
+using Pickup = HPNS.CoreClient.Environment.Pickup;
 
 namespace InteractivityTests.Tests
 {
     public class TakePickupTaskTest : TaskBase, ITest
     {
-        public string Name => nameof(TakePickupTaskTest);
-
         private ITask _testSequence;
+
+        public string TestName => nameof(TakePickupTaskTest);
+        
+        public TakePickupTaskTest() : base(nameof(TakePickupTaskTest)) { }
         
         protected override async Task ExecutePrepare()
         {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using CitizenFX.Core;
 
 namespace HPNS.Core
 {
@@ -56,7 +55,7 @@ namespace HPNS.Core
                 foreach (var updateObject in updateObjects)
                     updateObject.Update(_refreshRate);
 
-                await BaseScript.Delay(_refreshRate);
+                await Task.Delay(_refreshRate);
             }
 
             CurrentState = State.Idle;
