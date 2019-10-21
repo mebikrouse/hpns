@@ -33,36 +33,10 @@ printButton.onclick = function () {
             command: {
                 name: 'print',
                 data: {
-                    title: 'kek',
-                    content: 'lol'
+                    title: 'Участник диалога',
+                    content: 'Всеобъемлющий ответ участника текущего диалога, который дает актуальную информацию по текущей ситуации.'
                 }
             }
         }
     });
-}
-
-let skipButton = document.querySelector('#skip-button');
-skipButton.onclick = function () {
-    rootResponder.handle({
-        name: 'propagate',
-        data: {
-            target: 'dialogue',
-            command: {
-                name: 'skip'
-            }
-        }
-    });
-}
-
-let replyButton = document.querySelector('#reply-button');
-replyButton.onclick = function () {
-    rootResponder.handle({
-        name: 'propagate',
-        data: {
-            target: 'dialogue',
-            command: {
-                name: 'replytest'
-            }
-        }
-    })
 }
