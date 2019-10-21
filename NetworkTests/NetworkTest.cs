@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CitizenFX.Core;
 using HPNS.Core;
 using HPNS.CoreClient;
@@ -48,9 +49,23 @@ namespace NetworkTests
                 return $"[Handle: {_pedHandle}; Network ID: {_pedNetId}; Exists: {_pedExists}]";
             }
         }
+
+        private class Token
+        {
+            public int EntityHandle { get; }
+            
+            public bool Cancelled { get; set; }
+
+            public Token(int entityHandle)
+            {
+                EntityHandle = entityHandle;
+            }
+        }
         
         private UpdateObjectPool _updateObjectPool = new UpdateObjectPool(50);
         private List<PedChecker> _pedCheckers = new List<PedChecker>();
+        
+        private Token _currentToken;
 
         public NetworkTest()
         {
@@ -75,7 +90,7 @@ namespace NetworkTests
                 var pedHeading = Game.PlayerPed.Heading + 180f;
 
                 var pedHandle = await Utility.CreateRandomPedAsync(pedPosition, pedHeading);
-                //SetEntityAsMissionEntity(pedHandle, false, false);
+                SetEntityAsMissionEntity(pedHandle, true, false);
 
                 var pedChecker = new PedChecker(pedHandle);
                 _pedCheckers.Add(pedChecker);
@@ -213,6 +228,52 @@ namespace NetworkTests
                 PrintToChat($"Handle of entity with Network ID of {networkId} is {handle}.");
                 
             }), false);
+            
+            RegisterCommand("exists", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                var networkId = 0;
+                if (args.Count != 1 ||
+                    !int.TryParse(args[0].ToString(), out networkId))
+                {
+                    PrintToChat("Usage: /exists [network_id]");
+                    return;
+                }
+
+                var handle = NetworkGetEntityFromNetworkId(networkId);
+                PrintToChat($"Entity with Network ID of {networkId} exists: {DoesEntityExist(handle)}.");
+
+            }), false);
+            
+            RegisterCommand("hide", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                var playerNetworkId = 0;
+                if (args.Count != 1 ||
+                    !int.TryParse(args[0].ToString(), out playerNetworkId))
+                {
+                    PrintToChat("Usage: /hide [net_id]");
+                    return;
+                }
+
+                if (_currentToken != null)
+                    _currentToken.Cancelled = true;
+                
+                _currentToken = new Token(NetworkGetEntityFromNetworkId(playerNetworkId));
+                _ = HidingLoop(_currentToken);
+
+            }), false);
+            
+            RegisterCommand("unhide", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                if (args.Count != 0)
+                {
+                    PrintToChat("Usage: /unhide");
+                    return;
+                }
+
+                if (_currentToken != null)
+                    _currentToken.Cancelled = true;
+                
+            }), false);
         }
 
         private static void PrintToChat(string message)
@@ -222,6 +283,20 @@ namespace NetworkTests
                 color = new[] {255, 0, 0},
                 args = new[] {"[NetworkTests]", message}
             });
+        }
+        
+        private async Task HidingLoop(Token token)
+        {
+            while (!token.Cancelled)
+            {
+                await BaseScript.Delay(0);
+                
+                SetEntityVisible(token.EntityHandle, false, false);
+                SetEntityNoCollisionEntity(Game.PlayerPed.Handle, token.EntityHandle, false);
+
+                var position = Game.PlayerPed.Position;
+                ClearAreaOfProjectiles(position.X, position.Y, position.Z, 500f, true);
+            }
         }
     }
 }

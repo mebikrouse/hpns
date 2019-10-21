@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\FiveMDependencies\client\CitizenFX.Core.dll</HintPath>
+      <HintPath>..\Dependencies\citizenfx\client\CitizenFX.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,7 +45,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestsRunner.cs" />
     <Compile Include="Tests\AttachEntityTaskTest.cs" />
-    <Compile Include="Tests\ShopRobberyQuestTest.cs" />
+    <Compile Include="Tests\FocusFromBehindActivityTest.cs" />
+    <Compile Include="Tests\PedLookAtEntityActivityTest.cs" />
     <Compile Include="Tests\ShopRobberyScenarioTest.cs" />
     <Compile Include="Tests\TakePickupTaskTest.cs" />
   </ItemGroup>
@@ -55,7 +56,7 @@
       <Name>CoreClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{d32bac0c-2fb2-441e-b7aa-8002a058720a}</Project>
+      <Project>{410b73de-b5e6-4fa1-80ac-a4cb1a357cee}</Project>
       <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Interactivity\Interactivity.csproj">

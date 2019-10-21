@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CitizenFX.Core;
+
+using static CitizenFX.Core.Native.API;
 
 namespace HPNS.Core
 {
@@ -49,13 +52,16 @@ namespace HPNS.Core
 
         private async Task UpdateLoop()
         {
+            var prevGameTimer = GetGameTimer();
             while (CurrentState == State.Running)
             {
                 var updateObjects = new List<IUpdateObject>(_updateObjects);
                 foreach (var updateObject in updateObjects)
-                    updateObject.Update(_refreshRate);
+                    updateObject.Update((GetGameTimer() - prevGameTimer) / 1000f);
 
-                await Task.Delay(_refreshRate);
+                prevGameTimer = GetGameTimer();
+                
+                await BaseScript.Delay(_refreshRate);
             }
 
             CurrentState = State.Idle;

@@ -14,8 +14,9 @@ namespace InteractivityTests
         {
             new AttachEntityTaskTest(),
             new ShopRobberyScenarioTest(),
-            new ShopRobberyQuestTest(),
-            new TakePickupTaskTest()
+            new TakePickupTaskTest(),
+            new FocusFromBehindActivityTest(),
+            new PedLookAtEntityActivityTest()
         };
         
         private ITest _currentTest;

@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\FiveMDependencies\client\CitizenFX.Core.dll</HintPath>
+      <HintPath>..\Dependencies\citizenfx\client\CitizenFX.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{d32bac0c-2fb2-441e-b7aa-8002a058720a}</Project>
+      <Project>{410b73de-b5e6-4fa1-80ac-a4cb1a357cee}</Project>
       <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>

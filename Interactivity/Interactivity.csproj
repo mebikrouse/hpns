@@ -33,20 +33,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\FiveMDependencies\client\CitizenFX.Core.dll</HintPath>
+      <HintPath>..\Dependencies\citizenfx\client\CitizenFX.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\CalmPedActivity.cs" />
     <Compile Include="Activities\MarkAreaActivity.cs" />
-    <Compile Include="Activities\MarkDestinationActivity.cs" />
     <Compile Include="Activities\MarkBigEntityActivity.cs" />
+    <Compile Include="Activities\MarkDestinationActivity.cs" />
     <Compile Include="Activities\MarkRegularEntityActivity.cs" />
     <Compile Include="Activities\MarkSmallEntityActivity.cs" />
+    <Compile Include="Activities\PedCameraActivity.cs" />
+    <Compile Include="Activities\PedLookAtEntityActivity.cs" />
+    <Compile Include="Activities\PlayAnimActivity.cs" />
+    <Compile Include="Activities\PlayFacialAnimActivity.cs" />
     <Compile Include="Conditions\AimingAtEntityCondition.cs" />
     <Compile Include="Conditions\EntityAliveCondition.cs" />
     <Compile Include="Core\Activity\ActivityBase.cs" />
@@ -89,7 +94,7 @@
       <Name>CoreClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{d32bac0c-2fb2-441e-b7aa-8002a058720a}</Project>
+      <Project>{410b73de-b5e6-4fa1-80ac-a4cb1a357cee}</Project>
       <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
