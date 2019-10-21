@@ -48,7 +48,6 @@
     <Compile Include="Activities\MarkDestinationActivity.cs" />
     <Compile Include="Activities\MarkRegularEntityActivity.cs" />
     <Compile Include="Activities\MarkSmallEntityActivity.cs" />
-    <Compile Include="Activities\PedCameraActivity.cs" />
     <Compile Include="Activities\PedLookAtEntityActivity.cs" />
     <Compile Include="Activities\PlayAnimActivity.cs" />
     <Compile Include="Activities\PlayFacialAnimActivity.cs" />
@@ -82,7 +81,6 @@
     <Compile Include="Tasks\CreateObjectTask.cs" />
     <Compile Include="Tasks\CreatePedTask.cs" />
     <Compile Include="Tasks\CreatePickupTask.cs" />
-    <Compile Include="Tasks\DialogueDidPrintWaitTask.cs" />
     <Compile Include="Tasks\EnterAreaTask.cs" />
     <Compile Include="Tasks\LeaveAreaTask.cs" />
     <Compile Include="Tasks\PlayAnimTask.cs" />

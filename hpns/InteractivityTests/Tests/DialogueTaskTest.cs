@@ -1,0 +1,127 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using CitizenFX.Core;
+using Dialogues.Data;
+using Dialogues.Tasks;
+using HPNS.CoreClient;
+using HPNS.Interactivity.Core.Data;
+using HPNS.Interactivity.Core.Task;
+using HPNS.Interactivity.Support;
+using HPNS.Interactivity.Tasks;
+using HPNS.UI;
+using InteractivityTests.Core;
+
+namespace InteractivityTests.Tests
+{
+    public class DialogueTaskTest : TaskBase, ITest
+    {
+        private ITask _testSequence;
+        
+        public string TestName => nameof(DialogueTaskTest);
+
+        public DialogueTaskTest() : base(nameof(DialogueTaskTest)) { }
+
+        protected override async Task ExecutePrepare()
+        {
+            var participants = new List<Participant>
+            {
+                new Participant("player", "Вы"),
+                new Participant("ped", "Случайный прохожий")
+            };
+            
+            var responses = new List<Response>
+            {
+                new Response(participants[1], "Добрый день!"),
+                new Response(participants[0], "Здравствуйте."),
+                new Response(participants[1], "Как у вас дела? Наверное, отлично, ведь на улице такая замечательная погода!"),
+                new Response(participants[0], "Да, у меня все хорошо. А погода действительно великолепная!"),
+                new Response(participants[0], "Сегодня так солнечно! Ветра почти нет. Великолепно!"),
+                new Response(participants[1], "Чем вы занимаетесь в свое свободное время?"),
+                new Response(participants[0], "Ой, по-разному бывает. Сегодня я планировал сходить в бар!"),
+                new Response(participants[1], "Ого, как круто! А можно с вами?"),
+                new Response(participants[0], "Хмм... Да, вы можете пойти со мной! Я познакомлю вас со своими друзьями. Мы весело проведем время!"),
+                new Response(participants[1], "Класс! Отправляемся?"),
+                new Response(participants[0], "Отправляемся!"),
+            };
+
+            var configuration = new Configuration
+            {
+                Configurations = new List<CameraConfiguration>
+                {
+                    new CameraConfiguration(
+                        new Vector3(-0.0009017102f, 0.8136478f, 0.03338432f),
+                        new Vector3(-0.420009f, 0.0001329383f, -180.1577f),
+                        30f),
+                    new CameraConfiguration(
+                        new Vector3(0.3481081f, 0.6787802f, -0.147724f),
+                        new Vector3(11.97f, 0.0001331912f, 151.7988f),
+                        30f),
+                    new CameraConfiguration(
+                        new Vector3(-0.5304984f, 0.7575822f, 0.1575111f),
+                        new Vector3(-9.449986f, 0.0001370825f, -143.8104f),
+                        30f),
+                    new CameraConfiguration(
+                        new Vector3(-0.4194367f, 0.5977129f, -0.1750073f),
+                        new Vector3(12.54f, 0.0001261951f, -143.4225f),
+                        30f),
+                    new CameraConfiguration(
+                        new Vector3(0.557281f, 0.8663054f, -0.4690321f),
+                        new Vector3(22.86f, 0.000126269f, 145.7156f),
+                        30f)
+                }
+            };
+            
+            var dialogue = new Dialogue(responses);
+            
+            var playerPedHandle = new Parameter<int>();
+            var pedPosition = new Parameter<Vector3>();
+            var pedHeading = new Parameter<float>();
+            
+            var createdPedHandle = new ResultCapturer<int>();
+            
+            var tasks = new List<ITask>();
+            tasks.Add(new LambdaTask(() =>
+            {
+                playerPedHandle.SetValue(Game.PlayerPed.Handle);
+                pedPosition.SetValue(Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 1.5f);
+                pedHeading.SetValue(Game.PlayerPed.Heading - 180f);
+            }));
+            tasks.Add(new CreatePedTask(Utility.GetRandomPedHash())
+            {
+                Position = pedPosition,
+                Heading = pedHeading,
+                PedHandle = createdPedHandle
+            });
+            tasks.Add(new WaitTask {Duration = new Parameter<int>(2000)});
+            tasks.Add(new DialogueTask(dialogue, configuration)
+            {
+                PedHandles = new Dictionary<string, IParameter<int>>
+                {
+                    {"player", playerPedHandle},
+                    {"ped", createdPedHandle}
+                }
+            });
+            tasks.Add(new LambdaTask(NotifyTaskDidEnd));
+
+            _testSequence = new SequenceTask(tasks);
+
+            await _testSequence.Prepare();
+        }
+
+        protected override void ExecuteStart()
+        {
+            _testSequence.Start();
+        }
+
+        protected override void ExecuteAbort()
+        {
+            _testSequence.Abort();
+            UI.Dialogues.Stop();
+        }
+
+        protected override void ExecuteReset()
+        {
+            _testSequence.Reset();
+        }
+    }
+}

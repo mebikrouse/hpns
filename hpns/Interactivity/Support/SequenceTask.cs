@@ -15,6 +15,11 @@ namespace HPNS.Interactivity.Support
         {
             _tasks = new List<ITask>(tasks);
         }
+        
+        public SequenceTask(params ITask[] tasks) : base(nameof(SequenceTask))
+        {
+            _tasks = new List<ITask>(tasks);
+        }
 
         protected override async Task ExecutePrepare()
         {

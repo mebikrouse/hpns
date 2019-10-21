@@ -1,36 +1,22 @@
 ﻿using System.Threading.Tasks;
-using CitizenFX.Core;
+using Dialogues.Data;
 using HPNS.Core;
 using HPNS.Interactivity.Core.Activity;
 using HPNS.Interactivity.Core.Data;
 using static CitizenFX.Core.Native.API;
 
-namespace HPNS.Interactivity.Activities
+namespace Dialogues.Activities
 {
     public class PedCameraActivity : ActivityBase
     {
-        public class Configuration
-        {
-            public Vector3 Offset { get; }
-            public Vector3 Rotation { get; }
-            public float FieldOfView { get; }
-
-            public Configuration(Vector3 offset, Vector3 rotation, float fieldOfView)
-            {
-                Offset = offset;
-                Rotation = rotation;
-                FieldOfView = fieldOfView;
-            }
-        }
-
-        private Configuration _configuration;
+        private CameraConfiguration _cameraConfiguration;
         private int _cameraHandle;
         
         public IParameter<int> PedHandle;
 
-        public PedCameraActivity(Configuration configuration) : base(nameof(PedCameraActivity))
+        public PedCameraActivity(CameraConfiguration cameraConfiguration) : base(nameof(PedCameraActivity))
         {
-            _configuration = configuration;
+            _cameraConfiguration = cameraConfiguration;
         }
 
         protected override Task ExecutePrepare()
@@ -45,16 +31,16 @@ namespace HPNS.Interactivity.Activities
             var bonePosition = GetPedBoneCoords(pedHandle, 31086, 0, 0, 0);
             var boneOffset = GetOffsetFromEntityGivenWorldCoords(pedHandle, bonePosition.X, bonePosition.Y, bonePosition.Z);
 
-            var offset = boneOffset + _configuration.Offset;
+            var offset = boneOffset + _cameraConfiguration.Offset;
             var cameraPosition = GetOffsetFromEntityInWorldCoords(pedHandle, offset.X, offset.Y, offset.Z);
 
             var pedRotation = GetEntityRotation(pedHandle, 2);
-            var cameraRotation = pedRotation + _configuration.Rotation;
+            var cameraRotation = pedRotation + _cameraConfiguration.Rotation;
 
             _cameraHandle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true);
             SetCamCoord(_cameraHandle, cameraPosition.X, cameraPosition.Y, cameraPosition.Z);
             SetCamRot(_cameraHandle, cameraRotation.X, cameraRotation.Y, cameraRotation.Z, 2);
-            SetCamFov(_cameraHandle, _configuration.FieldOfView);
+            SetCamFov(_cameraHandle, _cameraConfiguration.FieldOfView);
             
             RenderScriptCams(true, false, 0, true, true);
         }

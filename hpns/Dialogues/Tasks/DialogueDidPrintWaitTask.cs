@@ -2,7 +2,7 @@
 using HPNS.Core;
 using HPNS.Interactivity.Core.Task;
 
-namespace HPNS.Interactivity.Tasks
+namespace Dialogues.Tasks
 {
     public class DialogueDidPrintWaitTask : TaskBase
     {
@@ -15,19 +15,19 @@ namespace HPNS.Interactivity.Tasks
 
         protected override void ExecuteStart()
         {
-            UI.UI.Dialogues.DidPrint += DialoguesOnDidPrint;
+            HPNS.UI.UI.Dialogues.DidPrint += DialoguesOnDidPrint;
         }
 
         protected override void ExecuteAbort()
         {
-            UI.UI.Dialogues.DidPrint -= DialoguesOnDidPrint;
+            HPNS.UI.UI.Dialogues.DidPrint -= DialoguesOnDidPrint;
         }
 
         protected override void ExecuteReset() { }
 
         private void DialoguesOnDidPrint()
         {
-            UI.UI.Dialogues.DidPrint -= DialoguesOnDidPrint;
+            HPNS.UI.UI.Dialogues.DidPrint -= DialoguesOnDidPrint;
             NotifyTaskDidEnd();
         }
     }
