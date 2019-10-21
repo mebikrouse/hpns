@@ -50,3 +50,17 @@ Responder.prototype.reply = function (command) {
         }
     });
 }
+
+Responder.prototype.handleKeyPress = function (key) {
+    this.keyPressed(key);
+    for (let child of this.children) child.handleKeyPress(key);
+}
+
+Responder.prototype.keyPressed = function (key) { }
+
+Responder.prototype.handleKeyRelease = function (key) {
+    this.keyReleased(key);
+    for (let child of this.children) child.handleKeyRelease(key);
+}
+
+Responder.prototype.keyReleased = function (key) { }

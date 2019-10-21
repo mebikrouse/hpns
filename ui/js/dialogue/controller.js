@@ -3,7 +3,8 @@ function DialogueController(view) {
 
     this.registerHandler('print', (data) => this.print(data.title, data.content));
     this.registerHandler('skip', (data) => this.skip());
-    this.registerHandler('replytest', (data) => this.replytest());
+
+    this.printed = new Event(this);
 }
 
 DialogueController.prototype = Object.create(Controller.prototype);
@@ -25,6 +26,8 @@ DialogueController.prototype.skip = function () {
     console.log('skip');
 }
 
-DialogueController.prototype.replytest = function () {
-    this.reply({name: 'replytest'});
+DialogueController.prototype.keyPressed = function (key) { }
+
+DialogueController.prototype.keyReleased = function (key) {
+    if (key === 69) this.skip();
 }
