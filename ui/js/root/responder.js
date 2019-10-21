@@ -15,6 +15,8 @@ RootResponder.prototype.reply = function (command) {
 }
 
 RootResponder.prototype.init = function (resourceName) {
+    console.log(`init with '${resourceName}' resource`);
+
     if (this.resourceName) throw 'Cannot initialize root because it is already initialized';
     this.resourceName = resourceName;
 }

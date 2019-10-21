@@ -51,12 +51,12 @@ namespace HPNS.UI.Core
             child.Parent = this;
         }
 
-        protected virtual void Reply(object command)
+        protected virtual bool Reply(object command)
         {
             if (Parent == null)
                 throw new Exception("Cannot send reply because there is no appropriate parent.");
 
-            Parent.Reply(new
+            return Parent.Reply(new
             {
                 name = "propagate",
                 data = new {target = Name, command = command}

@@ -6,9 +6,9 @@ function DialogueController(view) {
     this.audio = view.querySelector('#audio');
 
     this.registerHandler('print', (data) => this.print(data.title, data.content));
+    this.registerHandler('skip', (data) => this.skip());
 
     this.currentDialogue = undefined;
-    this.skipWhenControlReleased = true;
 }
 
 DialogueController.prototype = Object.create(Controller.prototype);
@@ -46,19 +46,14 @@ DialogueController.prototype.didStop = function () {
 DialogueController.prototype.print = function (title, content) {
     if (this.currentDialogue) this.currentDialogue.hide();
 
-    this.skipWhenControlReleased = true;
-
     this.currentDialogue = new Dialogue(title, content, this.prototype, this.fade, this.audio);
     this.currentDialogue.show();
 
     this.currentDialogue.printer.onprint.attach(() => {
-        this.skipWhenControlReleased = false;
+        this.reply({name: 'printed'});
     });
 }
 
-DialogueController.prototype.keyReleased = function (key) {
-    if (key != 69 || !this.currentDialogue) return;
-
-    if (this.skipWhenControlReleased) this.currentDialogue.skip();
-    else this.reply({name: 'onnext'});
+DialogueController.prototype.skip = function () {
+    if (this.currentDialogue) this.currentDialogue.skip();
 }

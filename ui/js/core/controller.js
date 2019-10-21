@@ -27,11 +27,3 @@ Controller.prototype.stop = function () {
 }
 
 Controller.prototype.didStop = function () { }
-
-Controller.prototype.handleKeyPress = function (key) {
-    if (this.active) Responder.prototype.handleKeyPress.call(this, key);
-}
-
-Controller.prototype.handleKeyRelease = function (key) {
-    if (this.active) Responder.prototype.handleKeyRelease.call(this, key);
-}

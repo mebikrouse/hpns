@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CitizenFX.Core;
 using HPNS.Interactivity.Core.Activity;
+using HPNS.UI;
 using InteractivityTests.Core;
 using InteractivityTests.Tests;
 using static CitizenFX.Core.Native.API;
@@ -16,7 +17,8 @@ namespace InteractivityTests
             new ShopRobberyScenarioTest(),
             new TakePickupTaskTest(),
             new FocusFromBehindActivityTest(),
-            new PedLookAtEntityActivityTest()
+            new PedLookAtEntityActivityTest(),
+            new DialogueTest()
         };
         
         private ITest _currentTest;
@@ -26,9 +28,11 @@ namespace InteractivityTests
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
         }
 
-        private void OnClientResourceStart(string resourceName)
+        private async void OnClientResourceStart(string resourceName)
         {
             if (GetCurrentResourceName() != resourceName) return;
+            
+            await UI.Init(GetCurrentResourceName(), EventHandlers);
             
             RegisterCommand("test", new Action<int, List<object>, string>(async (source, args, raw) =>
             {

@@ -82,6 +82,7 @@
     <Compile Include="Tasks\CreateObjectTask.cs" />
     <Compile Include="Tasks\CreatePedTask.cs" />
     <Compile Include="Tasks\CreatePickupTask.cs" />
+    <Compile Include="Tasks\DialogueDidPrintWaitTask.cs" />
     <Compile Include="Tasks\EnterAreaTask.cs" />
     <Compile Include="Tasks\LeaveAreaTask.cs" />
     <Compile Include="Tasks\PlayAnimTask.cs" />
@@ -96,6 +97,10 @@
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{410b73de-b5e6-4fa1-80ac-a4cb1a357cee}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UI\UI.csproj">
+      <Project>{34134fd2-41ca-49ee-ac4b-e95479f05a47}</Project>
+      <Name>UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,6 @@
-﻿using HPNS.UI.Core;
+﻿using System.Threading.Tasks;
+using CitizenFX.Core;
+using HPNS.UI.Core;
 using Newtonsoft.Json;
 
 using static CitizenFX.Core.Native.API;
@@ -9,18 +11,24 @@ namespace HPNS.UI
     {
         public RootResponder() : base("root") { }
 
-        public void Init(string resourceName)
+        public async Task Init(string resourceName)
         {
-            Reply(new
+            var replyResult = false;
+            while (!replyResult)
             {
-                name = "init",
-                data = new {resourceName = resourceName}
-            });
+                await BaseScript.Delay(50);
+                
+                replyResult = Reply(new
+                {
+                    name = "init",
+                    data = new {resourceName = resourceName}
+                });
+            }
         }
 
-        protected override void Reply(object command)
+        protected override bool Reply(object command)
         {
-            SendNuiMessage(JsonConvert.SerializeObject(command));
+            return SendNuiMessage(JsonConvert.SerializeObject(command));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using CitizenFX.Core;
 using HPNS.UI.Core;
 
 namespace HPNS.UI
@@ -9,7 +10,7 @@ namespace HPNS.UI
         
         public DialogueController() : base("dialogue")
         {
-            RegisterHandler("didPrint", DidPrintHandler);
+            RegisterHandler("printed", OnPrintedHandler);
         }
 
         public void Print(string title, string content)
@@ -25,13 +26,9 @@ namespace HPNS.UI
             });
         }
 
-        public void Skip()
+        private void OnPrintedHandler(dynamic data)
         {
-            Reply(new {name = "skip"});
-        }
-
-        private void DidPrintHandler(dynamic data)
-        {
+            Debug.WriteLine("printed");
             DidPrint?.Invoke();
         }
     }
