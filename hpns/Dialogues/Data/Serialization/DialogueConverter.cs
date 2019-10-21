@@ -23,7 +23,8 @@ namespace Dialogues.Data.Serialization
             
             var responses = new List<Response>();
             foreach (var response in dialogue.Responses)
-                responses.Add(new Response(participants[response.ParticipantIdentifier], response.Content));
+                responses.Add(new Response(participants[response.FromIdentifier], participants[response.ToIdentifier],
+                    response.Content));
             
             return new Dialogue(responses);
         }

@@ -8,6 +8,8 @@ namespace HPNS.CoreClient
 {
     public static class Utility
     {
+        private static Random Random = new Random();
+        
         public static async Task LoadObject(uint modelHash)
         {
             RequestModel(modelHash);
@@ -44,7 +46,7 @@ namespace HPNS.CoreClient
         public static uint GetRandomPedHash()
         {
             var pedHashes = Enum.GetValues(typeof(PedHash)).Cast<PedHash>().ToList();
-            return (uint) pedHashes[new Random().Next(0, pedHashes.Count)];
+            return (uint) pedHashes[Random.Next(0, pedHashes.Count)];
         }
     }
 }

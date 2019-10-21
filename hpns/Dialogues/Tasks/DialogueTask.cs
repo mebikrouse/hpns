@@ -30,7 +30,8 @@ namespace Dialogues.Tasks
                 var response = _dialogue.Responses[0];
                 tasks.Add(new SingleResponseTask(response, _configuration.GetRandomCameraConfiguration(), 750)
                 {
-                    PedHandle = PedHandles[response.Participant.Identifier]
+                    FromPedHandle = PedHandles[response.From.Identifier],
+                    ToPedHandle = PedHandles[response.To.Identifier]
                 });
             }
             else
@@ -38,7 +39,8 @@ namespace Dialogues.Tasks
                 var firstResponse = _dialogue.Responses[0];
                 tasks.Add(new FirstResponseTask(firstResponse, _configuration.GetRandomCameraConfiguration(), 750)
                 {
-                    PedHandle = PedHandles[firstResponse.Participant.Identifier]
+                    FromPedHandle = PedHandles[firstResponse.From.Identifier],
+                    ToPedHandle = PedHandles[firstResponse.To.Identifier]
                 });
 
                 for (var i = 1; i < _dialogue.Responses.Count - 1; i++)
@@ -46,14 +48,16 @@ namespace Dialogues.Tasks
                     var response = _dialogue.Responses[i];
                     tasks.Add(new ResponseTask(response, _configuration.GetRandomCameraConfiguration())
                     {
-                        PedHandle = PedHandles[response.Participant.Identifier]
+                        FromPedHandle = PedHandles[response.From.Identifier],
+                        ToPedHandle = PedHandles[response.To.Identifier]
                     });
                 }
 
                 var lastResponse = _dialogue.Responses[_dialogue.Responses.Count - 1];
                 tasks.Add(new LastResponseTask(lastResponse, _configuration.GetRandomCameraConfiguration(), 750)
                 {
-                    PedHandle = PedHandles[lastResponse.Participant.Identifier]
+                    FromPedHandle = PedHandles[lastResponse.From.Identifier],
+                    ToPedHandle = PedHandles[lastResponse.To.Identifier]
                 });
             }
             

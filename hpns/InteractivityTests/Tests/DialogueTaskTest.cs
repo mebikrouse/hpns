@@ -26,22 +26,30 @@ namespace InteractivityTests.Tests
             var participants = new List<Participant>
             {
                 new Participant("player", "Вы"),
-                new Participant("ped", "Случайный прохожий")
+                new Participant("ped_a", "Левый хуй"),
+                new Participant("ped_b", "Правый хуй")
             };
             
             var responses = new List<Response>
             {
-                new Response(participants[1], "Добрый день!"),
-                new Response(participants[0], "Здравствуйте."),
-                new Response(participants[1], "Как у вас дела? Наверное, отлично, ведь на улице такая замечательная погода!"),
-                new Response(participants[0], "Да, у меня все хорошо. А погода действительно великолепная!"),
-                new Response(participants[0], "Сегодня так солнечно! Ветра почти нет. Великолепно!"),
-                new Response(participants[1], "Чем вы занимаетесь в свое свободное время?"),
-                new Response(participants[0], "Ой, по-разному бывает. Сегодня я планировал сходить в бар!"),
-                new Response(participants[1], "Ого, как круто! А можно с вами?"),
-                new Response(participants[0], "Хмм... Да, вы можете пойти со мной! Я познакомлю вас со своими друзьями. Мы весело проведем время!"),
-                new Response(participants[1], "Класс! Отправляемся?"),
-                new Response(participants[0], "Отправляемся!"),
+                new Response(participants[1], participants[0], "Добрый день!"),
+                new Response(participants[0], participants[1], "Здравствуйте."),
+                new Response(participants[2], participants[0], "Ага..."),
+                
+                new Response(participants[1], participants[0], "Как у вас дела? Наверное, отлично, ведь на улице такая замечательная погода!"),
+                new Response(participants[0], participants[1], "Да, у меня все хорошо. А погода действительно великолепная!"),
+                new Response(participants[2], participants[0], "Что за глупый вопрос?! Ты можешь нормальную дискуссию вести?"),
+                
+                new Response(participants[1], participants[2], "Простите, что с моим вопросом не так?"),
+                new Response(participants[2], participants[1], "Ну ты и омега, я тебя оскорбляю, а ты извиняешься. Ебанулся что ли?"),
+                
+                new Response(participants[0], participants[2], "Ты можешь успокоиться и не трогать его?!"),
+                new Response(participants[2], participants[0], "Заткнись нахуй, тебя не спрашивали."),
+                new Response(participants[0], participants[2], "Чего?!"),
+                
+                new Response(participants[2], participants[1], "Аривидерчи, я сваливаю от вас"),
+                new Response(participants[0], participants[2], "Ну и скатертью дорога!"),
+                new Response(participants[1], participants[2], "Да, вали отсюда!")
             };
 
             var configuration = new Configuration
@@ -74,23 +82,38 @@ namespace InteractivityTests.Tests
             var dialogue = new Dialogue(responses);
             
             var playerPedHandle = new Parameter<int>();
-            var pedPosition = new Parameter<Vector3>();
-            var pedHeading = new Parameter<float>();
             
-            var createdPedHandle = new ResultCapturer<int>();
+            var pedAPosition = new Parameter<Vector3>();
+            var pedAHeading = new Parameter<float>();
+            
+            var pedBPosition = new Parameter<Vector3>();
+            var pedBHeading = new Parameter<float>();
+            
+            var pedAHandle = new ResultCapturer<int>();
+            var pedBHandle = new ResultCapturer<int>();
             
             var tasks = new List<ITask>();
             tasks.Add(new LambdaTask(() =>
             {
                 playerPedHandle.SetValue(Game.PlayerPed.Handle);
-                pedPosition.SetValue(Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 1.5f);
-                pedHeading.SetValue(Game.PlayerPed.Heading - 180f);
+                
+                pedAPosition.SetValue(Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 1.5f + Game.PlayerPed.RightVector);
+                pedAHeading.SetValue(Game.PlayerPed.Heading - 180f);
+                
+                pedBPosition.SetValue(Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 1.5f - Game.PlayerPed.RightVector);
+                pedBHeading.SetValue(Game.PlayerPed.Heading - 180f);
             }));
             tasks.Add(new CreatePedTask(Utility.GetRandomPedHash())
             {
-                Position = pedPosition,
-                Heading = pedHeading,
-                PedHandle = createdPedHandle
+                Position = pedAPosition,
+                Heading = pedAHeading,
+                PedHandle = pedAHandle
+            });
+            tasks.Add(new CreatePedTask(Utility.GetRandomPedHash())
+            {
+                Position = pedBPosition,
+                Heading = pedBHeading,
+                PedHandle = pedBHandle
             });
             tasks.Add(new WaitTask {Duration = new Parameter<int>(2000)});
             tasks.Add(new DialogueTask(dialogue, configuration)
@@ -98,7 +121,8 @@ namespace InteractivityTests.Tests
                 PedHandles = new Dictionary<string, IParameter<int>>
                 {
                     {"player", playerPedHandle},
-                    {"ped", createdPedHandle}
+                    {"ped_a", pedAHandle},
+                    {"ped_b", pedBHandle}
                 }
             });
             tasks.Add(new LambdaTask(NotifyTaskDidEnd));

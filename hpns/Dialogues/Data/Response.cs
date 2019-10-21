@@ -2,13 +2,16 @@
 {
     public class Response
     {
-        public Participant Participant { get; }
+        public Participant From { get; }
 
+        public Participant To { get; }
+        
         public string Content { get; }
 
-        public Response(Participant participant, string content)
+        public Response(Participant from, Participant to, string content)
         {
-            Participant = participant;
+            From = from;
+            To = to;
             Content = content;
         }
     }

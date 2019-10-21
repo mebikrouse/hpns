@@ -2,7 +2,9 @@
 {
     public class SerializableResponse
     {
-        public string ParticipantIdentifier { get; set; }
+        public string FromIdentifier { get; set; }
+        
+        public string ToIdentifier { get; set; }
 
         public string Content { get; set; }
     }

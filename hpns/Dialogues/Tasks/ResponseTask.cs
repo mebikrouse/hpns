@@ -17,7 +17,8 @@ namespace Dialogues.Tasks
         
         private ITask _responseSequence;
         
-        public IParameter<int> PedHandle;
+        public IParameter<int> FromPedHandle;
+        public IParameter<int> ToPedHandle;
         
         public ResponseTask(Response response, CameraConfiguration configuration) : base(nameof(ResponseTask))
         {
@@ -34,13 +35,15 @@ namespace Dialogues.Tasks
                     new ParallelActivityTask(
                         new SequenceTask(new List<ITask>
                         {
-                            new LambdaTask(() => UI.Dialogues.Print(_response.Participant.Name, _response.Content)),
+                            new LambdaTask(() => UI.Dialogues.Print(_response.From.Name, _response.Content)),
                             new DialogueDidPrintWaitTask()
                         }),
-                        new PlayFacialAnimActivity("mp_facial", "mic_chatter") {PedHandle = PedHandle}),
+                        new PlayFacialAnimActivity("mp_facial", "mic_chatter") {PedHandle = FromPedHandle}),
                     new WaitTask {Duration = new Parameter<int>(1500)}
                 }),
-                new PedCameraActivity(_configuration) {PedHandle = PedHandle}));
+                new PedCameraActivity(_configuration) {PedHandle = FromPedHandle},
+                new PedLookAtEntityActivity {PedHandle = FromPedHandle, EntityHandle = ToPedHandle},
+                new PedLookAtEntityActivity {PedHandle = ToPedHandle, EntityHandle = FromPedHandle}));
             tasks.Add(new LambdaTask(NotifyTaskDidEnd));
 
             _responseSequence = new SequenceTask(tasks);
