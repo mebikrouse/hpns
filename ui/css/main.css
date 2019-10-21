@@ -1,0 +1,69 @@
+@font-face {
+    font-family: "San Francisco";
+    font-weight: 400;
+    src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* background: url('../images/bg.jpg'); */
+    font-family: "San Francisco", sans-serif;
+}
+
+.debug {
+    position: absolute;
+    color: rgb(255, 255, 255);
+}
+
+.screen {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+}
+
+.debug-menu {
+    position: absolute;
+    padding: 32px;
+    background: rgba(0, 0, 0, 0.35);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    width: 100%;
+    z-index: 100;
+}
+
+.debug-menu .button {
+    background: rgba(0, 0, 0, 0.75);
+
+    color: rgb(255, 255, 255);
+    font-size: 14pt;
+
+    padding: 8px 16px 8px 16px;
+
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    transition: border 0.25s;
+
+    margin-left: 8px;
+
+    outline: none;
+}
+
+.debug-menu .button:first-child {
+    margin-left: 0;
+}
+
+.debug-menu .button:hover {
+    border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.debug-menu .button:active {
+    border: 1px solid rgba(255, 255, 255, 0.75);
+}

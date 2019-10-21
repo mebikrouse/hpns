@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/dialogues.css">
+    </head>
+    <body>
+        <!--<div class="debug-menu">
+            <button class="button" id="start-button">Start</button>
+            <button class="button" id="stop-button">Stop</button>
+            <button class="button" id="print-button">Print</button>
+            <button class="button" id="skip-button">Skip</button>
+            <button class="button" id="reply-button">Reply</button>
+
+            <script src="js/dialogue/debug.js"></script>
+        </div>-->
+
+        <div class="screen" id="dialogue">
+
+            <div class="dialogue" id="prototype" style="display: none;">
+                <div class="item">
+                    <p class="title" id="title">Владелец Стрипклуба</p>
+                </div>
+                <div class="item">
+                    <p class="content" id="content">Добрый день, уважаемый игрок. Сегодня я дам вам охуительный квест.</p>
+                </div>
+            </div>
+
+            <div class="dialogue-fade" id="fade">
+            </div>
+
+            <audio src="audio/dialogue.wav" id="audio"></audio>
+
+        </div>
+
+        <script src="js/animejs/anime.min.js"></script>
+        <script src="js/core/responder.js"></script>
+        <script src="js/core/controller.js"></script>
+        <script src="js/dialogue/controller.js"></script>
+        <script src="js/root/responder.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/utilities.js"></script>
+
+    </body>
+</html>
