@@ -17,11 +17,38 @@ namespace InteractivityTests.Tests
     {
         private ITask _testSequence;
         
+        private Configuration _configuration = new Configuration
+        {
+            Configurations = new List<CameraConfiguration>
+            {
+                new CameraConfiguration(
+                    new Vector3(-0.0009017102f, 0.8136478f, 0.03338432f),
+                    new Vector3(-0.420009f, 0.0001329383f, -180.1577f),
+                    30f),
+                new CameraConfiguration(
+                    new Vector3(0.3481081f, 0.6787802f, -0.147724f),
+                    new Vector3(11.97f, 0.0001331912f, 151.7988f),
+                    30f),
+                new CameraConfiguration(
+                    new Vector3(-0.5304984f, 0.7575822f, 0.1575111f),
+                    new Vector3(-9.449986f, 0.0001370825f, -143.8104f),
+                    30f),
+                new CameraConfiguration(
+                    new Vector3(-0.4194367f, 0.5977129f, -0.1750073f),
+                    new Vector3(12.54f, 0.0001261951f, -143.4225f),
+                    30f),
+                new CameraConfiguration(
+                    new Vector3(0.557281f, 0.8663054f, -0.4690321f),
+                    new Vector3(22.86f, 0.000126269f, 145.7156f),
+                    30f)
+            }
+        };
+
+        private Dialogue _dialogue;
+        
         public string TestName => nameof(DialogueTaskTest);
 
-        public DialogueTaskTest() : base(nameof(DialogueTaskTest)) { }
-
-        protected override async Task ExecutePrepare()
+        public DialogueTaskTest() : base(nameof(DialogueTaskTest))
         {
             var participants = new List<Participant>
             {
@@ -51,36 +78,12 @@ namespace InteractivityTests.Tests
                 new Response(participants[0], participants[2], "Ну и скатертью дорога!"),
                 new Response(participants[1], participants[2], "Да, вали отсюда!")
             };
+            
+            _dialogue = new Dialogue(responses);
+        }
 
-            var configuration = new Configuration
-            {
-                Configurations = new List<CameraConfiguration>
-                {
-                    new CameraConfiguration(
-                        new Vector3(-0.0009017102f, 0.8136478f, 0.03338432f),
-                        new Vector3(-0.420009f, 0.0001329383f, -180.1577f),
-                        30f),
-                    new CameraConfiguration(
-                        new Vector3(0.3481081f, 0.6787802f, -0.147724f),
-                        new Vector3(11.97f, 0.0001331912f, 151.7988f),
-                        30f),
-                    new CameraConfiguration(
-                        new Vector3(-0.5304984f, 0.7575822f, 0.1575111f),
-                        new Vector3(-9.449986f, 0.0001370825f, -143.8104f),
-                        30f),
-                    new CameraConfiguration(
-                        new Vector3(-0.4194367f, 0.5977129f, -0.1750073f),
-                        new Vector3(12.54f, 0.0001261951f, -143.4225f),
-                        30f),
-                    new CameraConfiguration(
-                        new Vector3(0.557281f, 0.8663054f, -0.4690321f),
-                        new Vector3(22.86f, 0.000126269f, 145.7156f),
-                        30f)
-                }
-            };
-            
-            var dialogue = new Dialogue(responses);
-            
+        protected override async Task ExecutePrepare()
+        {
             var playerPedHandle = new Parameter<int>();
             
             var pedAPosition = new Parameter<Vector3>();
@@ -116,7 +119,7 @@ namespace InteractivityTests.Tests
                 PedHandle = pedBHandle
             });
             tasks.Add(new WaitTask {Duration = new Parameter<int>(2000)});
-            tasks.Add(new DialogueTask(dialogue, configuration)
+            tasks.Add(new DialogueTask(_dialogue, _configuration)
             {
                 PedHandles = new Dictionary<string, IParameter<int>>
                 {
