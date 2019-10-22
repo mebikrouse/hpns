@@ -20,7 +20,7 @@ namespace HPNS.Interactivity.Tasks
 
         private ITask _animSequence;
 
-        public PlayAnimTask(string dict, string name, string typeName = nameof(PlayAnimTask)) : base(typeName)
+        public PlayAnimTask(string dict, string name)
         {
             _dict = dict;
             _name = name;

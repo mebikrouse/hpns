@@ -18,8 +18,6 @@ namespace HPNS.Interactivity.Tasks
         public IParameter<int> Duration;
 
         private ITask _attachSequence;
-        
-        public AttachEntityTask() : base(nameof(AttachEntityTask)) { }
 
         protected override async Task ExecutePrepare()
         {

@@ -10,7 +10,7 @@ namespace HPNS.Interactivity.Support
     {
         private ICondition _condition;
         
-        public ConditionWaitBreakTask(ICondition condition) : base(nameof(ConditionWaitBreakTask))
+        public ConditionWaitBreakTask(ICondition condition)
         {
             _condition = condition;
         }

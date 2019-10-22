@@ -18,8 +18,6 @@ namespace HPNS.Interactivity.Activities
         {
             return TaskHelper.CompletedTask;
         }
-
-        public MarkRegularEntityActivity() : base(nameof(MarkRegularEntityActivity)) { }
         
         protected override void ExecuteStart()
         {

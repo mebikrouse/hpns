@@ -15,7 +15,7 @@ namespace HPNS.Interactivity.Activities
 
         protected virtual int AnimFlag => 1;
 
-        public PlayAnimActivity(string dict, string name, string typeName = nameof(PlayAnimActivity)) : base(typeName)
+        public PlayAnimActivity(string dict, string name)
         {
             _dict = dict;
             _name = name;

@@ -16,8 +16,6 @@ namespace HPNS.Interactivity.Support
         private CancellationToken _currentCancellationToken;
 
         public IParameter<int> Duration;
-        
-        public WaitTask() : base(nameof(WaitTask)) { }
 
         protected override Task ExecutePrepare()
         {

@@ -18,8 +18,6 @@ namespace InteractivityTests.Tests
 
         public string TestName => nameof(ShopRobberyScenarioTest);
         
-        public ShopRobberyScenarioTest() : base(nameof(ShopRobberyScenarioTest)) { }
-        
         protected override async Task ExecutePrepare()
         {
             var pedPosition = new Parameter<Vector3>();

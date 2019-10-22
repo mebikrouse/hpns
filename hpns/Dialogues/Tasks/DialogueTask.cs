@@ -16,7 +16,7 @@ namespace Dialogues.Tasks
 
         public Dictionary<string, IParameter<int>> PedHandles;
 
-        public DialogueTask(Dialogue dialogue, Configuration configuration) : base(nameof(DialogueTask))
+        public DialogueTask(Dialogue dialogue, Configuration configuration)
         {
             _dialogue = dialogue;
             _configuration = configuration;

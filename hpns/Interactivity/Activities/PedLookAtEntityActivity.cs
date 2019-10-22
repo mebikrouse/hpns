@@ -10,8 +10,6 @@ namespace HPNS.Interactivity.Activities
     {
         public IParameter<int> PedHandle;
         public IParameter<int> EntityHandle;
-        
-        public PedLookAtEntityActivity() : base(nameof(PedLookAtEntityActivity)) { }
 
         protected override Task ExecutePrepare()
         {

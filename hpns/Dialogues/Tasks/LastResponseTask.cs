@@ -21,7 +21,7 @@ namespace Dialogues.Tasks
         public IParameter<int> FromPedHandle;
         public IParameter<int> ToPedHandle;
         
-        public LastResponseTask(Response response, CameraConfiguration configuration, int delay) : base(nameof(LastResponseTask))
+        public LastResponseTask(Response response, CameraConfiguration configuration, int delay)
         {
             _response = response;
             _configuration = configuration;

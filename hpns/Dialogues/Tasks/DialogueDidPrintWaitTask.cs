@@ -6,8 +6,6 @@ namespace Dialogues.Tasks
 {
     public class DialogueDidPrintWaitTask : TaskBase
     {
-        public DialogueDidPrintWaitTask() : base(nameof(DialogueDidPrintWaitTask)) { }
-
         protected override Task ExecutePrepare()
         {
             return TaskHelper.CompletedTask;

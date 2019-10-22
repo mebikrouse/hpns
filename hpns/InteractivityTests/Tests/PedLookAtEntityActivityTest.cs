@@ -16,8 +16,6 @@ namespace InteractivityTests.Tests
         private ITask _testSequence;
         
         public string TestName => nameof(PedLookAtEntityActivityTest);
-        
-        public PedLookAtEntityActivityTest() : base(nameof(PedLookAtEntityActivityTest)) { }
 
         protected override async Task ExecutePrepare()
         {

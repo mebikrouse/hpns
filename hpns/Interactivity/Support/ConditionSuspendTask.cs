@@ -10,7 +10,7 @@ namespace HPNS.Interactivity.Support
         private ITask _task;
         private ICondition _condition;
         
-        public ConditionSuspendTask(ITask task, ICondition condition) : base(nameof(ConditionSuspendTask))
+        public ConditionSuspendTask(ITask task, ICondition condition)
         {
             _task = task;
             _condition = condition;

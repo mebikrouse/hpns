@@ -14,7 +14,7 @@ namespace Dialogues.Activities
         
         public IParameter<int> PedHandle;
 
-        public PedCameraActivity(CameraConfiguration cameraConfiguration) : base(nameof(PedCameraActivity))
+        public PedCameraActivity(CameraConfiguration cameraConfiguration)
         {
             _cameraConfiguration = cameraConfiguration;
         }

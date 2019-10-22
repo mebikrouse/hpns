@@ -16,7 +16,7 @@ namespace HPNS.Interactivity.Tasks
         public IParameter<float> Heading = new Parameter<float>(0f);
         public IResult<int> PedHandle;
         
-        public CreatePedTask(uint pedHash) : base(nameof(CreatePedTask))
+        public CreatePedTask(uint pedHash)
         {
             _pedHash = pedHash;
         }

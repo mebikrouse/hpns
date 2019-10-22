@@ -9,7 +9,7 @@ namespace HPNS.Interactivity.Support
     {
         private Action _lambda;
         
-        public LambdaTask(Action lambda) : base(nameof(LambdaTask))
+        public LambdaTask(Action lambda)
         {
             _lambda = lambda;
         }

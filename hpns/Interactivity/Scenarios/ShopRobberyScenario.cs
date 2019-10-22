@@ -16,8 +16,6 @@ namespace HPNS.Interactivity.Scenarios
 
         private ITask _scenarioTask;
         
-        public ShopRobberyScenario() : base(nameof(ShopRobberyScenario)) { }
-        
         protected override async Task ExecutePrepare()
         {
             var bagHandle = new ResultCapturer<int>(BagHandle);

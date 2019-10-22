@@ -20,7 +20,7 @@ namespace Dialogues.Tasks
         public IParameter<int> FromPedHandle;
         public IParameter<int> ToPedHandle;
         
-        public ResponseTask(Response response, CameraConfiguration configuration) : base(nameof(ResponseTask))
+        public ResponseTask(Response response, CameraConfiguration configuration)
         {
             _response = response;
             _configuration = configuration;

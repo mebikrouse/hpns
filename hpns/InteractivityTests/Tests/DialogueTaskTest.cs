@@ -48,7 +48,7 @@ namespace InteractivityTests.Tests
         
         public string TestName => nameof(DialogueTaskTest);
 
-        public DialogueTaskTest() : base(nameof(DialogueTaskTest))
+        public DialogueTaskTest()
         {
             var participants = new List<Participant>
             {

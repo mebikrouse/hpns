@@ -13,8 +13,6 @@ namespace HPNS.Interactivity.Activities
         public IParameter<BlipColor> Color;
 
         private int _blipHandle;
-        
-        public MarkBigEntityActivity() : base(nameof(MarkBigEntityActivity)) { }
 
         protected override Task ExecutePrepare()
         {

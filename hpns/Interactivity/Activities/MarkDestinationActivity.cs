@@ -12,8 +12,6 @@ namespace HPNS.Interactivity.Activities
         public IParameter<Vector3> Destination;
 
         private int _blipHandle;
-        
-        public MarkDestinationActivity() : base(nameof(MarkDestinationActivity)) { }
 
         protected override Task ExecutePrepare()
         {

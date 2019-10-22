@@ -10,8 +10,6 @@ namespace HPNS.Interactivity.Tasks
     public class TakePickupTask : TaskBase
     {
         public IParameter<Pickup> Pickup;
-        
-        public TakePickupTask() : base(nameof(TakePickupTask)) { }
 
         protected override Task ExecutePrepare()
         {

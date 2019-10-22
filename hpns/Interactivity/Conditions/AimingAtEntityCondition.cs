@@ -11,8 +11,6 @@ namespace HPNS.Interactivity.Conditions
     {
         public IParameter<int> EntityHandle;
 
-        public AimingAtEntityCondition() : base(nameof(AimingAtEntityCondition)) { }
-
         protected override Task ExecutePrepare()
         {
             return TaskHelper.CompletedTask;
@@ -38,16 +36,12 @@ namespace HPNS.Interactivity.Conditions
 
         private void SubscribeToAimingManagerNotifications()
         {
-            Debug.WriteLine($"Subscribing {Name} to AimingManager's notifications.");
-            
             World.Current.AimingManager.PlayerDidStartAimingAtEntity += AimingManagerOnPlayerDidStartAimingAtEntity;
             World.Current.AimingManager.PlayerDidStopAimingAtEntity += AimingManagerOnPlayerDidStopAimingAtEntity;
         }
 
         private void UnsubscribeFromAimingManagerNotifications()
         {
-            Debug.WriteLine($"Unsubscribing {Name} from AimingManager's notifications.");
-            
             World.Current.AimingManager.PlayerDidStartAimingAtEntity -= AimingManagerOnPlayerDidStartAimingAtEntity;
             World.Current.AimingManager.PlayerDidStopAimingAtEntity -= AimingManagerOnPlayerDidStopAimingAtEntity;
         }

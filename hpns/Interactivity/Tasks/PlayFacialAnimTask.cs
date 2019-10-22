@@ -4,6 +4,6 @@ namespace HPNS.Interactivity.Tasks
     {
         protected override int AnimFlag => 33;
 
-        public PlayFacialAnimTask(string dict, string name) : base(dict, name, nameof(PlayFacialAnimTask)) { }
+        public PlayFacialAnimTask(string dict, string name) : base(dict, name) { }
     }
 }

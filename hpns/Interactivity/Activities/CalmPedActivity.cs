@@ -10,8 +10,6 @@ namespace HPNS.Interactivity.Activities
     {
         public IParameter<int> PedHandle;
         
-        public CalmPedActivity() : base(nameof(CalmPedActivity)) { }
-
         protected override Task ExecutePrepare()
         {
             return TaskHelper.CompletedTask;

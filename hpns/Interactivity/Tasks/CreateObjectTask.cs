@@ -16,7 +16,7 @@ namespace HPNS.Interactivity.Tasks
         public IParameter<Vector3> Rotation = new Parameter<Vector3>(Vector3.Zero);
         public IResult<int> ObjectHandle;
 
-        public CreateObjectTask(string model) : base(nameof(CreateObjectTask))
+        public CreateObjectTask(string model)
         {
             _modelHash = (uint) GetHashKey(model);
         }

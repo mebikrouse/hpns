@@ -11,8 +11,6 @@ namespace HPNS.Interactivity.Tasks
     {
         public IParameter<int> EntityHandle;
         public IResult<Pickup> Pickup;
-        
-        public CreatePickupTask() : base(nameof(CreatePickupTask)) { }
 
         protected override Task ExecutePrepare()
         {

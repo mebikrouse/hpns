@@ -15,8 +15,6 @@ namespace HPNS.Interactivity.Tasks
         public IParameter<float> Radius;
 
         private Checkpoint _checkpoint;
-        
-        public LeaveAreaTask() : base(nameof(LeaveAreaTask)) { }
 
         protected override Task ExecutePrepare()
         {

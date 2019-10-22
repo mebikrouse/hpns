@@ -16,8 +16,6 @@ namespace InteractivityTests.Tests
 
         public string TestName => nameof(TakePickupTaskTest);
         
-        public TakePickupTaskTest() : base(nameof(TakePickupTaskTest)) { }
-        
         protected override async Task ExecutePrepare()
         {
             var objectPosition = new Parameter<Vector3>();

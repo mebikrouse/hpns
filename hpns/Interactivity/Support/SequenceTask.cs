@@ -11,12 +11,12 @@ namespace HPNS.Interactivity.Support
         private ITask _currentTask;
         private int _nextTaskIndex;
         
-        public SequenceTask(IEnumerable<ITask> tasks) : base(nameof(SequenceTask))
+        public SequenceTask(IEnumerable<ITask> tasks)
         {
             _tasks = new List<ITask>(tasks);
         }
         
-        public SequenceTask(params ITask[] tasks) : base(nameof(SequenceTask))
+        public SequenceTask(params ITask[] tasks)
         {
             _tasks = new List<ITask>(tasks);
         }

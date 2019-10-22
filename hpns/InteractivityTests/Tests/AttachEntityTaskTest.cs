@@ -15,8 +15,6 @@ namespace InteractivityTests.Tests
         private ITask _testSequence;
 
         public string TestName => nameof(AttachEntityTaskTest);
-
-        public AttachEntityTaskTest() : base(nameof(AttachEntityTaskTest)) { }
         
         protected override async Task ExecutePrepare()
         {

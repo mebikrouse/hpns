@@ -12,7 +12,7 @@ namespace HPNS.Interactivity.Support
 
         private bool _taskDidStart;
         
-        public ConditionalTask(ITask task, Func<bool> condition) : base(nameof(ConditionalTask))
+        public ConditionalTask(ITask task, Func<bool> condition)
         {
             _task = task;
             _condition = condition;

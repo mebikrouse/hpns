@@ -11,12 +11,12 @@ namespace HPNS.Interactivity.Support
         private List<ITask> _tasks;
         private List<ITask> _runningTasks;
         
-        public ParallelAnyTask(IEnumerable<ITask> tasks) : base(nameof(ParallelAnyTask))
+        public ParallelAnyTask(IEnumerable<ITask> tasks)
         {
             _tasks = new List<ITask>(tasks);
         }
         
-        public ParallelAnyTask(params ITask[] tasks) : base(nameof(ParallelAnyTask))
+        public ParallelAnyTask(params ITask[] tasks)
         {
             _tasks = new List<ITask>(tasks);
         }

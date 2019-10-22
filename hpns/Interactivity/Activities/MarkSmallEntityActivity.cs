@@ -19,8 +19,6 @@ namespace HPNS.Interactivity.Activities
             return TaskHelper.CompletedTask;
         }
 
-        public MarkSmallEntityActivity() : base(nameof(MarkSmallEntityActivity)) { }
-
         protected override void ExecuteStart()
         {
             AddBlip();

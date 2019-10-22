@@ -10,8 +10,6 @@ namespace HPNS.Interactivity.Conditions
     public class EntityAliveCondition : ConditionBase
     {
         public IParameter<int> EntityHandle;
-        
-        public EntityAliveCondition() : base(nameof(EntityAliveCondition)) { }
 
         protected override Task ExecutePrepare()
         {
@@ -38,16 +36,12 @@ namespace HPNS.Interactivity.Conditions
 
         private void SubscribeToEntityDeathTrackerNotifications()
         {
-            Debug.WriteLine($"Subscribing {Name} to EntityDeathTracker's notifications.");
-            
             World.Current.EntityDeathTracker.EntityDidDie += EntityDeathTrackerOnEntityDidDie;
             World.Current.EntityDeathTracker.AddEntity(EntityHandle.GetValue());
         }
 
         private void UnsubscribeFromEntityDeathTrackerNotifications()
         {
-            Debug.WriteLine($"Unsubscribing {Name} from EntityDeathTracker's notifications.");
-            
             World.Current.EntityDeathTracker.EntityDidDie -= EntityDeathTrackerOnEntityDidDie;
             World.Current.EntityDeathTracker.RemoveEntity(EntityHandle.GetValue());
         }

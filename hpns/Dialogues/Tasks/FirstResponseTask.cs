@@ -21,7 +21,7 @@ namespace Dialogues.Tasks
         public IParameter<int> FromPedHandle;
         public IParameter<int> ToPedHandle;
         
-        public FirstResponseTask(Response response, CameraConfiguration configuration, int delay) : base(nameof(FirstResponseTask))
+        public FirstResponseTask(Response response, CameraConfiguration configuration, int delay)
         {
             _response = response;
             _configuration = configuration;

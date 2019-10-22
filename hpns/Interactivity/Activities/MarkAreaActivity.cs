@@ -14,8 +14,6 @@ namespace HPNS.Interactivity.Activities
         public IParameter<BlipColor> Color;
 
         private int _blipHandle;
-        
-        public MarkAreaActivity() : base(nameof(MarkAreaActivity)) { }
 
         protected override Task ExecutePrepare()
         {
