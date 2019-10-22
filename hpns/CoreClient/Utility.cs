@@ -26,21 +26,39 @@ namespace HPNS.CoreClient
                 await BaseScript.Delay(100);
         }
         
-        public static async Task<int> CreatePedAtPositionAsync(Vector3 position, float heading, uint pedHash)
+        public static async Task<int> CreatePedAtPositionAsync(Vector3 position, float heading, uint pedHash, bool network = true)
         {
             await LoadObject(pedHash);
-            return CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, true, false);
+            return CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, network, false);
         }
         
-        public static int CreatePedAtPosition(Vector3 position, float heading, uint pedHash)
+        public static int CreatePedAtPosition(Vector3 position, float heading, uint pedHash, bool network = true)
         {
-            return CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, true, false);
+            return CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, network, false);
         }
         
-        public static async Task<int> CreateRandomPedAsync(Vector3 position, float heading)
+        public static async Task<int> CreatePedAtPositionAsync(Vector3 position, float heading, string pedModel, bool network = true)
+        {
+            var pedHash = (uint) GetHashKey(pedModel);
+            await LoadObject(pedHash);
+            return CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, network, false);
+        }
+        
+        public static int CreatePedAtPosition(Vector3 position, float heading, string pedModel, bool network = true)
+        {
+            var pedHash = (uint) GetHashKey(pedModel);
+            return CreatePed(0, pedHash, position.X, position.Y, position.Z, heading, network, false);
+        }
+        
+        public static async Task<int> CreateRandomPedAsync(Vector3 position, float heading, bool network = true)
         {
             var pedHash = GetRandomPedHash();
-            return await CreatePedAtPositionAsync(position, heading, pedHash);
+            return await CreatePedAtPositionAsync(position, heading, pedHash, network);
+        }
+
+        public static void RemovePed(int pedHandle)
+        {
+            DeletePed(ref pedHandle);
         }
         
         public static uint GetRandomPedHash()
