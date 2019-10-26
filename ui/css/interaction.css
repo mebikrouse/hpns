@@ -1,0 +1,57 @@
+.interaction {
+    background: rgb(255, 255, 255);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+
+    padding: 8px 16px 8px 16px;
+
+    display: inline-block;
+
+    font-weight: bold;
+    font-size: 12pt;
+
+    border-radius: 999px;
+
+    max-width: 400px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.interaction p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.interaction .item {
+    display: inline-block;
+    margin-left: 8px;
+
+    vertical-align: middle;
+}
+
+.interaction .icon {
+    font-size: 14pt;
+}
+
+.interaction .item:first-child {
+    margin-left: 0;
+}
+
+.crosshair {
+    position: absolute;
+
+    width: 16px;
+    height: 16px;
+
+    left: 50%;
+    top: 50%;
+
+    margin-left: -8px;
+    margin-top: -8px;
+
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 50%;
+}

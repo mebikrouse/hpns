@@ -1,4 +1,6 @@
-let startButton = document.querySelector("#start-button");
+let dialogueDebug = document.querySelector('#dialogue-debug');
+
+let startButton = dialogueDebug.querySelector("#start-button");
 startButton.onclick = function () {
     rootResponder.handle({
         name: 'propagate',
@@ -11,7 +13,7 @@ startButton.onclick = function () {
     });
 }
 
-let stopButton = document.querySelector('#stop-button');
+let stopButton = dialogueDebug.querySelector('#stop-button');
 stopButton.onclick = function () {
     rootResponder.handle({
         name: 'propagate',
@@ -24,7 +26,7 @@ stopButton.onclick = function () {
     });
 }
 
-let printButton = document.querySelector('#print-button');
+let printButton = dialogueDebug.querySelector('#print-button');
 printButton.onclick = function () {
     rootResponder.handle({
         name: 'propagate',
@@ -36,6 +38,19 @@ printButton.onclick = function () {
                     title: 'Участник диалога',
                     content: 'Всеобъемлющий ответ участника текущего диалога, который дает актуальную информацию по текущей ситуации.'
                 }
+            }
+        }
+    });
+}
+
+let skipButton = dialogueDebug.querySelector('#skip-button');
+skipButton.onclick = function () {
+    rootResponder.handle({
+        name: 'propagate',
+        data: {
+            target: 'dialogue',
+            command: {
+                name: 'skip'
             }
         }
     });

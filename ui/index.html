@@ -1,18 +1,27 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/main.css">
-        <link rel="stylesheet" type="text/css" href="css/dialogues.css">
+        <link rel="stylesheet" type="text/css" href="css/dialogue.css">
+        <link rel="stylesheet" type="text/css" href="css/interaction.css">
     </head>
     <body>
-        <!--<div class="debug-menu">
+        <!--<div class="debug-menu" id="dialogue-debug">
             <button class="button" id="start-button">Start</button>
             <button class="button" id="stop-button">Stop</button>
             <button class="button" id="print-button">Print</button>
             <button class="button" id="skip-button">Skip</button>
-            <button class="button" id="reply-button">Reply</button>
 
             <script src="js/dialogue/debug.js"></script>
         </div>-->
+
+        <div class="debug-menu" id="interaction-debug">
+            <button class="button" id="start-button">Start</button>
+            <button class="button" id="stop-button">Stop</button>
+            <button class="button" id="show-menu-button">Show Menu</button>
+            <button class="button" id="hide-menu-button">Hide Menu</button>
+
+            <script src="js/interaction/debug.js"></script>
+        </div>
 
         <div class="screen" id="dialogue">
 
@@ -32,15 +41,25 @@
 
         </div>
 
+        <div class="screen" id="interaction">
+
+            <div class="interaction" id="prototype" style="display: none;">
+                <p class="item icon" id="icon">&#128139;</p>
+                <p class="item" id="name">Поцеловать</p>
+            </div>
+
+            <div class="crosshair" id="crosshair" style="display: none;"></div>
+        </div>
+
         <script src="js/animejs/anime.min.js"></script>
         <script src="js/utilities.js"></script>
         <script src="js/core/event.js"></script>
-        <script src="js/core/inputhandler.js"></script>
         <script src="js/core/responder.js"></script>
         <script src="js/core/controller.js"></script>
         <script src="js/dialogue/printer.js"></script>
         <script src="js/dialogue/dialogue.js"></script>
         <script src="js/dialogue/controller.js"></script>
+        <script src="js/interaction/controller.js"></script>
         <script src="js/root/responder.js"></script>
         <script src="js/main.js"></script>
 
