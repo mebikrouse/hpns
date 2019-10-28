@@ -54,3 +54,29 @@ hideMenuButton.onclick = function () {
         }
     });
 }
+
+let showCrossButton = interactionDebug.querySelector('#show-cross-button');
+showCrossButton.onclick = function () {
+    rootResponder.handle({
+        name: 'propagate',
+        data: {
+            target: 'interaction',
+            command: {
+                name: 'showCrosshair'
+            }
+        }
+    });
+}
+
+let hideCrossButton = interactionDebug.querySelector('#hide-cross-button');
+hideCrossButton.onclick = function () {
+    rootResponder.handle({
+        name: 'propagate',
+        data: {
+            target: 'interaction',
+            command: {
+                name: 'hideCrosshair'
+            }
+        }
+    });
+}
