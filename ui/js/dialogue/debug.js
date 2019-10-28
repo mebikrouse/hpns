@@ -3,12 +3,9 @@ let dialogueDebug = document.querySelector('#dialogue-debug');
 let startButton = dialogueDebug.querySelector("#start-button");
 startButton.onclick = function () {
     rootResponder.handle({
-        name: 'propagate',
+        name: 'startChild',
         data: {
-            target: 'dialogue',
-            command: {
-                name: 'start'
-            }
+            target: 'dialogue'
         }
     });
 }
@@ -16,12 +13,9 @@ startButton.onclick = function () {
 let stopButton = dialogueDebug.querySelector('#stop-button');
 stopButton.onclick = function () {
     rootResponder.handle({
-        name: 'propagate',
+        name: 'stopChild',
         data: {
-            target: 'dialogue',
-            command: {
-                name: 'stop'
-            }
+            target: 'dialogue'
         }
     });
 }

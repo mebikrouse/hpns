@@ -3,12 +3,9 @@ let interactionDebug = document.querySelector('#interaction-debug');
 let startButton = interactionDebug.querySelector("#start-button");
 startButton.onclick = function () {
     rootResponder.handle({
-        name: 'propagate',
+        name: 'startChild',
         data: {
-            target: 'interaction',
-            command: {
-                name: 'start'
-            }
+            target: 'interaction'
         }
     });
 }
@@ -16,12 +13,9 @@ startButton.onclick = function () {
 let stopButton = interactionDebug.querySelector('#stop-button');
 stopButton.onclick = function () {
     rootResponder.handle({
-        name: 'propagate',
+        name: 'stopChild',
         data: {
-            target: 'interaction',
-            command: {
-                name: 'stop'
-            }
+            target: 'interaction'
         }
     });
 }

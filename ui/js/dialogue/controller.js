@@ -1,5 +1,5 @@
 function DialogueController(view) {
-    Controller.call(this, 'dialogue');
+    Responder.call(this, 'dialogue');
 
     this.prototype = view.querySelector('#prototype');
     this.fade = view.querySelector('#fade');
@@ -8,16 +8,15 @@ function DialogueController(view) {
     this.registerHandler('print', (data) => this.print(data.title, data.content));
     this.registerHandler('skip', (data) => this.skip());
 
-    this.currentDialogue = undefined;
+    this.currentDialogue = null;
 }
 
-DialogueController.prototype = Object.create(Controller.prototype);
-DialogueController.prototype.constructor = Controller;
+DialogueController.prototype = Object.create(Responder.prototype);
+DialogueController.prototype.constructor = Responder;
 
 DialogueController.prototype.didStart = function () {
-    this.fade.style.display = 'block';
-
     let fade = this.fade;
+    fade.style.display = 'block';
     anime({
         targets: fade,
         opacity: [0, 1],
@@ -28,7 +27,7 @@ DialogueController.prototype.didStart = function () {
 
 DialogueController.prototype.didStop = function () {
     if (this.currentDialogue) this.currentDialogue.hide();
-    this.currentDialogue = undefined;
+    this.currentDialogue = null;
 
     let fade = this.fade;
     anime({

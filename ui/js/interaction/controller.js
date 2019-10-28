@@ -1,5 +1,5 @@
 function InteractionController(view) {
-    Controller.call(this, 'interaction');
+    Responder.call(this, 'interaction');
 
     this.container = view;
     this.crosshair = view.querySelector('#crosshair');
@@ -12,8 +12,8 @@ function InteractionController(view) {
     this.registerHandler('hideMenu', (data) => this.hideMenu());
 }
 
-InteractionController.prototype = Object.create(Controller.prototype);
-InteractionController.prototype.constructor = Controller;
+InteractionController.prototype = Object.create(Responder.prototype);
+InteractionController.prototype.constructor = Responder;
 
 InteractionController.prototype.didStart = function () {
     this.showCrosshair();

@@ -8,6 +8,8 @@ let rootResponder = new RootResponder();
 rootResponder.addChild(dialogueController);
 rootResponder.addChild(interactionController);
 
+rootResponder.start();
+
 window.addEventListener('message', (e) => {
     console.log(JSON.stringify(e));
     rootResponder.handle(e.data);
