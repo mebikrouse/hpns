@@ -3,6 +3,7 @@ function InteractionController(view) {
 
     this.container = view;
     this.crosshair = view.querySelector('#crosshair');
+    this.cancel = view.querySelector('#cancel');
     this.prototype = view.querySelector('#prototype');
 
     this.options = [];
@@ -23,9 +24,51 @@ InteractionController.prototype.didStop = function () {
     this.hideCrosshair();
 }
 
+InteractionController.prototype.showMenu = function (options) {
+    let delay = 25;
+    let stepLength = 60;
+    let stepsCount = Math.ceil(options.length / 2);
+    let radius = stepLength * stepsCount / 2;
+    let currentHeight = stepLength / 2;
+    
+    for (let i = 0; i < stepsCount; i++) {
+        let translateY = currentHeight - radius;
+        let translateX = Math.cos(Math.asin((radius - currentHeight) / radius)) * radius;
+
+        let optionNodeRight = this.appendOption(options[i], translateX, translateY);
+        this.options[i] = optionNodeRight;
+
+        this.showOption(optionNodeRight, delay * i);
+
+        if (i + stepsCount < options.length) {
+            let j = options.length - 1 - i;
+
+            let optionNodeLeft = this.appendOption(options[i], -translateX, translateY);
+            this.options[j] = optionNodeLeft;
+
+            optionNodeLeft.style.marginLeft = -optionNodeLeft.offsetWidth;
+            this.showOption(optionNodeLeft, delay * j);
+        }
+        
+        currentHeight += stepLength;
+    }
+
+    this.showCancel();
+}
+
+InteractionController.prototype.hideMenu = function () {
+    let delay = 25;
+    for (let i = 0; i < this.options.length; i++)
+        this.hideOption(this.options[i], delay * i);
+
+    this.options = [];
+
+    this.hideCancel();
+}
+
 InteractionController.prototype.showCrosshair = function () {
     this.crosshair.style.display = 'block';
-
+    
     let crosshair = this.crosshair;
     anime({
         targets: crosshair, 
@@ -54,85 +97,73 @@ InteractionController.prototype.hideCrosshair = function () {
     });
 }
 
-InteractionController.prototype.showMenu = function (options) {
-    let delay = 25;
-    let stepLength = 60;
-    let stepsCount = Math.ceil(options.length / 2);
-    let radius = stepLength * stepsCount / 2;
-    let currentHeight = stepLength / 2;
-    
-    for (let i = 0; i < stepsCount; i++) {
-        let optionNodeRight = this.prototype.cloneNode(true);
-        this.container.appendChild(optionNodeRight);
+InteractionController.prototype.appendOption = function (option, x, y) {
+    let optionNode = this.prototype.cloneNode(true);
 
-        optionNodeRight.style.display = 'block';
-        optionNodeRight.style.marginTop = -optionNodeRight.offsetHeight / 2;
+    optionNode.querySelector('#icon').textContent = option.icon;
+    optionNode.querySelector('#text').textContent = option.text;
 
-        let translateY = currentHeight - radius;
-        let translateX = Math.cos(Math.asin((radius - currentHeight) / radius)) * radius;
-        optionNodeRight.style.transform = `translate(${translateX}px, ${translateY}px)`;
+    this.container.appendChild(optionNode);
 
-        anime({
-            targets: optionNodeRight,
-            opacity: [0, 1],
-            scaleX: [0.25, 1],
-            scaleY: [0.25, 1],
-            duration: 250,
-            delay: delay * i,
-            easing: 'easeInOutCubic'
-        });
+    optionNode.style.display = 'block';
+    optionNode.style.marginTop = -optionNode.offsetHeight / 2;
+    optionNode.style.transform = `translate(${x}px, ${y}px)`;
 
-        this.options[i] = optionNodeRight;
-
-        currentHeight += stepLength;
-
-        if (i + stepsCount >= options.length) return;
-        let j = options.length - 1 - i;
-        
-        let optionNodeLeft = this.prototype.cloneNode(true);
-        this.container.appendChild(optionNodeLeft);
-
-        optionNodeLeft.style.display = 'block';
-        optionNodeLeft.style.marginTop = -optionNodeLeft.offsetHeight / 2;
-        optionNodeLeft.style.marginLeft = -optionNodeLeft.offsetWidth;
-
-        optionNodeLeft.style.transform = `translate(${-translateX}px, ${translateY}px)`;
-
-        anime({
-            targets: optionNodeLeft,
-            opacity: [0, 1],
-            scaleX: [0.25, 1],
-            scaleY: [0.25, 1],
-            duration: 250,
-            delay: delay * j,
-            easing: 'easeInOutCubic'
-        });
-
-        this.options[j] = optionNodeLeft;
-    }
+    return optionNode;
 }
 
-InteractionController.prototype.hideMenu = function () {
-    let delay = 25;
+InteractionController.prototype.showOption = function (optionNode, delay) {
+    anime({
+        targets: optionNode,
+        opacity: [0, 1],
+        scaleX: [0.25, 1],
+        scaleY: [0.25, 1],
+        duration: 250,
+        delay: delay,
+        easing: 'easeInOutCubic'
+    });
+}
+
+InteractionController.prototype.hideOption = function (optionNode, delay) {
     let container = this.container;
-    let currentDelay = 0;
+    anime({
+        targets: optionNode,
+        opacity: [1, 0],
+        scaleX: [1, 0.25],
+        scaleY: [1, 0.25],
+        duration: 250,
+        delay: delay,
+        easing: 'easeInOutCubic',
+        complete: () => {
+            container.removeChild(optionNode);
+        }
+    });
+}
 
-    for (let optionNode of this.options) {
-        anime({
-            targets: optionNode,
-            opacity: [1, 0],
-            scaleX: [1, 0.25],
-            scaleY: [1, 0.25],
-            duration: 250,
-            delay: currentDelay,
-            easing: 'easeInOutCubic',
-            complete: () => {
-                container.removeChild(optionNode);
-            }
-        });
+InteractionController.prototype.showCancel = function () {
+    let cancel = this.cancel;
+    cancel.style.display = 'block';
+    anime({
+        targets: cancel,
+        opacity: [0, 1],
+        scaleX: [0.25, 1],
+        scaleY: [0.25, 1],
+        duration: 250,
+        easing: 'easeInOutCubic'
+    });
+}
 
-        currentDelay += delay;
-    }
-
-    this.options = [];
+InteractionController.prototype.hideCancel = function () {
+    let cancel = this.cancel;
+    anime({
+        targets: cancel,
+        opacity: [1, 0],
+        scaleX: [1, 0.25],
+        scaleY: [1, 0.25],
+        duration: 250,
+        easing: 'easeInOutCubic',
+        complete: () => {
+            cancel.style.display = 'none';
+        }
+    });
 }
